@@ -15,13 +15,13 @@ const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, is
     const navigate = useNavigate()
     const lang = useSelector(state => state.lang.lang)
 
-    const _id = isOwner ? clinic._id : clinic.clinic._id
-    const clinicId = isOwner ? clinic?.clinicId : clinic?.clinic?.clinicId
-    const name = isOwner ? clinic?.name : clinic?.clinic?.name
-    const phone = isOwner ? `+${clinic?.countryCode}${clinic?.phone}` : `+${clinic?.clinic?.countryCode}${clinic?.clinic?.phone}`
-    const city = isOwner ? clinic?.city : clinic?.clinic?.city
-    const country = isOwner ? clinic?.country : clinic?.clinic?.country
-    const mode = isOwner ? clinic?.mode : clinic?.clinic?.mode
+    const _id = clinic._id
+    const clinicId = clinic?.clinicId
+    const name = clinic?.name
+    const phone = `+${clinic?.countryCode}${clinic?.phone}`
+    const city = clinic?.city
+    const country = clinic?.country
+    const mode = clinic?.mode
 
     const cardActionsList = [
         {
@@ -36,7 +36,7 @@ const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, is
      ]
 
     return <CardTransition>
-    <div onClick={e => disableOnClickView ? null : navigate(`/clinics/${_id}/profile`)} className={`patient-card-container body-text`}>
+    <div className={`patient-card-container body-text`}>
         <div className="patient-card-header">
             <div className="patient-image-info-container">
                 <img src={`https://avatars.dicebear.com/api/initials/${name}.svg`} alt="patient-image" />
@@ -45,10 +45,13 @@ const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, is
                     <span className="grey-text">#{clinicId}</span>
                 </div>
             </div>
-            <CardActions actions={cardActionsList} />
         </div>
         <div className="patient-card-body">
             <ul>
+                <li>
+                    <strong>Phone</strong>
+                    <span>{phone}</span>
+                </li>
                 <li>
                     <strong>{translations[lang]['Country']}</strong>
                     <span>{translations[lang][capitalizeFirstLetter(country)]}</span>
@@ -67,18 +70,13 @@ const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, is
 
                     }
                 </li>
-                {
-                    isShowRenew ?
-                    <li>
-                        <strong>{translations[lang]['Renew Date']}</strong>
-                        { clinic?.clinic?.activeUntilDate ? 
-                        <span>{format(new Date(clinic?.clinic?.activeUntilDate), lang === 'en' ? 'dd MMMM yyyy' : 'MM/dd/yyyy')}</span> 
-                        : 
-                        translations[lang]['Not Registered'] }
-                    </li>
-                    :
-                    null
-                }
+                <li>
+                    <strong>{translations[lang]['Renew Date']}</strong>
+                    { clinic?.activeUntilDate ? 
+                    <span>{format(new Date(clinic?.activeUntilDate), lang === 'en' ? 'dd MMMM yyyy' : 'MM/dd/yyyy')}</span> 
+                    : 
+                    translations[lang]['Not Registered'] }
+                </li>
             </ul>
         </div>
         <CardDate creationDate={clinic.createdAt} />

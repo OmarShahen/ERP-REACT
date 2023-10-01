@@ -17,7 +17,7 @@ const PageHeader = ({
     formURL, 
     setReload, 
     reload, 
-    isHideRefresh,
+    isHideRefresh=false,
     isHideBackButton
 }) => {
 
@@ -40,45 +40,47 @@ const PageHeader = ({
                     {pageName}
                 </h1>
             </div>
-            {
-                addBtnText ? 
-                <div 
-                className="btns-container subheader-text" 
-                onClick={e => formURL ? navigate(formURL) : setShowModalForm(true)}
-                >
+                <div className="header-buttons-container">
                     {
-                        addBtnText2 ?
-                        <button 
-                        onClick={e => { 
-                            e.stopPropagation()
-                            setShowModalForm2(true)
-                        }}
+                        isHideRefresh ?
+                        null
+                        :
+                        <div className="header-mobile-icons-container">
+                            <div onClick={e => setReload(reload + 1)}>
+                                <CachedIcon />
+                            </div>
+                        </div>
+                    }
+                    {
+                        addBtnText ?
+                        <div 
+                        className="btns-container subheader-text" 
+                        onClick={e => formURL ? navigate(formURL) : setShowModalForm(true)}
                         >
-                            { addBtnText2Icon ? addBtnText2Icon : <AddOutlinedIcon /> }
-                            <strong>{addBtnText2}</strong>
-                        </button>
+                            {
+                                addBtnText2 ?
+                                <button 
+                                onClick={e => { 
+                                    e.stopPropagation()
+                                    setShowModalForm2(true)
+                                }}
+                                >
+                                    { addBtnText2Icon ? addBtnText2Icon : <AddOutlinedIcon /> }
+                                    <strong>{addBtnText2}</strong>
+                                </button>
+                                :
+                                null
+                            }
+                            <button>
+                                { addBtnTextIcon ? addBtnTextIcon : <AddOutlinedIcon /> }
+                                <strong>{addBtnText}</strong>
+                            </button>
+                        </div>
                         :
                         null
                     }
-                    <button>
-                        { addBtnTextIcon ? addBtnTextIcon : <AddOutlinedIcon /> }
-                        <strong>{addBtnText}</strong>
-                    </button>
                 </div>
-                :
-                null
-            }
-
-            {
-                isHideRefresh ?
-                null
-                :
-                <div className="header-mobile-icons-container">
-                    <div onClick={e => setReload(reload + 1)}>
-                        <CachedIcon />
-                    </div>
-                </div>
-            }
+                
         </div>
     </div>
 }

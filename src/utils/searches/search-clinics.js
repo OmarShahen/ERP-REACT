@@ -1,6 +1,6 @@
 export const searchClinics = (clinic, value) => {
 
-    const currentClinic = clinic.clinic
+    const currentClinic = clinic
     value = value.toLowerCase()
 
     const name = currentClinic.name.toLowerCase()

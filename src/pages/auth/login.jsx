@@ -39,20 +39,15 @@ const LoginPage = () => {
         }
 
         setIsSubmit(true)
-        serverRequest.post('/v1/auth/login', loginData)
+        serverRequest.post('/v1/auth/employee/login', loginData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
             let user = data.user
             user.accessToken = data.token
-            const isLogged = user.roles.includes('STAFF') && !user.clinicId ? false : true
+            const isLogged = true
             sessionStorage.setItem('user', JSON.stringify({ ...data.user, isLogged }))
             dispatch(setUser({ ...data.user, isLogged }))
-
-            if(user.roles.includes('STAFF') && !user.clinicId) {
-                return navigate('/users/pending')
-            }
-
             return navigate('/patients')
         })
         .catch(error => {
@@ -118,9 +113,6 @@ const LoginPage = () => {
                                 :
                                 <input type="submit" className="action-color-bg white-text bold-text" value={translations[lang]["Continue"]} />
                             }
-                        </div>
-                        <div className="form-note-container">
-                            <span>{translations[lang]["Don't have an account?"]} <strong><NavLink to="/signup">{translations[lang]['Signup']}</NavLink></strong></span>
                         </div>
                     </div>
                 </form>

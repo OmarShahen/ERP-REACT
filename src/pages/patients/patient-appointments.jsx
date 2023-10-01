@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom'
 import translations from '../../i18n'
 
 
+
 const PatientAppointmentsPage = ({ roles }) => {
 
     const pagePath = window.location.pathname

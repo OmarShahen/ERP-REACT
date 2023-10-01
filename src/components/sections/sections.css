@@ -65,7 +65,16 @@
 .header-mobile-icons-container {
     display: flex;
     align-items: center;
-    display: none;
+}
+
+.header-mobile-icons-container:hover {
+    cursor: pointer;
+    opacity: .9;
+}
+
+.header-buttons-container {
+    display: flex;
+    align-items: center;
 }
 
 .header-mobile-icons-container div {

@@ -15,7 +15,6 @@ import NavigationBar from '../../components/navigation/navigation-bar'
 import FolderCard from '../../components/cards/folder'
 import FolderFormModal from '../../components/modals/folder-form'
 import FolderDeleteConfirmationModal from '../../components/modals/confirmation/folder-delete-confirmation-modal'
-import UploadFileFormModal from '../../components/modals/file-upload-form'
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined'
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import FileCard from '../../components/cards/file'
@@ -119,16 +118,6 @@ const FileManagerFolderPage = ({ roles }) => {
             /> 
             : 
             null 
-        }
-        { 
-        isShowUploadForm ? 
-        <UploadFileFormModal 
-        reload={reload}
-        setReload={setReload}
-        setShowFormModal={setIsShowUploadForm}
-        /> 
-        : 
-        null 
         }
 
         {

@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react'
 import './prescriptions.css'
 import PageHeader from '../components/sections/page-header'
 import { serverRequest } from '../components/API/request'
-import NavigationBar from '../components/navigation/navigation-bar'
 import CircularLoading from '../components/loadings/circular'
 import { useSelector } from 'react-redux'
 import FiltersSection from '../components/sections/filters/filters'
-import PrescriptionCard from '../components/cards/prescription'
 import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
-import { searchPrescriptions } from '../utils/searches/search-prescriptions'
+import { searchUsers } from '../utils/searches/search-users'
 import { useNavigate } from 'react-router-dom'
 import PrescriptionDeleteConfirmationModal from '../components/modals/confirmation/prescription-delete-confirmation-modal'
 import { isRolesValid } from '../utils/roles'
@@ -18,23 +16,23 @@ import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
 import { formatNumber } from '../utils/numbers'
 import FloatingButton from '../components/buttons/floating-button'
 import translations from '../i18n'
-import PrescriptionSurveyCard from '../components/cards/prescription-survey'
 import PrescriptionUpdateSurveyConfirmationModal from '../components/modals/confirmation/prescription-update-survey-confirmation-modal'
+import UserCard from '../components/cards/user'
 
 
-const PrescriptionsPage = ({ roles }) => {
+const UsersPage = ({ roles }) => {
 
     const navigate = useNavigate()
     
     const [isShowModal, setIsShowModal] = useState(false)
-    const [targetPrescription, setTargetPrescription] = useState({})
+    const [targetUser, setTargetUser] = useState({})
 
     const [isShowUpdateSurveyModal, setIsShowUpdateSurveyModal] = useState(false)
 
     const [isLoading, setIsLoading] = useState(true)
     const [reload, setReload] = useState(1)
-    const [prescriptions, setPrescriptions] = useState([])
-    const [searchedPrescriptions, setSearchedPrescriptions] = useState([])
+    const [users, setUsers] = useState([])
+    const [searchedUsers, setSearchedUsers] = useState([])
 
     const [viewStatus, setViewStatus] = useState('ALL')
 
@@ -58,14 +56,14 @@ const PrescriptionsPage = ({ roles }) => {
 
     useEffect(() => {
 
-        let endpointURL = `/v1/prescriptions/followup-service/clinics-subscriptions/active`
+        let endpointURL = `/v1/users/roles/app`
 
         setIsLoading(true)
         serverRequest.get(endpointURL, { params: statsQuery })
         .then(response => {
             setIsLoading(false)
-            setPrescriptions(response.data.prescriptions)
-            setSearchedPrescriptions(response.data.prescriptions)
+            setUsers(response.data.users)
+            setSearchedUsers(response.data.users)
         })
         .catch(error => {
             setIsLoading(false)
@@ -89,27 +87,15 @@ const PrescriptionsPage = ({ roles }) => {
         }
         <div className="padded-container">
             <PageHeader 
-            pageName={translations[lang]['Prescriptions']} 
+            pageName={'Users'} 
             reload={reload}
             setReload={setReload}
             />
             <div className="cards-3-list-wrapper margin-bottom-1">
                 <Card 
                 icon={<NumbersOutlinedIcon />}
-                cardHeader={translations[lang]['Prescriptions']}
-                number={formatNumber(searchedPrescriptions.length)}
-                iconColor={'#5C60F5'}
-                />
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Done Surveys'}
-                number={formatNumber(prescriptions.filter(prescription => prescription?.survey?.isDone).length)}
-                iconColor={'#5C60F5'}
-                />
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Waiting Surveys'}
-                number={formatNumber(prescriptions.filter(prescription => !prescription?.survey?.isDone).length)}
+                cardHeader={'Users'}
+                number={formatNumber(searchedUsers.length)}
                 iconColor={'#5C60F5'}
                 />
             </div>
@@ -121,44 +107,23 @@ const PrescriptionsPage = ({ roles }) => {
 
             <div className="search-input-container">
                 <SearchInput 
-                rows={prescriptions} 
-                setRows={setSearchedPrescriptions}
-                searchRows={searchPrescriptions}
-                isHideClinics={user.roles.includes('STAFF') ? true : false }
+                rows={users} 
+                setRows={setSearchedUsers}
+                searchRows={searchUsers}
+                isHideClinics={true}
                 />
-            </div>
-            <div className="appointments-categories-container cards-list-wrapper">
-                <div style={ viewStatus === 'ALL' ? activeElementColor : null } onClick={e => {
-                    setViewStatus('ALL')
-                    setSearchedPrescriptions(prescriptions.filter(prescription => true))
-                }}>
-                    {translations[lang]['All']}
-                </div>
-                <div style={ viewStatus === 'DONE' ?  activeElementColor : null } onClick={e => {
-                    setViewStatus('DONE')
-                    setSearchedPrescriptions(prescriptions.filter(prescription => prescription?.survey?.isDone))
-                }}>
-                    {'Done'}
-                </div>
-                <div style={ viewStatus === 'WAITING' ?  activeElementColor : null } onClick={e => {
-                    setViewStatus('WAITING')
-                    setSearchedPrescriptions(prescriptions.filter(prescription => !prescription?.survey?.isDone))
-                }}>
-                    {'Waiting'}
-                </div>
             </div>
             {
                 isLoading ?
                 <CircularLoading />
                 :
-                searchedPrescriptions.length !== 0 ?
+                searchedUsers.length !== 0 ?
                 <div className="cards-grey-container cards-3-list-wrapper">
-                    {searchedPrescriptions.map(prescription =><PrescriptionSurveyCard 
-                    prescription={prescription} 
+                    {searchedUsers.map(user =><UserCard 
+                    user={user} 
                     setReload={setReload} 
                     reload={reload} 
-                    setTargetPrescription={setTargetPrescription}
-                    setIsShowUpdatePrescription={setIsShowUpdateSurveyModal}
+                    setTargetUser={setTargetUser}
                     />)}
                 </div>
                     
@@ -170,4 +135,4 @@ const PrescriptionsPage = ({ roles }) => {
     </div>
 }
 
-export default PrescriptionsPage
+export default UsersPage

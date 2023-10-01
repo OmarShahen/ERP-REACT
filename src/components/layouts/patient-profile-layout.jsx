@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import { serverRequest } from '../../components/API/request'
-import NavigationBar from '../../components/navigation/navigation-bar'
-import PageHeader from '../sections/page-header'
 import { setPatient } from '../../redux/slices/patientSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import translations from '../../i18n'
@@ -10,8 +8,6 @@ import QuickFormMenu from '../menus/quick-forms/quick-forms'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import AppointmentFormModal from '../modals/appointment-form'
-import EmergencyContactFormModal from '../modals/emergency-contacts-form'
-import InsurancePoliciyFormModal from '../modals/insurance-policy-form'
 
 const PatientProfileLayout = () => {
 
@@ -52,10 +48,7 @@ const PatientProfileLayout = () => {
 
 
     return <div className="page-container">
-        <NavigationBar pageName={translations[lang]['Medical Profile']} />
         { isShowAppointmentsForm ? <AppointmentFormModal setShowFormModal={setIsShowAppointmentsForm} /> : null }
-        { isShowEmergencyContactsForm ? <EmergencyContactFormModal mode={'CREATE'} setShowModalForm={setIsShowEmergencyContactsForm} /> : null }
-        { isShowInsurancePolicy ? <InsurancePoliciyFormModal setShowFormModal={setIsShowInsurancePolicy} /> : null }
         <div className="padded-container">
         <div className="page-header-wrapper">
                     <div className="back-button-container">
@@ -79,8 +72,6 @@ const PatientProfileLayout = () => {
                             showQuickActionsForm ? 
                             <QuickFormMenu 
                             setShowAppointmentForm={setIsShowAppointmentsForm}
-                            setShowEmergencyContactForm={setIsShowEmergencyContactsForm}
-                            setShowInsurancePoliciesForm={setIsShowInsurancePolicy}
                             /> 
                             : 
                             null 
@@ -91,17 +82,7 @@ const PatientProfileLayout = () => {
             <div className="mini-page-navigator-container">
                 <ul>
                     <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/medical-profile`}>{translations[lang]['Profile']}</NavLink></li> 
-                    <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/emergency-contacts`}>{translations[lang]['Contacts']}</NavLink></li>
-                    {/* !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/doctors`}>{translations[lang]['Past Doctors']}</NavLink></li> */}
-                    { !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/encounters`}>{translations[lang]['Encounters']}</NavLink></li> }
-                    {/* !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/symptoms`}>{translations[lang]['Symptoms']}</NavLink></li> */}
-                    {/* !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/diagnosis`}>{translations[lang]['Diagnosis']}</NavLink></li> */}
-                    { !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/prescriptions`}>{translations[lang]['Prescriptions']}</NavLink></li> }
-                    { !user.roles.includes('DOCTOR') ? null : <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/drugs`}>{translations[lang]['Drugs']}</NavLink></li> }
-                    { user.roles.includes('DOCTOR') || user.roles.includes('STAFF') ? <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/appointments`}>{translations[lang]['Appointments']}</NavLink></li> : null }
-                    { user.roles.includes('OWNER') || user.roles.includes('STAFF') ? <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/invoices`}>{translations[lang]['Invoices']}</NavLink></li> : null }
-                    { user.roles.includes('OWNER') || user.roles.includes('STAFF') ? <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/insurance-policies`}>{translations[lang]['Insurance']}</NavLink></li> : null }
-                    { user.roles.includes('OWNER') || user.roles.includes('STAFF') ? <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/attachments`}>{translations[lang]['Attachments']}</NavLink></li> : null }
+                    <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/emergency-contacts`}>Surveys</NavLink></li>
 
                 </ul>
             </div>

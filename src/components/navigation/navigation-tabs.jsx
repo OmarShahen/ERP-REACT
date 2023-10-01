@@ -1,39 +1,64 @@
 import { NavLink } from "react-router-dom"
 import './navigation-tabs.css'
+import { useSelector } from "react-redux"
 
 const NavigationTabs = () => {
+
+    const user = useSelector(state => state.user.user)
 
     return <div>
         <div className="navigation-tabs-links body-text">
             <ul>
-                <NavLink to="/">
-                    <li>
-                        Home
-                    </li>
-                </NavLink>
                 <NavLink to="/patients">
                     <li>
                         Patients
                     </li>
                 </NavLink>
-                <NavLink to="/encounters">
+                {
+                    user.roles.includes('ADMIN') ?
+                    <NavLink to="/appointments">
+                        <li>
+                            Appointments
+                        </li>
+                    </NavLink>
+                    :
+                    null
+                }
+                
+                <NavLink to="/clinics/all">
                     <li>
-                        Encounters
+                        Clinics
                     </li>
                 </NavLink>
-                <NavLink to="/prescriptions">
+                    
+                {
+                    user.roles.includes('ADMIN') ?
+                    <NavLink to="/users">
+                        <li>
+                            Users
+                        </li>
+                    </NavLink>
+                    :
+                    null
+                }
+                {
+                    user.roles.includes('ADMIN') ?
+                    <NavLink to="/subscriptions">
+                        <li>
+                            Subscriptions
+                        </li>
+                    </NavLink>
+                    :
+                    null
+                }
+                <NavLink to="/patients-surveys">
                     <li>
-                        Prescriptions
+                        Surveys
                     </li>
                 </NavLink>
-                <NavLink to="/appointments">
+                <NavLink to="/settings/profile">
                     <li>
-                        Appointments
-                    </li>
-                </NavLink>
-                <NavLink to="/billing">
-                    <li>
-                        Billing
+                        Settings
                     </li>
                 </NavLink>
             </ul>

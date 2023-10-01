@@ -23,7 +23,6 @@ import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'
 import translations from '../../i18n'
 import SelectSection from '../../components/sections/selectors/select';
-import PrintInvoices from '../../components/prints/invoices/print-invoices';
 
 const InvoicesPage = ({ roles }) => {
 

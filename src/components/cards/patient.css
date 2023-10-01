@@ -12,7 +12,6 @@
 
 .patient-card-container:hover {
     cursor: pointer;
-    transform: scale(.9);
 }
 
 .patient-card-header {

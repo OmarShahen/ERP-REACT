@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import NavigationBar from '../components/navigation/navigation-bar'
 import { toast } from 'react-hot-toast'
 import PrescriptionCard from '../components/cards/prescription'
-import PrintPrescription from '../components/prints/prescriptions/print-prescription'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { isRolesValid } from '../utils/roles'
 import PrescriptionConfirmationDeleteModal from '../components/modals/confirmation/prescription-delete-confirmation-modal'
@@ -75,7 +74,7 @@ const PrescriptionPage = ({ roles }) => {
                         </h1>
                     </div>
                     <div className="btns-container subheader-text">
-                    { prescription ? <PrintPrescription prescription={prescription} /> : null }                </div>
+                    </div>
                 </div>
             </div>
             { 

@@ -7,7 +7,6 @@ import './invoice.css'
 import { useNavigate } from 'react-router-dom'
 import { TailSpin } from 'react-loader-spinner'
 import CircularLoading from '../../components/loadings/circular'
-import PrintInvoice from '../../components/prints/invoices/print-invoice'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import PayDebtFormModal from '../../components/modals/pay-debt-form'
 import InvoiceDeleteConfirmationModal from '../../components/modals/confirmation/invoice-delete-confirmation-modal';
@@ -153,7 +152,6 @@ const InvoicePage = ({ roles }) => {
                         </h1>
                     </div>
                     <div className="btns-container subheader-text">
-                        { invoice ? <PrintInvoice invoice={invoice} /> : null }
                     </div>
                 </div>
             </div>

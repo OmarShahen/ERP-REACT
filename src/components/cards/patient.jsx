@@ -9,8 +9,10 @@ import CardTransition from '../transitions/card-transitions'
 import { capitalizeFirstLetter } from '../../utils/formatString'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
+import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined'
 
-const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowDeleteModal }) => {
+const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUpdatePatient }) => {
 
     const navigate = useNavigate()
 
@@ -24,21 +26,11 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowDe
 
     const cardActionsList = [
         {
-            name: translations[lang]['Delete Patient'],
-            icon: <DeleteOutlineOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetPatient(patient)
-                setIsShowDeleteModal(true)
-                deletePatient(patient._id)
-            }
-        },
-        {
-            name: translations[lang]['Update Patient'],
+            name: 'Add Survey',
             icon: <CreateOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
-                navigate(`/patients/${patient?.patient?._id}/form?mode=UPDATE`)
+                navigate(`/clinics/${patient.clinicId}/patients/${patient.patientId}/patient-survey/form`)
             }
         }
      ]
@@ -73,10 +65,6 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowDe
                         <span>{patientPhone}</span>
                     </li>
                     <li>
-                        <strong>{translations[lang]['Card ID']}</strong>
-                        <span>{patient.patient.cardId ? `#${patient.patient.cardId}` : translations[lang]['Not Registered']}</span>
-                    </li>
-                    <li>
                         <strong>{translations[lang]['Gender']}</strong>
                         <span>{patient.patient.gender ? translations[lang][capitalizeFirstLetter(patient.patient.gender)] : translations[lang]['Not registered']}</span>
                     </li>
@@ -88,9 +76,31 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowDe
                         <strong>{translations[lang]['Age']}</strong>
                         <span>{patient.patient.dateOfBirth ? getAge(patient.patient.dateOfBirth) : translations[lang]['Not Registered']}</span>
                     </li>
+                    <li>
+                        <strong>City</strong>
+                        <span>{patient?.patient?.city ? capitalizeFirstLetter(patient.patient.city) : 'Not Registered'}</span>
+                    </li>
+                    <li>
+                        <strong>Survey</strong>
+                        {
+                            patient?.survey?.isDone ?
+                            <span className="status-btn done bold-text">Done</span>
+                            :
+                            <span className="status-btn pending bold-text">Waiting</span>
+                        }
+                    </li>
+                    {
+                        patient?.member ?
+                        <li>
+                            <strong>Done By</strong>
+                            <span>{patient?.member?.firstName + ' ' + patient?.member?.lastName}</span>
+                        </li>
+                        :
+                        null
+                    }
                 </ul>
             </div>
-            <CardDate creationDate={patient.createdAt} />
+            <CardDate creationDate={patient.createdAt}  updateDate={patient?.survey?.doneDate} />
         </div>
     </CardTransition>
 }

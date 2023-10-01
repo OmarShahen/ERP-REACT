@@ -24,7 +24,7 @@ const PatientMedicalPage = ({ roles }) => {
 
     useEffect(() => { 
         scroll(0, 0) 
-        isRolesValid(user.roles, roles) ? null : navigate('/login')
+        //isRolesValid(user.roles, roles) ? null : navigate('/login')
     }, [])
     
     useEffect(() => {

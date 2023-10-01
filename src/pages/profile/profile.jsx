@@ -19,7 +19,7 @@ const ProfilePage = ({ roles }) => {
 
     useEffect(() => {
         scroll(0,0)
-        isRolesValid(appUser.roles, roles) ? null : navigate('/login')
+        //isRolesValid(appUser.roles, roles) ? null : navigate('/login')
     }, [])
 
     useEffect(() => {

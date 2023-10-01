@@ -37,11 +37,7 @@ const SearchInput = ({
             return
         }
 
-        let endpointURL = `/v1/clinics/doctors/${user._id}`
-
-        if(user.roles.includes('OWNER') && !user.roles.includes('DOCTOR')) {
-            endpointURL = `/v1/clinics-owners/owners/${user._id}`
-        }
+        let endpointURL = `/v1/clinics/followup-service/clinics-subscriptions/active`
 
         serverRequest.get(endpointURL)
         .then(response => {
@@ -122,7 +118,7 @@ const SearchInput = ({
                 >
                     <option selected disabled>{translations[lang]['Select clinic']}</option>
                     <option value={'ALL'}>{translations[lang]['All']}</option>
-                    {clinics.map(clinic => <option value={clinic?.clinic?._id}>{clinic?.clinic?.name}</option>)}
+                    {clinics.map(clinic => <option value={clinic?._id}>{clinic?.name}</option>)}
                 </select>
             </div>
         }

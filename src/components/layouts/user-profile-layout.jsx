@@ -10,7 +10,6 @@ const UserProfileLayoutPage = () => {
     const lang = useSelector(state => state.lang.lang)
 
     return <div className="page-container">
-        <NavigationBar pageName={translations[lang]['Account Settings']} />
         <div className="padded-container">
             <PageHeader pageName={translations[lang]["Account Settings"]} />
             <div className="mini-page-navigator-container">

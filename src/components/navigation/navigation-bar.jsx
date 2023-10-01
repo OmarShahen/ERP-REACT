@@ -10,13 +10,12 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
 import translations from '../../i18n'
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
+import NavigationTabs from './navigation-tabs'
 
-const NavigationBar = ({ pageName }) => {
+const NavigationBar = () => {
 
     const navigate = useNavigate()
     const user = useSelector(state => state.user.user)
-    const sidebar = useSelector(state => state.sidebar)
-    const lang = useSelector(state => state.lang.lang)
     const dispatch = useDispatch()
 
     const [showUserProfileMenu, setShowUserProfileMenu] = useState(false)
@@ -25,10 +24,6 @@ const NavigationBar = ({ pageName }) => {
     useEffect(() => {
         if(!user.isLogged) {
             navigate('/login')
-        }
-
-        if(user.roles.includes('STAFF') && !user.clinicId) {
-            navigate('/users/pending')
         }
 
         const windowWidth = window.innerWidth
@@ -43,26 +38,10 @@ const NavigationBar = ({ pageName }) => {
     return <div>
         <div className="navigation-bar-container body-text">
             <div className="navigation-map-container">
-                    <span onClick={e => dispatch(setIsShowSidebar(!sidebar.isShowSidebar))}>
-                        <MenuOpenIcon />
-                    </span>
-                <span>{pageName}</span>
+                    
+                <span>{"RA'AYA"}</span>
             </div>
             <div className="navigation-bar-options-container">
-                {
-                    user.roles.includes('DOCTOR') || user.roles.includes('OWNER') ?
-                    <div>
-                        <button 
-                        className="upgrade-btn"
-                        onClick={e => navigate('/billing/packages')}
-                        >
-                            <StarBorderOutlinedIcon />
-                            Upgrade to Plus
-                        </button>
-                    </div>
-                    :
-                    null
-                }
                 <div className="show-large">
                     <NavLink to="/settings/profile">
                         <SettingsOutlinedIcon />
@@ -79,6 +58,7 @@ const NavigationBar = ({ pageName }) => {
                 </div>
             </div>
         </div>
+        <NavigationTabs />
     </div>
 }
 

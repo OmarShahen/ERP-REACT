@@ -61,15 +61,13 @@ const AppointmentsPage = ({ roles }) => {
 
     useEffect(() => { 
         scroll(0,0) 
-        isRolesValid(user.roles, roles) ? null : navigate('/login')
+        //isRolesValid(user.roles, roles) ? null : navigate('/login')
     }, [])
 
     useEffect(() => {
         setIsLoading(true)
-        const endpointURL = user.roles.includes('STAFF') ?
-        `/v1/appointments/clinics/${user.clinicId}`
-        :
-        `/v1/appointments/doctors/${user._id}`
+        const endpointURL = `/v1/appointments/followup-service/clinics-subscriptions/active`
+
         serverRequest.get(endpointURL, { params: statsQuery })
         .then(response => {
             setIsLoading(false)
@@ -84,7 +82,6 @@ const AppointmentsPage = ({ roles }) => {
 
 
     return <div className="page-container">
-        <NavigationBar pageName={translations[lang]['Appointments']} />
          { 
         isShowDeleteModal ? 
         <AppointmentDeleteConfirmationModal 

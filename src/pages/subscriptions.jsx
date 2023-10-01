@@ -24,25 +24,21 @@ import { formatNumber } from '../utils/numbers'
 import translations from '../i18n'
 import PageHeader from '../components/sections/page-header'
 import PatientUpdateSurveyConfirmationModal from '../components/modals/confirmation/patient-update-survey-confirmation-modal'
+import SubscriptionCard from '../components/cards/subscriptions'
 
-const PatientsPage = ({ roles }) => {
-
-    const navigate = useNavigate()
+const SubscriptionsPage = ({ roles }) => {
 
     const user = useSelector(state => state.user.user)
     const lang = useSelector(state => state.lang.lang)
 
     const [isShowUpdateSurveyModal, setIsShowUpdateSurveyModal] = useState(false)
-    const [targetPatient, setTargetPatient] = useState({})
+    const [targetSubscription, setTargetSubscription] = useState({})
 
     const [statsQuery, setStatsQuery] = useState()
-    const [targetClinic, setTargetClinic] = useState()
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
-    const [showPatientIdForm, setShowPatientIdForm] = useState(false)
-    const [showPatientDataForm, setShowPatientDataForm] = useState(false)
-    const [patients, setPatients] = useState([])
-    const [searchedPatients, setSearchedPatients] = useState([])
+    const [subscriptions, setSubscriptions] = useState([])
+    const [searchedSubscriptions, setSearchedSubscriptions] = useState([])
 
     const [viewStatus, setViewStatus] = useState('ALL')
 
@@ -54,12 +50,12 @@ const PatientsPage = ({ roles }) => {
 
     useEffect(() => {
         setIsLoading(true)    
-        const endpointURL = `/v1/patients/followup-service/clinics-subscriptions/active`  
+        const endpointURL = `/v1/clinics-subscriptions`  
         serverRequest.get(endpointURL,  { params: statsQuery })
         .then(response => {
             setIsLoading(false)
-            setPatients(response.data.patients)
-            setSearchedPatients(response.data.patients)
+            setSubscriptions(response.data.clinicsSubscriptions)
+            setSearchedSubscriptions(response.data.clinicsSubscriptions)
         })
         .catch(error => {
             setIsLoading(false)
@@ -88,27 +84,33 @@ const PatientsPage = ({ roles }) => {
 
             <div className="padded-container">
                 <PageHeader 
-                pageName={'Patients'}
+                pageName={'Subscriptions'}
                 reload={reload}
                 setReload={setReload}
                 />
-                <div className="cards-3-list-wrapper margin-bottom-1">
+                <div className="cards-4-list-wrapper margin-bottom-1">
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={translations[lang]['Patients']}
-                    number={formatNumber(searchedPatients.length)}
+                    cardHeader={'Subscriptions'}
+                    number={formatNumber(searchedSubscriptions.length)}
                     iconColor={'#5C60F5'}
                     />
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Done Surveys'}
-                    number={formatNumber(patients.filter(patient => patient?.survey?.isDone).length)}
+                    cardHeader={'Active'}
+                    number={formatNumber(searchedSubscriptions.filter(subscription => subscription.isActive && new Date(subscription.endDate) > new Date()).length)}
                     iconColor={'#5C60F5'}
                     />
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Waiting Surveys'}
-                    number={formatNumber(patients.filter(patient => !patient?.survey?.isDone).length)}
+                    cardHeader={'Not Active'}
+                    number={formatNumber(searchedSubscriptions.filter(subscription => !subscription.isActive && new Date(subscription.endDate) > new Date()).length)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'Expired'}
+                    number={formatNumber(searchedSubscriptions.filter(subscription => new Date(subscription.endDate) < new Date()).length)}
                     iconColor={'#5C60F5'}
                     />
                 </div>
@@ -120,54 +122,59 @@ const PatientsPage = ({ roles }) => {
                     />
                     <div className="search-input-container">
                         <SearchInput 
-                        rows={patients} 
-                        setRows={setSearchedPatients}
+                        rows={subscriptions} 
+                        setRows={setSearchedSubscriptions}
                         searchRows={searchPatients}
-                        setTargetClinic={setTargetClinic}
-                        isHideClinics={user.roles.includes('STAFF') ? true : false }
+                        setTargetClinic={setTargetSubscription}
+                        isHideClinics={false}
                         />
                     </div>
                     <div className="appointments-categories-container cards-list-wrapper">
                         <div style={ viewStatus === 'ALL' ? activeElementColor : null } onClick={e => {
                             setViewStatus('ALL')
-                            setSearchedPatients(patients.filter(patient => true))
+                            setSearchedSubscriptions(subscriptions.filter(subscription => true))
                         }}>
                             {translations[lang]['All']}
                         </div>
-                        <div style={ viewStatus === 'DONE' ?  activeElementColor : null } onClick={e => {
-                            setViewStatus('DONE')
-                            setSearchedPatients(patients.filter(patient => patient?.survey?.isDone))
+                        <div style={ viewStatus === 'ACTIVE' ?  activeElementColor : null } onClick={e => {
+                            setViewStatus('ACTIVE')
+                            setSearchedSubscriptions(subscriptions.filter(subscription => subscription.isActive && new Date(subscription.endDate) > new Date()))
                         }}>
-                            {'Done'}
+                            {'Active'}
                         </div>
-                        <div style={ viewStatus === 'WAITING' ?  activeElementColor : null } onClick={e => {
-                            setViewStatus('WAITING')
-                            setSearchedPatients(patients.filter(patient => !patient?.survey?.isDone))
+                        <div style={ viewStatus === 'INACTIVE' ?  activeElementColor : null } onClick={e => {
+                            setViewStatus('INACTIVE')
+                            setSearchedSubscriptions(subscriptions.filter(subscription => !subscription.isActive && new Date(subscription.endDate) > new Date()))
                         }}>
-                            {'Waiting'}
+                            {'Not Active'}
+                        </div>
+                        <div style={ viewStatus === 'EXPIRED' ?  activeElementColor : null } onClick={e => {
+                            setViewStatus('EXPIRED')
+                            setSearchedSubscriptions(subscriptions.filter(subscription => new Date(subscription.endDate) < new Date()))
+                        }}>
+                            {'Expired'}
                         </div>
                     </div>
                 {
                     isLoading ?
                     <CircularLoading />
                     :
-                    searchedPatients.length !== 0 ?
+                    searchedSubscriptions.length !== 0 ?
                     <div className="cards-grey-container cards-3-list-wrapper">
-                            {searchedPatients.map((patient, index) => <PatientCard 
-                                patient={patient} 
+                            {searchedSubscriptions.map((subscription, index) => <SubscriptionCard 
+                                subscription={subscription} 
                                 setReload={setReload} 
                                 reload={reload}
-                                setIsShowUpdatePatient={setIsShowUpdateSurveyModal}
-                                setTargetPatient={setTargetPatient}
+                                setTargetSubscription={setTargetSubscription}
                                 />
                             )}
                     </div>
                     :
-                    <EmptySection setIsShowForm={setShowPatientDataForm} />
+                    <EmptySection />
     }
         </div>
         </div>
     </div>
 }
 
-export default PatientsPage
+export default SubscriptionsPage

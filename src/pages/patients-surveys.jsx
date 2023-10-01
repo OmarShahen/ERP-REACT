@@ -11,8 +11,7 @@ import CachedIcon from '@mui/icons-material/Cached'
 import FloatingButton from '../components/buttons/floating-button'
 import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
-import { searchPatients } from '../utils/searches/search-patients'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { searchPatientsSurveys } from '../utils/searches/search-patients-surveys'
 import { useNavigate } from 'react-router-dom'
 import PatientDeleteConfirmationModal from '../components/modals/confirmation/patient-delete-confirmation-modal'
 import { toast } from 'react-hot-toast'
@@ -24,8 +23,10 @@ import { formatNumber } from '../utils/numbers'
 import translations from '../i18n'
 import PageHeader from '../components/sections/page-header'
 import PatientUpdateSurveyConfirmationModal from '../components/modals/confirmation/patient-update-survey-confirmation-modal'
+import PatientSurveyCard from '../components/cards/patient-survey'
+import PatientSurveyDeleteConfirmationModal from '../components/modals/confirmation/patient-survey-delete-confirmation-modal'
 
-const PatientsPage = ({ roles }) => {
+const PatientsSurveysPage = ({ roles }) => {
 
     const navigate = useNavigate()
 
@@ -33,20 +34,15 @@ const PatientsPage = ({ roles }) => {
     const lang = useSelector(state => state.lang.lang)
 
     const [isShowUpdateSurveyModal, setIsShowUpdateSurveyModal] = useState(false)
-    const [targetPatient, setTargetPatient] = useState({})
+    const [targetSurvey, setTargetSurvey] = useState({})
 
     const [statsQuery, setStatsQuery] = useState()
-    const [targetClinic, setTargetClinic] = useState()
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
     const [showPatientIdForm, setShowPatientIdForm] = useState(false)
     const [showPatientDataForm, setShowPatientDataForm] = useState(false)
-    const [patients, setPatients] = useState([])
-    const [searchedPatients, setSearchedPatients] = useState([])
-
-    const [viewStatus, setViewStatus] = useState('ALL')
-
-    const activeElementColor = { border: '2px solid #4c83ee', color: '#4c83ee' }
+    const [patientsSurveys, setPatientsSurveys] = useState([])
+    const [searchedPatientsSurveys, setSearchedPatientsSurveys] = useState([])
 
     useEffect(() => { 
         scroll(0,0)
@@ -54,12 +50,12 @@ const PatientsPage = ({ roles }) => {
 
     useEffect(() => {
         setIsLoading(true)    
-        const endpointURL = `/v1/patients/followup-service/clinics-subscriptions/active`  
+        const endpointURL = `/v1/patients-surveys`  
         serverRequest.get(endpointURL,  { params: statsQuery })
         .then(response => {
             setIsLoading(false)
-            setPatients(response.data.patients)
-            setSearchedPatients(response.data.patients)
+            setPatientsSurveys(response.data.patientsSurveys)
+            setSearchedPatientsSurveys(response.data.patientsSurveys)
         })
         .catch(error => {
             setIsLoading(false)
@@ -72,9 +68,8 @@ const PatientsPage = ({ roles }) => {
     return <div className="page-container page-white-background">
         { 
         isShowUpdateSurveyModal ? 
-        <PatientUpdateSurveyConfirmationModal 
-        patient={targetPatient}
-        isSurveyed={!targetPatient?.survey?.isDone}
+        <PatientSurveyDeleteConfirmationModal 
+        survey={targetSurvey}
         reload={reload}
         setReload={setReload} 
         setIsShowModal={setIsShowUpdateSurveyModal}
@@ -88,27 +83,15 @@ const PatientsPage = ({ roles }) => {
 
             <div className="padded-container">
                 <PageHeader 
-                pageName={'Patients'}
+                pageName={'Surveys'}
                 reload={reload}
                 setReload={setReload}
                 />
                 <div className="cards-3-list-wrapper margin-bottom-1">
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={translations[lang]['Patients']}
-                    number={formatNumber(searchedPatients.length)}
-                    iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Done Surveys'}
-                    number={formatNumber(patients.filter(patient => patient?.survey?.isDone).length)}
-                    iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Waiting Surveys'}
-                    number={formatNumber(patients.filter(patient => !patient?.survey?.isDone).length)}
+                    cardHeader={'Surveys'}
+                    number={formatNumber(searchedPatientsSurveys.length)}
                     iconColor={'#5C60F5'}
                     />
                 </div>
@@ -120,54 +103,34 @@ const PatientsPage = ({ roles }) => {
                     />
                     <div className="search-input-container">
                         <SearchInput 
-                        rows={patients} 
-                        setRows={setSearchedPatients}
-                        searchRows={searchPatients}
-                        setTargetClinic={setTargetClinic}
-                        isHideClinics={user.roles.includes('STAFF') ? true : false }
+                        rows={patientsSurveys} 
+                        setRows={setSearchedPatientsSurveys}
+                        searchRows={searchPatientsSurveys}
+                        isHideClinics={false}
                         />
                     </div>
-                    <div className="appointments-categories-container cards-list-wrapper">
-                        <div style={ viewStatus === 'ALL' ? activeElementColor : null } onClick={e => {
-                            setViewStatus('ALL')
-                            setSearchedPatients(patients.filter(patient => true))
-                        }}>
-                            {translations[lang]['All']}
-                        </div>
-                        <div style={ viewStatus === 'DONE' ?  activeElementColor : null } onClick={e => {
-                            setViewStatus('DONE')
-                            setSearchedPatients(patients.filter(patient => patient?.survey?.isDone))
-                        }}>
-                            {'Done'}
-                        </div>
-                        <div style={ viewStatus === 'WAITING' ?  activeElementColor : null } onClick={e => {
-                            setViewStatus('WAITING')
-                            setSearchedPatients(patients.filter(patient => !patient?.survey?.isDone))
-                        }}>
-                            {'Waiting'}
-                        </div>
-                    </div>
+                    
                 {
                     isLoading ?
                     <CircularLoading />
                     :
-                    searchedPatients.length !== 0 ?
+                    searchedPatientsSurveys.length !== 0 ?
                     <div className="cards-grey-container cards-3-list-wrapper">
-                            {searchedPatients.map((patient, index) => <PatientCard 
-                                patient={patient} 
+                            {searchedPatientsSurveys.map((survey, index) => <PatientSurveyCard 
+                                survey={survey} 
                                 setReload={setReload} 
                                 reload={reload}
-                                setIsShowUpdatePatient={setIsShowUpdateSurveyModal}
-                                setTargetPatient={setTargetPatient}
+                                setIsShowUpdateSurvey={setIsShowUpdateSurveyModal}
+                                setTargetSurvey={setTargetSurvey}
                                 />
                             )}
                     </div>
                     :
-                    <EmptySection setIsShowForm={setShowPatientDataForm} />
+                    <EmptySection />
     }
         </div>
         </div>
     </div>
 }
 
-export default PatientsPage
+export default PatientsSurveysPage
