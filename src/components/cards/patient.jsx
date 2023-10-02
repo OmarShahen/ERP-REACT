@@ -98,6 +98,21 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUp
                         :
                         null
                     }
+                    {
+                        patient?.speciality?.length !== 0 ?
+                        <div>
+                            <div className="card-list-header body-text">
+                                <span>Clinic Speciality</span>
+                            </div>
+                            <div className="codes-container">
+                                { patient?.speciality.map(special => <span className="status-btn grey-bg">
+                                    {translations['ar'][special.name]}                   
+                                </span>) }
+                            </div>
+                        </div>
+                        :
+                        null
+                    }
                 </ul>
             </div>
             <CardDate creationDate={patient.createdAt}  updateDate={patient?.survey?.doneDate} />
