@@ -43,7 +43,7 @@ const PatientSurveyPage = ({ roles }) => {
 
     return <div>
         <PageHeader
-        pageName={`Patient Survey #${patientSurvey?.patientSurveyId}`}
+        pageName={`Impression Survey #${patientSurvey?.patientSurveyId}`}
         addBtnText={'Update Survey'}
         addBtnTextIcon={<CreateOutlinedIcon />}
         setReload={setReload}
@@ -121,7 +121,7 @@ const PatientSurveyPage = ({ roles }) => {
                                     Patient
                                 </div>
                                 <div>
-                                    {`${patientSurvey?.patient?.firstName} ${patientSurvey?.patient?.lastName}`}
+                                    {`${patientSurvey?.patient?.firstName} ${patientSurvey?.patient?.lastName ? patientSurvey?.patient?.lastName : ''}`}
                                 </div>
                             </li>
                             <li>
@@ -138,6 +138,14 @@ const PatientSurveyPage = ({ roles }) => {
                                 </div>
                                 <div>
                                     {getExperienceNameByNumber(patientSurvey?.overallExperience)}
+                                </div>
+                            </li>
+                            <li>
+                                <div className="bold-text">
+                                    Arrival Method
+                                </div>
+                                <div>
+                                    {patientSurvey?.arrivalMethod?.name ? patientSurvey?.arrivalMethod?.name : 'Not Registered'}
                                 </div>
                             </li>
                             <li>
@@ -165,7 +173,7 @@ const PatientSurveyPage = ({ roles }) => {
                                     Name
                                 </div>
                                 <div>
-                                    {`${patientSurvey?.patient?.firstName} ${patientSurvey?.patient?.lastName}`}
+                                    {`${patientSurvey?.patient?.firstName} ${patientSurvey?.patient?.lastName ? patientSurvey?.patient?.lastName : ''}`}
                                 </div>
                             </li>
                             <li>

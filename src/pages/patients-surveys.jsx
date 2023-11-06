@@ -77,13 +77,10 @@ const PatientsSurveysPage = ({ roles }) => {
         : 
         null 
         }
-        <div className="show-mobile">
-            { user.roles.includes('STAFF') || user.roles.includes('DOCTOR') ? <FloatingButton url={'/patients/form'} /> : null }
-        </div>
 
             <div className="padded-container">
                 <PageHeader 
-                pageName={'Surveys'}
+                pageName={'Impression Surveys'}
                 reload={reload}
                 setReload={setReload}
                 />

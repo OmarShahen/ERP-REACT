@@ -3,6 +3,12 @@
     grid-template-columns: auto;
 }
 
+.page-body-layout-container {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+
 @media only screen and (max-width: 600px) {
     .main-layout-container {
         grid-template-columns: 100% !important;

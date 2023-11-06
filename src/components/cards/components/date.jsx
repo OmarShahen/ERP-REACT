@@ -2,7 +2,7 @@ import { format, formatDistance  } from 'date-fns'
 import { useSelector } from 'react-redux'
 
 
-const CardDate = ({ creationDate, updateDate }) => {
+const CardDate = ({ creationDate, updateDate, isHideUpdate=false }) => {
 
     const lang = useSelector(state => state.lang.lang)
 
@@ -13,6 +13,7 @@ const CardDate = ({ creationDate, updateDate }) => {
         { lang === 'en' ?
             <div>
                 {
+                    !isHideUpdate ?
                     !updateDate || new Date(creationDate).getTime() === new Date(updateDate).getTime() ?
                     <span>
                         {formatDistance(new Date(creationDate), new Date(), { addSuffix: true })}
@@ -21,6 +22,8 @@ const CardDate = ({ creationDate, updateDate }) => {
                     <span>
                         last modified({formatDistance(new Date(updateDate), new Date(), { addSuffix: true })})
                     </span>
+                    :
+                    null
                 }
             </div>
             :

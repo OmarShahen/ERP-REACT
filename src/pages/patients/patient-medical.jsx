@@ -49,51 +49,7 @@ const PatientMedicalPage = ({ roles }) => {
                     isLoading ?
                     <CircularLoading />
                     :
-                    <div className="patient-profile-grid-container"> 
-                        <div className="patient-profile-page-navigator-container">
-                            <ul>
-                                <li>
-                                    <a href="#demographic-section">
-                                        {translations[lang]['Demographic']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#bad-habits-section">
-                                        {translations[lang]['Bad Habits']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#chronic-section">
-                                        {translations[lang]['Chronic Diseases']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#genetic-section">
-                                        {translations[lang]['Genetic Issue']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#blood-section">
-                                        {translations[lang]['Blood']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#allergies-section">
-                                        {translations[lang]['Allergies']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#immune-section">
-                                        {translations[lang]['Immune Diseases']}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#surgery-section">
-                                        {translations[lang]['Past Surgeries']}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div> 
                         <PatientProfileSection patient={patient} />
                     </div>
                 }

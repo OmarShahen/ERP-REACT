@@ -58,7 +58,7 @@ const PatientProfileLayout = () => {
                     <div className="page-header-container">
                         <div>
                             <h1>
-                                { isLoading ? 'Loading...' : patientProfile?.firstName + ' ' + patientProfile?.lastName }
+                                { isLoading ? 'Loading...' : `${patientProfile?.firstName} ${patientProfile?.lastName ? patientProfile.lastName : ''}` }
                             </h1>
                         </div>
                         <div className="btns-container subheader-text quick-form-container">
@@ -82,8 +82,8 @@ const PatientProfileLayout = () => {
             <div className="mini-page-navigator-container">
                 <ul>
                     <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/medical-profile`}>{translations[lang]['Profile']}</NavLink></li> 
-                    <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/emergency-contacts`}>Surveys</NavLink></li>
-
+                    <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/patients-surveys`}>Patient Surveys</NavLink></li>
+                    <li><NavLink to={`/patients/${patientId}/clinics/${clinicId}/treatments-surveys`}>Treatment Surveys</NavLink></li>
                 </ul>
             </div>
             <Outlet />

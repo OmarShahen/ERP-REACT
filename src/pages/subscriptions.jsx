@@ -78,9 +78,7 @@ const SubscriptionsPage = ({ roles }) => {
         : 
         null 
         }
-        <div className="show-mobile">
-            { user.roles.includes('STAFF') || user.roles.includes('DOCTOR') ? <FloatingButton url={'/patients/form'} /> : null }
-        </div>
+        
 
             <div className="padded-container">
                 <PageHeader 

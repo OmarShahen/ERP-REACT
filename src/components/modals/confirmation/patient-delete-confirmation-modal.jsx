@@ -18,12 +18,8 @@ const PatientDeleteConfirmationModal = ({ patient, reload, setReload, setIsShowM
     const deletePatient = () => {
         setIsLoading(true)
 
-        let endpointURL = `/v1/clinics-patients-doctors/${patient._id}`
-
-        if(user.roles.includes('STAFF')) {
-            endpointURL = `/v1/clinics-patients/${patient._id}`
-        }
-
+        let endpointURL = `/v1/clinics-patients/${patient._id}`
+        
         serverRequest.delete(endpointURL)
         .then(response => {
             setIsLoading(false)

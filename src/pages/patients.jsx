@@ -24,6 +24,8 @@ import { formatNumber } from '../utils/numbers'
 import translations from '../i18n'
 import PageHeader from '../components/sections/page-header'
 import PatientUpdateSurveyConfirmationModal from '../components/modals/confirmation/patient-update-survey-confirmation-modal'
+import Sidebar from '../components/navigation/sidebar'
+
 
 const PatientsPage = ({ roles }) => {
 
@@ -33,9 +35,12 @@ const PatientsPage = ({ roles }) => {
     const lang = useSelector(state => state.lang.lang)
 
     const [isShowUpdateSurveyModal, setIsShowUpdateSurveyModal] = useState(false)
+    const [isShowDeletePatientModel, setIsShowDeletePatientModal] = useState(false)
+    const [isShowAddPatientForm, setIsShowAddPatientForm] = useState(false)
     const [targetPatient, setTargetPatient] = useState({})
 
-    const [statsQuery, setStatsQuery] = useState()
+    const [isUpdatePatient, setIsUpdatePatient] = useState(false)
+
     const [targetClinic, setTargetClinic] = useState()
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
@@ -47,6 +52,14 @@ const PatientsPage = ({ roles }) => {
     const [viewStatus, setViewStatus] = useState('ALL')
 
     const activeElementColor = { border: '2px solid #4c83ee', color: '#4c83ee' }
+
+    const todayDate = new Date()
+    const weekDate = new Date()
+
+    todayDate.setDate(todayDate.getDate() + 1)
+    weekDate.setDate(weekDate.getDate() - 7)
+
+    const [statsQuery, setStatsQuery] = useState({ from: weekDate, to: todayDate })
 
     useEffect(() => { 
         scroll(0,0)
@@ -70,6 +83,30 @@ const PatientsPage = ({ roles }) => {
 
 
     return <div className="page-container page-white-background">
+        {
+            isShowAddPatientForm ?
+            <PatientFormModal 
+            reload={reload} 
+            setReload={setReload} 
+            setShowModalForm={setIsShowAddPatientForm}  
+            isUpdate={isUpdatePatient}
+            setIsUpdate={setIsUpdatePatient}
+            patient={targetPatient}
+            />
+            :
+            null
+        }
+        {
+            isShowDeletePatientModel ?
+            <PatientDeleteConfirmationModal
+            reload={reload}
+            setReload={setReload}
+            patient={targetPatient}
+            setIsShowModal={setIsShowDeletePatientModal}
+            />
+            :
+            null
+        }
         { 
         isShowUpdateSurveyModal ? 
         <PatientUpdateSurveyConfirmationModal 
@@ -83,40 +120,45 @@ const PatientsPage = ({ roles }) => {
         null 
         }
         <div className="show-mobile">
-            { user.roles.includes('STAFF') || user.roles.includes('DOCTOR') ? <FloatingButton url={'/patients/form'} /> : null }
+            <FloatingButton setIsShowForm={setIsShowAddPatientForm} />
         </div>
 
             <div className="padded-container">
-                <PageHeader 
-                pageName={'Patients'}
-                reload={reload}
-                setReload={setReload}
-                />
-                <div className="cards-3-list-wrapper margin-bottom-1">
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={translations[lang]['Patients']}
-                    number={formatNumber(searchedPatients.length)}
-                    iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Done Surveys'}
-                    number={formatNumber(patients.filter(patient => patient?.survey?.isDone).length)}
-                    iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Waiting Surveys'}
-                    number={formatNumber(patients.filter(patient => !patient?.survey?.isDone).length)}
-                    iconColor={'#5C60F5'}
-                    />
-                </div>
                 <div>
+                    <PageHeader 
+                    pageName={'Patients'}
+                    reload={reload}
+                    setReload={setReload}
+                    addBtnText={'Add Patient'}
+                    setShowModalForm={setIsShowAddPatientForm}
+                    />
+                    <div className="cards-3-list-wrapper margin-bottom-1">
+                        <Card 
+                        icon={<NumbersOutlinedIcon />}
+                        cardHeader={translations[lang]['Patients']}
+                        number={formatNumber(searchedPatients.length)}
+                        iconColor={'#5C60F5'}
+                        />
+                        <Card 
+                        icon={<NumbersOutlinedIcon />}
+                        cardHeader={'Done Surveys'}
+                        number={formatNumber(patients.filter(patient => patient?.survey?.isDone).length)}
+                        iconColor={'#5C60F5'}
+                        />
+                        <Card 
+                        icon={<NumbersOutlinedIcon />}
+                        cardHeader={'Waiting Surveys'}
+                        number={formatNumber(patients.filter(patient => !patient?.survey?.isDone).length)}
+                        iconColor={'#5C60F5'}
+                        />
+                    </div>
+                <div>
+            </div>
+                
                     <FiltersSection 
                     setStatsQuery={setStatsQuery} 
                     statsQuery={statsQuery}
-                    defaultValue={'LIFETIME'}
+                    defaultValue={'-7'}
                     />
                     <div className="search-input-container">
                         <SearchInput 
@@ -158,6 +200,9 @@ const PatientsPage = ({ roles }) => {
                                 setReload={setReload} 
                                 reload={reload}
                                 setIsShowUpdatePatient={setIsShowUpdateSurveyModal}
+                                setIsShowAddPatient={setIsShowAddPatientForm}
+                                setIsUpdatePatient={setIsUpdatePatient}
+                                setIsShowDeletePatient={setIsShowDeletePatientModal}
                                 setTargetPatient={setTargetPatient}
                                 />
                             )}
@@ -165,7 +210,7 @@ const PatientsPage = ({ roles }) => {
                     :
                     <EmptySection setIsShowForm={setShowPatientDataForm} />
     }
-        </div>
+            </div>
         </div>
     </div>
 }

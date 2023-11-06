@@ -60,7 +60,7 @@ const PatientProfileSection = ({ patient }) => {
                         {translations[lang]['Name']}
                     </div>
                     <div>
-                        {patient.firstName && patient.lastName ? `${patient.firstName} ${patient.lastName}` : translations[lang]['Not Registered'] }
+                        {patient.firstName ? `${patient.firstName} ${patient.lastName ? patient.lastName : ''}` : translations[lang]['Not Registered'] }
                     </div>
                 </li>
                 <li>
@@ -110,80 +110,7 @@ const PatientProfileSection = ({ patient }) => {
             
         </div>
     </div>
-
-    <br />
-
-    <div className="cards-grey-container" id="surgery-section">
-        <div className="information-list-container">
-        <div className="information-list-header">
-            <div className="header-and-icon-container">
-                <h2 className="subheader-text">
-                    {translations[lang]['Past Surgery']}
-                </h2>
-                <span className="icon-container pending">
-                    <VaccinesOutlinedIcon />
-                </span>
-            </div>
-        </div>
-        {
-            surgery ?
-            <ul className="body-text">
-                <li>
-                    <div className="bold-text">
-                        {translations[lang]['Hospital Confined']}
-                    </div>
-                    <div>
-                        {translations[lang][formatValue(patient?.healthHistory?.isHospitalConfined)]}
-                    </div>
-                </li>
-                {
-                    patient.healthHistory.hospitalConfinedReason.length !== 0 ?
-                    <li className="nested-list">
-                        <div className="bold-text">
-                            {translations[lang]['Confine Reason']}
-                        </div>
-                        <div className="codes-container">
-                            {
-                                patient.healthHistory.hospitalConfinedReason.map(reason => <span className="status-btn grey-bg">
-                                    {reason}
-                                </span>)
-                            }
-                        </div>
-                    </li>
-                    :
-                    null
-                }
-                
-                <li>
-                    <div className="bold-text">
-                        {translations[lang]['Past Surgery']}
-                    </div>
-                    <div>
-                        {translations[lang][formatValue(patient?.healthHistory?.isSurgicalOperations)]}
-                    </div>
-                </li>
-                {
-                    patient?.healthHistory?.surgicalOperationsReason.length !== 0 ?
-                    <li className="nested-list">
-                        <div className="bold-text">
-                            {translations[lang]['Surgeries']} 
-                        </div>
-                        <div className="codes-container">
-                            { patient?.healthHistory?.surgicalOperationsReason.map(reason => <span className="status-btn grey-bg">
-                                {reason}
-                            </span>) }
-                        </div>
-                    </li>
-                    :
-                    null
-                }
-            </ul>
-            :
-            null
-        }
-        </div>
     </div>
-</div>
 }
 
 export default PatientProfileSection

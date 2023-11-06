@@ -1,0 +1,105 @@
+.search-menu-container {
+    position: absolute;
+    top: 2.5rem;
+    right: 0;
+    background-color: #FFF;
+    z-index: 1;
+    border-radius: .25rem;
+    padding: .5rem;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 100%;
+    max-height: 15rem;
+    overflow: auto;
+}
+
+.search-menu-header-container {
+    display: block !important;
+}
+
+.search-menu-header-container span {
+    font-weight: 500;
+    font-size: .9rem;
+    color: #5E6C84;
+    display: block;
+    padding-bottom: .7rem;
+}
+
+.search-list-container ul {
+    padding-top: 0rem;
+}
+
+.search-list-container ul li {
+    list-style-type: none;
+    padding: 0rem .3rem;
+    margin: 0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+    color: #4c83ee;
+    font-size: .8rem;
+}
+
+.search-list-container ul li svg {
+    color: #4c83ee;
+    font-size: 1.2rem;
+    margin-right: .4rem;
+} 
+
+.search-list-container ul li:hover {
+    cursor: pointer;
+}
+
+.search-list-item-container {
+    padding: 0 .5rem;
+    margin: 0;
+}
+
+.search-list-item-container:hover {
+    background-color: #F8F8F8;
+}
+
+.search-list-item-container div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.search-list-item-description {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-left: .2rem;
+}
+
+.search-menu-header-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 0 .5rem !important;
+    padding: 0 !important;
+    border-bottom: 2px solid #F8F8F8;
+
+}
+
+.search-menu-header-container span, .search-menu-header-container div  {
+    padding: 0;
+    margin: 0;
+}
+
+.search-menu-header-container span {
+    font-size: .7rem;
+    font-weight: bold;
+}
+
+.search-menu-header-container div svg {
+    font-size: 1rem;
+}
+
+.search-menu-header-container div:hover {
+    cursor: pointer;
+    color: #4c83ee;
+}

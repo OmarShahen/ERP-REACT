@@ -5,6 +5,10 @@ import './input.css'
 import { useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
 import translations from '../../i18n'
+import { leadStatus, leadStages } from '../../utils/values'
+import { capitalizeFirstLetter } from '../../utils/formatString'
+import { formatNumber } from '../../utils/numbers'
+
 
 const SearchInput = ({ 
     rows, 
@@ -16,6 +20,8 @@ const SearchInput = ({
     isHideSpeciality=true,
     isSpecialityNested=true,
     isShowInsuranceCompanies=false,
+    isShowStatus=false,
+    isShowStages=false
 }) => { 
 
     const user = useSelector(state => state.user.user)
@@ -177,6 +183,48 @@ const SearchInput = ({
                     <option value="NO-INSURANCE">{translations[lang]['No Insurance']}</option>
                     <option value="INSURANCED">{translations[lang]['Insuranced Only']}</option>
                     {insuranceCompanies.map(company => <option value={company?._id}>{company?.name}</option>)}
+                </select>
+            </div>
+            :
+            null
+        }
+        {
+            isShowStatus ?
+            <div className="form-input-container">
+                <select 
+                className="form-input"
+                onChange={e => {
+                    if(e.target.value === 'ALL') {
+                        return setRows(rows)
+                    }
+
+                    return setRows(rows.filter(row => row.status === e.target.value))
+                }}
+                >
+                    <option disabled selected>Select status</option>
+                    <option value="ALL">All</option>
+                    {leadStatus.map(status => <option value={status}>{capitalizeFirstLetter(status)}</option>)}
+                </select>
+            </div>
+            :
+            null
+        }
+        {
+            isShowStatus ?
+            <div className="form-input-container">
+                <select 
+                className="form-input"
+                onChange={e => {
+                    if(e.target.value === 'ALL') {
+                        return setRows(rows)
+                    }
+
+                    return setRows(rows.filter(row => row.stage === e.target.value))
+                }}
+                >
+                    <option disabled selected>Select stage</option>
+                    <option value="ALL">All</option>
+                    {leadStages.map(stage => <option value={stage}>{`${capitalizeFirstLetter(stage)} (${formatNumber(rows.filter(row => row.stage === stage).length)})`}</option>)}
                 </select>
             </div>
             :

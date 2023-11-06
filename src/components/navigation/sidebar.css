@@ -1,0 +1,136 @@
+.side-bar-container {
+    box-shadow: var(--box-shadow-line);
+    width: 15vw;
+    min-height: 100vh;
+    /*background-color: #1a2e44;*/
+    background-color: rgba(19, 33, 68, 1);
+    position:fixed;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    transition: 0.5s; 
+}
+
+.side-bar-logo-container {
+    padding: 1rem 0 1rem 0;
+}
+
+.side-bar-logo-container img {
+    width: 10rem;
+}
+
+.side-bar-container ul {
+    padding: 0;
+    max-height: 80vh;
+}
+
+.side-bar-container ul:hover {
+    overflow-y: scroll;
+}
+
+.side-bar-container ul li {
+    list-style-type: none;
+}
+
+.side-bar-number-container {
+    background-color: #4c83ee;
+    color: #FFF;
+    border-radius: 5px;
+    padding: 0rem .3rem;
+}
+
+.side-bar-container ul li a {
+    font-size: .9rem;
+    display: flex;
+    align-items: center;
+    color: #E9ECEF80;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 0rem .5rem .5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.side-bar-container ul li a:hover {
+    color: #4c83ee;
+}
+
+.side-bar-container ul li a span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.side-bar-container ul li .active {
+    color: #FFF !important;
+    font-weight: 500;
+}
+
+.side-bar-container ul li .active svg {
+    color: #FFF;
+}
+
+
+.side-bar-container ul li a:hover {
+    color: #FFF;
+}
+
+.side-bar-container ul li svg {
+    margin-right: .4rem;
+    font-size: 1.2rem;
+}
+
+.side-bar-arrow-container {
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+.side-bar-arrow-container span svg {
+    color: #a3abb4;
+}
+
+.side-bar-arrow-container span:hover {
+    cursor: pointer;
+    color: #4c83ee;
+}
+
+.upgrade-container {
+    padding: .5rem 1.7rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.upgrade-container svg {
+    margin-right: .1rem;
+    font-size: 1.2rem;
+}
+
+.header-list-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #CED4DA;
+    padding: 0rem 0rem .5rem 1rem;
+    font-size: .9rem;
+}
+
+.header-list-container:hover {
+    cursor: pointer;
+}
+
+.nav-nested-list-container li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: .4rem;
+}
+
+
+@media only screen and (max-width: 700px) {
+    .side-bar-container {
+      width: 45vw !important;
+    }
+}

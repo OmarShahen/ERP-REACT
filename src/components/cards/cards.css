@@ -25,6 +25,12 @@
     flex-wrap: wrap;
 }
 
+.cards-tags-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .codes-container span {
     padding: .3rem .5rem;
     margin: .3rem 0;

@@ -10,6 +10,7 @@ import { capitalizeFirstLetter } from '../../utils/formatString'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import { formatNumber } from '../../utils/numbers'
+import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined'
 
 
 const PatientSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsShowUpdateSurvey }) => {
@@ -19,7 +20,7 @@ const PatientSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsSh
     const user = useSelector(state => state.user.user)
     const lang = useSelector(state => state.lang.lang)
 
-    const patientName = `${survey.patient.firstName} ${survey.patient.lastName}`
+    const patientName = `${survey.patient.firstName} ${survey?.patient?.lastName ? survey.patient.lastName : ''}`
     const patientPhone = `+${survey.patient.countryCode}${survey.patient.phone}`
     const memberName = `${survey.member.firstName} ${survey.member.lastName}`
 
@@ -54,6 +55,14 @@ const PatientSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsSh
             onAction: (e) => {
                 e.stopPropagation()
                 navigate(`/patients-surveys/${survey._id}/patient-survey/form?mode=UPDATE`)
+            }
+        },
+        {
+            name: 'View Patient',
+            icon: <HotelOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                navigate(`/patients/${survey.patientId}/clinics/${survey.clinicId}/medical-profile`)
             }
         },
     ]

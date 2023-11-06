@@ -22,6 +22,23 @@ export const satisfactionRateList = [
     { name: 'Very satisfied', number: 5 },
 ]
 
+export const healthImprovementRateList = [
+    { name: 'Minimal', number: 1 },
+    { name: 'Mild', number: 2 },
+    { name: 'Moderate', number: 3 },
+    { name: 'Significant', number: 4 },
+    { name: 'Excellent', number: 5 },
+]
+
+export const getHealthImprovementNameByNumber = (number) => {
+
+    for(let i=0;i<healthImprovementRateList.length;i++) {
+        if(number === healthImprovementRateList[i].number) {
+            return healthImprovementRateList[i].name
+        }
+    }
+}
+
 export const getExperienceNameByNumber = (number) => {
 
     for(let i=0;i<experienceRateList.length;i++) {

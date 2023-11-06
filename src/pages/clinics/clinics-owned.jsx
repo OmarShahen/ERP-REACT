@@ -72,14 +72,6 @@ const ClinicsPage = ({ roles }) => {
         addBtnText={user.roles.includes('DOCTOR') ? translations[lang]['Add Clinic'] : null}
         setShowModalForm={setIsShowInfoModal}
         />
-        {
-            user.roles.includes('OWNER') || user.roles.includes('DOCTOR') ?
-            <div className="show-mobile">
-                <FloatingButton setIsShowForm={setIsShowInfoModal} />
-            </div>
-            :
-            null
-        }
         <div className="cards-list-wrapper margin-bottom-1">
             <Card 
             icon={<NumbersOutlinedIcon />}

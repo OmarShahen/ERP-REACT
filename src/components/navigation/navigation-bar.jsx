@@ -9,16 +9,32 @@ import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
 import translations from '../../i18n'
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
-import NavigationTabs from './navigation-tabs'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import QuickFormMenu from '../menus/quick-forms/quick-forms'
+import AppointmentFormModal from '../modals/appointment-form'
+import InvoiceFormModal from '../modals/invoice-form'
+import InsurancePolicyFormModal from '../modals/insurance-policy-form'
+import InsuranceFormModal from '../modals/insurance-form'
+import CommentFormModal from '../modals/comment-form'
 
-const NavigationBar = () => {
+
+const NavigationBar = ({ pageName }) => {
 
     const navigate = useNavigate()
     const user = useSelector(state => state.user.user)
+    const lang = useSelector(state => state.lang.lang)
+    const sidebar = useSelector(state => state.sidebar)
     const dispatch = useDispatch()
 
     const [showUserProfileMenu, setShowUserProfileMenu] = useState(false)
+    const [showQuickActionsForm, setShowQuickActionsForm] = useState(false)
+
+    const [isShowAppointmentsForm, setIsShowAppointmentsForm] = useState(false)
+    const [showInvoiceForm, setShowInvoiceForm] = useState(false)
+    const [isShowEmergencyContactsForm, setIsShowEmergencyContactsForm] = useState(false)
+    const [isShowInsurancePolicy, setIsShowInsurancePolicy] = useState(false)
+    const [isShowInsuranceCompanyForm, setIsShowInsuranceCompanyForm] = useState(false)
+    const [isShowCommentForm, setIsShowCommentForm] = useState()
 
 
     useEffect(() => {
@@ -38,10 +54,38 @@ const NavigationBar = () => {
     return <div>
         <div className="navigation-bar-container body-text">
             <div className="navigation-map-container">
-                    
-                <span>{"RA'AYA"}</span>
+                    <span onClick={e => dispatch(setIsShowSidebar(!sidebar.isShowSidebar))}>
+                        <MenuOpenIcon />
+                    </span>
+                <span>{`${user.firstName} ${user.lastName}`}</span>
             </div>
+            
             <div className="navigation-bar-options-container">
+                
+                <div className="quick-form-container">
+                    <button 
+                    className="upgrade-btn"
+                    onClick={e => setShowQuickActionsForm(!showQuickActionsForm)}
+                    >
+                        <AddOutlinedIcon />
+                        Create
+                    </button>
+                    { 
+                        showQuickActionsForm ? 
+                        <QuickFormMenu 
+                        setShowAppointmentForm={setIsShowAppointmentsForm}
+                        setShowEmergencyContactForm={setIsShowEmergencyContactsForm}
+                        setShowInsurancePoliciesForm={setIsShowInsurancePolicy}
+                        setShowInvoiceForm={setShowInvoiceForm}
+                        setShowMenu={setShowQuickActionsForm}
+                        setIsShowInsuranceCompanyForm={setIsShowInsuranceCompanyForm}
+                        setIsShowCommentForm={setIsShowCommentForm}
+                        /> 
+                        : 
+                        null 
+                    }
+                </div>
+                   
                 <div className="show-large">
                     <NavLink to="/settings/profile">
                         <SettingsOutlinedIcon />
@@ -58,7 +102,37 @@ const NavigationBar = () => {
                 </div>
             </div>
         </div>
-        <NavigationTabs />
+        { 
+            isShowAppointmentsForm ? 
+            <AppointmentFormModal setShowFormModal={setIsShowAppointmentsForm} />
+             : 
+             null 
+        }
+        { 
+            showInvoiceForm ? 
+            <InvoiceFormModal setShowModalForm={setShowInvoiceForm} /> 
+            : 
+            null 
+        }
+        {
+            isShowInsurancePolicy ?
+            <InsurancePolicyFormModal setShowFormModal={setIsShowInsurancePolicy} />
+            :
+            null
+        }
+        {
+            isShowInsuranceCompanyForm ?
+            <InsuranceFormModal setShowFormModal={setIsShowInsuranceCompanyForm} />
+            :
+            null
+        }
+        {
+            isShowCommentForm ?
+            <CommentFormModal setShowModalForm={setIsShowCommentForm} />
+            :
+            null
+        }
+
     </div>
 }
 

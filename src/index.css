@@ -406,6 +406,12 @@ button:hover {
   opacity: .8;
 }
 
+.image-container img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
 .page-bottom-margin {
   background-color: #F3F4F0;
 }
@@ -416,6 +422,14 @@ button:hover {
 
 .tag-purple-text {
   color: #5C60F5;
+}
+
+.tag-cyan-bg {
+  background-color: #215A6C;
+}
+
+.tag-cyan-text {
+  color: #215A6C;
 }
 
 .tag-orange-bg {
@@ -604,6 +618,12 @@ button:hover {
 
 .grey-bg {
   background-color: #F4F5F7;
+}
+
+.page-body-sidebar-layout-container {
+  display: grid;
+  grid-template-columns: 15% auto;
+  column-gap: 1rem;
 }
 
 .forms-page-container {

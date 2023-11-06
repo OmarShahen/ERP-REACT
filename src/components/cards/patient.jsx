@@ -9,28 +9,66 @@ import CardTransition from '../transitions/card-transitions'
 import { capitalizeFirstLetter } from '../../utils/formatString'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
-import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import { formatDistance, format  } from 'date-fns'
 
-const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUpdatePatient }) => {
+
+
+const PatientCard = ({ 
+    patient, 
+    reload, 
+    setReload, 
+    setTargetPatient, 
+    setIsShowUpdatePatient,
+    setIsUpdatePatient,
+    setIsShowDeletePatient,
+    setIsShowAddPatient
+}) => {
 
     const navigate = useNavigate()
 
     const user = useSelector(state => state.user.user)
     const lang = useSelector(state => state.lang.lang)
 
-    const patientName = `${patient.patient.firstName} ${patient.patient.lastName}`
+    const patientName = `${patient.patient.firstName} ${patient?.patient?.lastName ? patient?.patient?.lastName : ''}`
     const patientPhone = `+${patient.patient.countryCode}${patient.patient.phone}`
 
     const profileURL = user.roles.includes('STAFF') ? `/patients/${patient.patient._id}/clinics/${user.clinicId}/medical-profile` : `/patients/${patient.patient._id}/clinics/${patient.clinic._id}/medical-profile`
 
     const cardActionsList = [
         {
-            name: 'Add Survey',
+            name: 'Delete Patient',
+            icon: <DeleteOutlineOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                setTargetPatient(patient)
+                setIsShowDeletePatient(true)
+            }
+        },
+        {
+            name: 'Update Patient',
             icon: <CreateOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
+                setTargetPatient(patient)
+                setIsUpdatePatient(true)
+                setIsShowAddPatient(true)
+            }
+        },
+        {
+            name: 'Add Patient Survey',
+            icon: <AddOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
                 navigate(`/clinics/${patient.clinicId}/patients/${patient.patientId}/patient-survey/form`)
+            }
+        },
+        {
+            name: 'Add Treatment Survey',
+            icon: <AddOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                navigate(`/clinics/${patient.clinicId}/patients/${patient.patientId}/treatment-survey/form`)
             }
         }
      ]
@@ -42,7 +80,7 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUp
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
                     <img src={`https://avatars.dicebear.com/api/initials/${patientName}.svg`} alt="patient-image" />
-                    <div>
+                <div>
                         <strong>{patientName}</strong>
                         <span className="grey-text">#{patient?.patient?.patientId}</span>
                     </div>
@@ -81,6 +119,12 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUp
                         <span>{patient?.patient?.city ? capitalizeFirstLetter(patient.patient.city) : 'Not Registered'}</span>
                     </li>
                     <li>
+                        <strong>Last Visit ({format(new Date(patient.lastVisitDate ? patient.lastVisitDate : patient.createdAt), 'yyyy/MM/dd')})</strong>
+                        <span>
+                            {formatDistance(new Date(patient.lastVisitDate ? patient.lastVisitDate : patient.createdAt), new Date(), { addSuffix: true })}  
+                        </span>                  
+                    </li>
+                    <li>
                         <strong>Survey</strong>
                         {
                             patient?.survey?.isDone ?
@@ -115,7 +159,10 @@ const PatientCard = ({ patient, reload, setReload, setTargetPatient, setIsShowUp
                     }
                 </ul>
             </div>
-            <CardDate creationDate={patient.createdAt}  updateDate={patient?.survey?.doneDate} />
+            <CardDate 
+            creationDate={patient.createdAt} 
+            updateDate={patient.updatedAt} 
+            />
         </div>
     </CardTransition>
 }

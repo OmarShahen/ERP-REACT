@@ -1,70 +1,101 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './modals.css'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
-import { getBirthYearByAge } from '../../utils/age-calculator'
+import { getBirthYearByAge, getAge } from '../../utils/age-calculator'
 import { useNavigate } from 'react-router-dom'
 import { TailSpin } from 'react-loader-spinner'
 import { useSelector } from 'react-redux'
+import { cities } from '../../utils/cities'
+import { capitalizeFirstLetter } from '../../utils/formatString'
 
-const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
+
+const PatientFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpdate, patient }) => {
 
     const navigate = useNavigate()
 
     const user = useSelector(state => state.user.user)
 
     const [isSubmit, setIsSubmit] = useState(false)
-    const [firstName, setFirstName] = useState()
-    const [lastName, setLastName] = useState()
-    const [countryCode, setCountryCode] = useState(20)
-    const [phone, setPhone] = useState()
-    const [gender, setGender] = useState("MALE")
-    const [age, setAge] = useState()
-    const [cardId, setCardId] = useState()
 
-    const [firstNameError, setFirstNameError] = useState()
+    const [clinics, setClinics] = useState([])
+
+    const [name, setName] = useState(isUpdate ? `${patient?.patient?.firstName}` : '')
+    const [lastName, setLastName] = useState(isUpdate ? patient?.patient?.lastName : null)
+    const [countryCode, setCountryCode] = useState(20)
+    const [phone, setPhone] = useState(isUpdate ? patient?.patient?.phone : '')
+    const [gender, setGender] = useState(isUpdate ? patient?.patient?.gender : "MALE")
+    const [age, setAge] = useState(isUpdate ? getAge(patient?.patient?.dateOfBirth) : '')
+    const [city, setCity] = useState(isUpdate ? patient?.patient?.city : 'ALEXANDRIA')
+    const [country, setCountry] = useState()
+    const [lastVisitDate, setLastVisitDate] = useState()
+    const [service, setService] = useState()
+    const [clinic, setClinic] = useState(isUpdate ? patient.clinicId : '')
+
+
+    const [nameError, setNameError] = useState()
     const [lastNameError, setLastNameError] = useState()
     const [countryCodeError, setCountryCodeError] = useState()
     const [phoneError, setPhoneError] = useState()
     const [genderError, setGenderError] = useState()
     const [ageError, setAgeError] = useState()
-    const [cardIdError, setCardIdError] = useState()
+    const [cityError, setCityError] = useState()
+    const [countryError, setCountryError] = useState()
+    const [lastVisitDateError, setLastVisitDateError] = useState()
+    const [serviceError, setServiceError] = useState()
+    const [clinicError, setClinicError] = useState()
+
+    const genders = ['MALE', 'FEMALE']
+
+    useEffect(() => {
+
+        serverRequest.get(`/v1/clinics/followup-service/clinics-subscriptions/active`)
+        .then(response => {
+            const data = response.data
+            setClinics(data.clinics)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
+        })
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        if(!firstName) return setFirstNameError('First name is required')
+        if(!name) return setNameError('Name is required')
 
-        if(!lastName) return setLastNameError('Last number is required')
+        if(!clinic) return setClinicError('Clinic is required')
         
-        if(!countryCode) return setCountryCodeError('Country code is required')
-
         if(!phone) return setPhoneError('Phone is required')
 
         if(!gender) return setGenderError('Gender is required')
 
-        if(!cardId) return setCardIdError('Card Id is required')
+        if(!city) return setCityError('City is required')
 
-        const patient = {
-            doctorId: user._id,
-            cardId: Number.parseInt(cardId),
-            firstName,
-            lastName,
-            countryCode: Number.parseInt(countryCode),
+        const patientData = {
+            clinicId: clinic,
+            firstName: name,
+            countryCode: 20,
             phone: Number.parseInt(phone),
             gender,
-            dateOfBirth: String(getBirthYearByAge(age))
+            city,
+            country: 'EGYPT',
+            lastVisitDate,
+        }
+
+        if(age) {
+            patientData.dateOfBirth = String(getBirthYearByAge(age))
         }
 
         setIsSubmit(true)
-        serverRequest.post(`/v1/patients`, patient)
+        serverRequest.post(`/v1/patients`, patientData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
-            resetForm()
+            setReload(reload + 1)
             setShowModalForm(false)
             toast.success(data.message, { position: 'top-right', duration: 3000 })
-            reload ? setReload(reload+1) : navigate('/patients')
         })
         .catch(error => {
             setIsSubmit(false)
@@ -74,17 +105,81 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
 
                 const errorResponse = error.response.data
 
-                if(errorResponse.field === 'firstName') return setFirstNameError(errorResponse.message)
+                if(errorResponse.field === 'firstName') return setNameError(errorResponse.message)
 
-                if(errorResponse.field === 'lastName') return setLastNameError(errorResponse.message)
-
-                if(errorResponse.field === 'countryCode') return setCountryCodeError(errorResponse.message)
+                if(errorResponse.field === 'lastName') return setNameError(errorResponse.message)
 
                 if(errorResponse.field === 'phone') return setPhoneError(errorResponse.message)
 
                 if(errorResponse.field === 'gender') return setGenderError(errorResponse.message)
 
                 if(errorResponse.field === 'dateOfBirth') return setAgeError(errorResponse.message)
+
+                if(errorResponse.field === 'city') return setCityError(errorResponse.message)
+
+                if(errorResponse.field === 'lastVisitDate') return setLastVisitDateError(errorResponse.message)
+
+                toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
+
+            } catch(error) {}
+        })
+
+    }
+
+    const handleUpdate = (e) => {
+        e.preventDefault()
+
+        if(!name) return setNameError('Name is required')
+        
+        if(!phone) return setPhoneError('Phone is required')
+
+        if(!gender) return setGenderError('Gender is required')
+
+        if(!city) return setCityError('City is required')
+
+        const patientData = {
+            firstName: name,
+            lastName,
+            countryCode: 20,
+            phone: Number.parseInt(phone),
+            gender,
+            city,
+            country: 'EGYPT'
+        }
+
+        if(age) {
+            patientData.dateOfBirth = String(getBirthYearByAge(age))
+        }
+
+        setIsSubmit(true)
+        serverRequest.put(`/v1/patients/${patient.patientId}`, patientData)
+        .then(response => {
+            setIsSubmit(false)
+            const data = response.data
+            setReload(reload + 1)
+            setShowModalForm(false)
+            setIsUpdate(false)
+            toast.success(data.message, { position: 'top-right', duration: 3000 })
+        })
+        .catch(error => {
+            setIsSubmit(false)
+            console.error(error)
+            
+            try {
+
+                const errorResponse = error.response.data
+
+                if(errorResponse.field === 'firstName') return setNameError(errorResponse.message)
+
+                if(errorResponse.field === 'lastName') return setNameError(errorResponse.message)
+
+                if(errorResponse.field === 'phone') return setPhoneError(errorResponse.message)
+
+                if(errorResponse.field === 'gender') return setGenderError(errorResponse.message)
+
+                if(errorResponse.field === 'dateOfBirth') return setAgeError(errorResponse.message)
+
+                if(errorResponse.field === 'city') return setCityError(errorResponse.message)
 
                 toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
 
@@ -115,47 +210,60 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
     return <div className="modal">
         <div className="modal-container body-text">
             <div className="modal-header">
-                <h2>Add Patient</h2>
+                <h2>{ isUpdate ? 'Update Patient' : 'Add Patient'}</h2>
             </div>
             <div className="modal-body-container">
-                <form id="patient-form" className="modal-form-container responsive-form body-text" onSubmit={handleSubmit}>
+                <form 
+                id="patient-form" 
+                className="modal-form-container responsive-form body-text" 
+                onSubmit={isUpdate ? handleUpdate : handleSubmit}
+                >
                     <div className="form-input-container">
-                        <label>First Name*</label>
+                        <label>Name*</label>
                         <input 
                         type="text" 
                         className="form-input" 
                         placeholder=""
-                        value={firstName}
-                        onChange={e => setFirstName(e.target.value)}
-                        onClick={e => setFirstNameError()}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        onClick={e => setNameError()}
                         />
-                        <span className="red">{firstNameError}</span>
+                        <span className="red">{nameError}</span>
                     </div>
-                    <div className="form-input-container">
-                        <label>Last Name*</label>
-                        <input 
-                        type="text" 
-                        className="form-input" 
-                        placeholder=""
-                        value={lastName}
-                        onChange={e => setLastName(e.target.value)}
-                        onClick={e => setLastNameError()}
-                        />
-                        <span className="red">{lastNameError}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label>Country Code*</label>
-                        <input 
-                        type="number"
-                        min="0"
-                        className="form-input" 
-                        placeholder=""
-                        value={countryCode} 
-                        onChange={e => setCountryCode(e.target.value)}
-                        onClick={e => setCountryCodeError()}
-                        />
-                        <span className="red">{countryCodeError}</span>
-                    </div>
+                    {
+                        isUpdate && patient?.patient?.lastName ?
+                        <div className="form-input-container">
+                            <label>Last Name</label>
+                            <input 
+                            type="text" 
+                            className="form-input" 
+                            placeholder=""
+                            value={lastName}
+                            onChange={e => setLastName(e.target.value)}
+                            onClick={e => setLastNameError()}
+                            />
+                            <span className="red">{lastNameError}</span>
+                        </div>
+                        :
+                        null
+                    }
+                    {
+                        !isUpdate ?
+                        <div className="form-input-container">
+                            <label>Clinic*</label>
+                            <select 
+                            className="form-input"
+                            onClick={e => setClinicError()}
+                            onChange={e => setClinic(e.target.value)}
+                            >
+                                <option selected disabled>Choose Clinic</option>
+                                {clinics.map(clinic => <option value={clinic._id}>{clinic.name}</option>)}
+                            </select>
+                            <span className="red">{clinicError}</span>
+                        </div>
+                        :
+                        null
+                    }
                     <div className="form-input-container">
                         <label>Phone*</label>
                         <input 
@@ -174,9 +282,15 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
                         name="gender" 
                         id="gender"
                         onChange={e => setGender(e.target.value)}
+                        onClick={e => setGenderError()}
                         >
-                            <option value="MALE">Male</option>
-                            <option value="FEMALE">Female</option>
+                            {genders.map(tempGender => {
+                                if(tempGender === gender) {
+                                    return <option selected value={tempGender}>{capitalizeFirstLetter(tempGender)}</option>
+                                }
+
+                                return <option value={tempGender}>{capitalizeFirstLetter(tempGender)}</option>
+                            })}
                         </select>
                         <span className="red">{genderError}</span>
                     </div>
@@ -194,17 +308,34 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
                         <span className="red">{ageError}</span>
                     </div>
                     <div className="form-input-container">
-                        <label>Card ID*</label>
-                        <input 
-                        type="text"
-                        className="form-input" 
-                        placeholder=""
-                        value={cardId} 
-                        onChange={e => setCardId(e.target.value)}
-                        onClick={e => setCardIdError()}
-                        />
-                        <span className="red">{cardIdError}</span>
+                        <label>City*</label>
+                        <select
+                        className="form-input"
+                        onClick={e => setCityError()}
+                        onChange={e => setCity(e.target.value)}
+                        >
+                            {cities.map(tempCity => {
+
+                                if(tempCity === city) {
+                                    return <option selected value={tempCity}>{capitalizeFirstLetter(tempCity)}</option>
+                                }
+
+                                return <option value={tempCity}>{capitalizeFirstLetter(tempCity)}</option>
+                            })}
+                        </select>
+                        <span className="red">{cityError}</span>
                     </div>
+                    <div className="form-input-container">
+                        <label>Last Visit</label>
+                        <input 
+                        type="date"
+                        className="form-input" 
+                        value={lastVisitDate} 
+                        onChange={e => setLastVisitDate(e.target.value)}
+                        onClick={e => setLastVisitDateError()}
+                        />
+                        <span className="red">{lastVisitDateError}</span>
+                        </div>
                 </form>
             </div>
             <div className="modal-form-btn-container">
@@ -216,7 +347,7 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
                         <button 
                         form="patient-form"
                         className="normal-button white-text action-color-bg"
-                        >Create</button>
+                        >{isUpdate ? 'Update' : 'Create'}</button>
                     }
                 </div>
                 <div>
@@ -224,6 +355,7 @@ const PatientFormModal = ({ reload, setReload, setShowModalForm }) => {
                     className="normal-button cancel-button"
                     onClick={e => {
                         setShowModalForm(false)
+                        setIsUpdate(false)
                     }}
                     >Close</button>
                 </div>

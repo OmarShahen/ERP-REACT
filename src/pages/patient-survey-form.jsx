@@ -3,18 +3,14 @@ import './patients.css'
 import { TailSpin } from "react-loader-spinner"
 import { serverRequest } from "../components/API/request"
 import { toast } from "react-hot-toast"
-import { getAge, getBirthYearByAge } from "../utils/age-calculator"
 import PageHeader from "../components/sections/page-header"
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
-import { isRolesValid } from "../utils/roles"
-import { setIsShowModal } from "../redux/slices/modalSlice"
 import translations from "../i18n"
 import { useSearchParams } from 'react-router-dom'
 import CircularLoading from "../components/loadings/circular"
 import { experienceRateList, explanationRateList, satisfactionRateList } from '../utils/experience-translator'
 import { capitalizeFirstLetter } from "../utils/formatString"
-
 
 
 const PatientFormPage = ({ roles }) => {
@@ -33,6 +29,8 @@ const PatientFormPage = ({ roles }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const mode = searchParams.get('mode')
 
+    const [arrivalMethods, setArrivalMethods] = useState([])
+
     const [patient, setPatient] = useState({})
     const [patientSurvey, setPatientSurvey] = useState({})
 
@@ -41,6 +39,7 @@ const PatientFormPage = ({ roles }) => {
 
     const [isSubmit, setIsSubmit] = useState(false)
 
+    const [arrivalMethod, setArrivalMethod] = useState()
     const [overallExperience, setOverallExperience] = useState()
     const [callDuration, setCallDuration] = useState()
     const [waitingTimeWaited, setWaitingTimeWaited] = useState()
@@ -60,6 +59,7 @@ const PatientFormPage = ({ roles }) => {
     const [appointmentsIsReminderSent, setAppointmentsIsReminderSent] = useState()
     const [appointmentsSchedulingWay, setAppointmentsSchedulingWay] = useState()
 
+    const [arrivalMethodError, setArrivalMethodError] = useState()
     const [overallExperienceError, setOverallExperienceError] = useState()
     const [callDurationError, setCallDurationError] = useState()
     const [waitingTimeWaitedError, setWaitingTimeWaitedError] = useState()
@@ -101,6 +101,7 @@ const PatientFormPage = ({ roles }) => {
 
             setPatientSurvey(patientSurvey)
 
+            setArrivalMethod(patientSurvey.arrivalMethodId)
             setOverallExperience(patientSurvey.overallExperience)
             setCallDuration(patientSurvey.callDuration)
             setWaitingTimeWaited(patientSurvey.waiting.timeWaited)
@@ -123,6 +124,17 @@ const PatientFormPage = ({ roles }) => {
         })
         .catch(error => {
             setIsLoadPatient(false)
+            console.error(error)
+            toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
+        })
+    }, [])
+
+    useEffect(() => {
+        serverRequest.get('/v1/arrival-methods')
+        .then(response => {
+            setArrivalMethods(response.data.arrivalMethods)
+        })
+        .catch(error => {
             console.error(error)
             toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
         })
@@ -170,6 +182,7 @@ const PatientFormPage = ({ roles }) => {
     const handleSubmit = () => {
 
         const patientSurveyData = {
+            arrivalMethodId: arrivalMethod,
             clinicId,
             doneById: user._id,
             patientId,
@@ -204,6 +217,12 @@ const PatientFormPage = ({ roles }) => {
         .catch(error => {
             setIsSubmit(false)
             console.error(error)
+
+            if(error?.response?.data?.field === 'arrivalMethodId') {
+                toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+                setArrivalMethodError(error?.response?.data?.message)
+                return
+            }
 
             if(error?.response?.data?.field === 'overallExperience') {
                 toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
@@ -321,9 +340,7 @@ const PatientFormPage = ({ roles }) => {
     const handleUpdate = () => {
 
         const patientSurveyData = {
-            clinicId,
-            doneById: user._id,
-            patientId,
+            arrivalMethodId: arrivalMethod,
             overallExperience: Number.parseInt(overallExperience),
             callDuration: Number.parseInt(callDuration),
             waitingTimeWaited: Number.parseInt(waitingTimeWaited),
@@ -354,6 +371,12 @@ const PatientFormPage = ({ roles }) => {
         .catch(error => {
             setIsSubmit(false)
             console.error(error)
+
+            if(error?.response?.data?.field === 'arrivalMethodId') {
+                toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+                setArrivalMethodError(error?.response?.data?.message)
+                return
+            }
 
             if(error?.response?.data?.field === 'overallExperience') {
                 toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
@@ -465,7 +488,7 @@ const PatientFormPage = ({ roles }) => {
 
     return <div>
         <PageHeader 
-        pageName={isUpdate ? `Update Patient Survey #${patientSurvey.patientSurveyId}` : `Create Patient Survey (${patient?.firstName} ${patient?.lastName})`}
+        pageName={isUpdate ? `Update Patient Survey #${patientSurvey.patientSurveyId}` : `Create Patient Survey For ${patient?.firstName} ${patient?.lastName ? patient.lastName : ''}`}
         isHideRefresh={true}
         />
             <div className="patient-profile-grid-container">
@@ -495,6 +518,11 @@ const PatientFormPage = ({ roles }) => {
                         <li>
                             <a href="#appointment-section">
                                 {'Appointments'}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#arrival-method-section">
+                                {'Arrival Method'}
                             </a>
                         </li>
                         <li>
@@ -852,6 +880,37 @@ const PatientFormPage = ({ roles }) => {
                             </div>
                         </div>
                         </div>
+
+                            <div className="cards-grey-container margin-top-1">
+                                <div className="patient-form-wrapper" id="arrival-method-section">
+                                    <div className="patient-form-header">
+                                        <h2>
+                                            Arrival Method
+                                        </h2>
+                                    </div>
+                                <div className="cards-2-list-wrapper">
+                                    <div className="form-input-container">
+                                        <label>How did you hear about the clinic?</label>
+                                            <select 
+                                            className="form-input"
+                                            onClick={e => setArrivalMethodError()}
+                                            onChange={e => setArrivalMethod(e.target.value)}
+                                            >
+                                                <option selected disabled></option>
+                                            {arrivalMethods.map(method => {
+
+                                                if(method._id === arrivalMethod) {
+                                                    return <option selected value={method._id}>{method.name}</option> 
+                                                }
+                                                    return <option value={method._id}>{method.name}</option>
+                                                })}
+                                            </select>
+                                            <span className="red">{arrivalMethodError}</span>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                            </div>
 
                         <div className="cards-grey-container margin-top-1">
                             <div className="patient-form-wrapper" id="overall-section">

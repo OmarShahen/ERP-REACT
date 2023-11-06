@@ -2,9 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .5rem 7rem;
+    padding: .5rem 0rem .5rem 0rem;
     border-bottom: 1px solid #eee;
-    background-color: #F6F8FA;
+    background-color: #FFF;
 }
 
 .navigation-bar-search-container {
@@ -148,7 +148,7 @@
 
 @media only screen and (max-width: 900px) {
     .navigation-bar-container {
-        padding: .5rem 1rem;
+        padding: .5rem;
     }
 }
 

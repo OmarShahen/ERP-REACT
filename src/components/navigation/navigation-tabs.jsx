@@ -53,9 +53,24 @@ const NavigationTabs = () => {
                 }
                 <NavLink to="/patients-surveys">
                     <li>
-                        Surveys
+                        Patients Surveys
                     </li>
                 </NavLink>
+                <NavLink to="/treatments-surveys">
+                    <li>
+                        Treatments Surveys
+                    </li>
+                </NavLink>
+                {
+                    user.roles.includes('ADMIN') ?
+                    <NavLink to="/arrival-methods">
+                        <li>
+                            Arrival Methods
+                        </li>
+                    </NavLink>
+                    :
+                    null
+                }
                 <NavLink to="/settings/profile">
                     <li>
                         Settings
