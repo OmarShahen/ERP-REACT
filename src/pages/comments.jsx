@@ -18,6 +18,7 @@ import translations from '../i18n'
 import CommentCard from '../components/cards/comment'
 import CommentDeleteConfirmationModal from '../components/modals/confirmation/comment-delete-confirmation-modal'
 import CommentFormModal from '../components/modals/comment-form'
+import FloatingButton from '../components/buttons/floating-button'
 
 
 const CommentsPage = ({ roles }) => {
@@ -89,6 +90,9 @@ const CommentsPage = ({ roles }) => {
             :
             null
         }
+        <div className="show-mobile">
+            <FloatingButton setIsShowForm={setIsShowAddModal} />
+        </div>
         <div className="padded-container">
             <PageHeader
             pageName={'Comments'}

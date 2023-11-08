@@ -134,6 +134,7 @@ const LeadsPage = ({ roles }) => {
                         cardHeader={'Potential Earnings'}
                         number={formatMoney(getTotalByValue(searchedLeads.filter(lead => lead.status === 'OPENED')))}
                         iconColor={'#5C60F5'}
+                        isMoney={true}
                         />
                     </div>
                 <div>
