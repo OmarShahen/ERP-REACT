@@ -22,7 +22,6 @@ import MeetingFormModal from '../../components/modals/meeting-form'
 
 const MeetingsPage = ({ roles }) => {
 
-    const [isShowDeleteLeadModal, setIsShowDeleteLeadModal] = useState(false)
     const [isShowAddMeetingForm, setIsShowAddMeetingForm] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
     const [targetMeeting, setTargetMeeting] = useState({})
@@ -30,7 +29,6 @@ const MeetingsPage = ({ roles }) => {
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
     const [meetings, setMeetings] = useState([])
-    const [searchedMeetings, setSearchedMeetings] = useState([])
 
     const [statsQuery, setStatsQuery] = useState({})
 
@@ -42,7 +40,6 @@ const MeetingsPage = ({ roles }) => {
         .then(response => {
             setIsLoading(false)
             setMeetings(response.data.meetings)
-            setSearchedMeetings(response.data.meetings)
         })
         .catch(error => {
             setIsLoading(false)
@@ -66,19 +63,7 @@ const MeetingsPage = ({ roles }) => {
             />
             :
             null
-        }
-        {
-            isShowDeleteLeadModal ?
-            <LeadDeleteConfirmationModal
-            reload={reload}
-            setReload={setReload}
-            lead={targetLead}
-            setIsShowModal={setIsShowDeleteLeadModal}
-            />
-            :
-            null
-        }
-        
+        } 
         <div className="show-mobile">
             <FloatingButton setIsShowForm={setIsShowAddMeetingForm} />
         </div>

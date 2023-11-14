@@ -49,6 +49,11 @@ import ArrivalMethodsPage from './pages/arrival-methods/arrival-methods'
 
 import LeadsPage from './pages/CRM/leads'
 import MeetingsPage from './pages/CRM/meetings'
+import StagesPage from './pages/CRM/stages'
+import LeadLayout from './components/layouts/lead-layout'
+import LeadsStagesPage from './pages/CRM/leads/leads-stages'
+import LeadsMeetingsPage from './pages/CRM/leads/leads-meetings'
+import MessagesTemplatesPage from './pages/CRM/messages/messages-templates'
 
 import DashboardPage from './pages/dashboard'
 
@@ -91,6 +96,13 @@ function App() {
 
             <Route path="/crm/leads" element={<LeadsPage roles={[]} />} />
             <Route path="/crm/meetings" element={<MeetingsPage roles={[]} />} />
+            <Route path="/crm/stages" element={<StagesPage roles={[]} />} />
+            <Route path="/crm/messages-templates" element={<MessagesTemplatesPage roles={[]} />} />
+
+            <Route element={<LeadLayout />}>
+              <Route path="/crm/leads/:leadId/stages" element={<LeadsStagesPage roles={[]} />} />
+              <Route path="/crm/leads/:leadId/meetings" element={<LeadsMeetingsPage roles={[]} />} />
+            </Route>
 
             <Route path="/dashboard" element={<DashboardPage />} />
 

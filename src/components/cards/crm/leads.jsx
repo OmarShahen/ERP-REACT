@@ -6,7 +6,8 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../../transitions/card-transitions'
 import { capitalizeFirstLetter } from '../../../utils/formatString'
 import { formatMoney } from '../../../utils/numbers'
-
+import { useNavigate } from 'react-router-dom'
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 
 
 const LeadCard = ({ 
@@ -17,7 +18,9 @@ const LeadCard = ({
     setIsShowDeleteLead,
 }) => {
 
-    const leadPhone = `+${lead.countryCode}${lead.phone}`
+    const navigate = useNavigate()
+
+    const leadPhone = lead.phone ? `+${lead.countryCode}${lead.phone}` : 'Not Registered'
 
     const cardActionsList = [
         {
@@ -37,6 +40,16 @@ const LeadCard = ({
                 setIsUpdate(true)
                 setTargetLead(lead)
                 setIsShowUpdateLead(true)
+            }
+        },
+        {
+            name: 'View Lead',
+            icon: <RemoveRedEyeOutlinedIcon />,
+            onAction: e => {
+                e.stopPropagation()
+                setIsUpdate(true)
+                setTargetLead(lead)
+                setIsShowUpdateLead(true) 
             }
         }
      ]
@@ -77,9 +90,7 @@ const LeadCard = ({
         <div 
         onClick={e => {
             e.stopPropagation()
-            setIsUpdate(true)
-            setTargetLead(lead)
-            setIsShowUpdateLead(true)
+            navigate(`/crm/leads/${lead._id}/stages`)
         }}
         className="patient-card-container body-text">
             <div className="patient-card-header">

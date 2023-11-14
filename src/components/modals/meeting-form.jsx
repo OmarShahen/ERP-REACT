@@ -76,7 +76,7 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
             setIsSubmit(false)
             const data = response.data
             toast.success(data.message, { position: 'top-right', duration: 3000 })
-            setReload(reload + 1)
+            reload ? setReload(reload + 1) : null
             setShowFormModal(false)
         })
         .catch(error => {
@@ -237,8 +237,8 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
                         className="normal-button cancel-button"
                         onClick={e => {
                             e.preventDefault()
-                            setIsUpdate()
-                            setMeeting()
+                            setIsUpdate ? setIsUpdate() : null
+                            setMeeting ? setMeeting() : null
                             setShowFormModal(false)
                         }}
                         >{translations[lang]['Close']}</button>

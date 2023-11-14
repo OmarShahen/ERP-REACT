@@ -16,6 +16,10 @@ import InvoiceFormModal from '../modals/invoice-form'
 import InsurancePolicyFormModal from '../modals/insurance-policy-form'
 import InsuranceFormModal from '../modals/insurance-form'
 import CommentFormModal from '../modals/comment-form'
+import LeadFormModal from '../modals/lead-form'
+import MeetingFormModal from '../modals/meeting-form'
+import StageFormModal from '../modals/stage-form'
+import MessageTemplateFormModal from '../modals/message-template-form'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -34,7 +38,11 @@ const NavigationBar = ({ pageName }) => {
     const [isShowEmergencyContactsForm, setIsShowEmergencyContactsForm] = useState(false)
     const [isShowInsurancePolicy, setIsShowInsurancePolicy] = useState(false)
     const [isShowInsuranceCompanyForm, setIsShowInsuranceCompanyForm] = useState(false)
-    const [isShowCommentForm, setIsShowCommentForm] = useState()
+    const [isShowCommentForm, setIsShowCommentForm] = useState(false)
+    const [isShowLeadForm, setIsShowLeadForm] = useState(false)
+    const [isShowMeetingForm, setIsShowMeetingForm] = useState(false)
+    const [isShowStageForm, setIsShowStageForm] = useState(false)
+    const [isShowMessageTemplateForm, setIsShowMessageTemplateForm] = useState(false)
 
 
     useEffect(() => {
@@ -80,6 +88,10 @@ const NavigationBar = ({ pageName }) => {
                         setShowMenu={setShowQuickActionsForm}
                         setIsShowInsuranceCompanyForm={setIsShowInsuranceCompanyForm}
                         setIsShowCommentForm={setIsShowCommentForm}
+                        setIsShowLeadForm={setIsShowLeadForm}
+                        setIsShowMeetingForm={setIsShowMeetingForm}
+                        setIsShowStageForm={setIsShowStageForm}
+                        setIsShowMessageTemplateForm={setIsShowMessageTemplateForm}
                         /> 
                         : 
                         null 
@@ -129,6 +141,30 @@ const NavigationBar = ({ pageName }) => {
         {
             isShowCommentForm ?
             <CommentFormModal setShowModalForm={setIsShowCommentForm} />
+            :
+            null
+        }
+        {
+            isShowLeadForm ?
+            <LeadFormModal setShowModalForm={setIsShowLeadForm} />
+            :
+            null
+        }
+        {
+            isShowMeetingForm ?
+            <MeetingFormModal setShowFormModal={setIsShowMeetingForm} />
+            :
+            null
+        }
+        {
+            isShowStageForm ?
+            <StageFormModal setShowFormModal={setIsShowStageForm} />
+            :
+            null
+        }
+        {
+            isShowMessageTemplateForm ?
+            <MessageTemplateFormModal setShowFormModal={setIsShowMessageTemplateForm} />
             :
             null
         }

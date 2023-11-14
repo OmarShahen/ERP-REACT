@@ -210,7 +210,7 @@ const SearchInput = ({
             null
         }
         {
-            isShowStatus ?
+            isShowStages ?
             <div className="form-input-container">
                 <select 
                 className="form-input"
@@ -230,10 +230,6 @@ const SearchInput = ({
             :
             null
         }
-         
-        {/*<div className="search-input-result-size-container">
-            <DocumentsSizes size={rows.length} />
-    </div>*/}
     </div>
 }
 

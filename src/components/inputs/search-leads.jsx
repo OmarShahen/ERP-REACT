@@ -22,7 +22,7 @@ const SearchLeadsInputField = ({
             return
         }
 
-        const endpointURL = `/v1/crm/leads/search?name=${name}`
+        const endpointURL = `/v1/crm/leads/name/search?name=${name}`
 
         serverRequest.get(endpointURL)
         .then(response => {

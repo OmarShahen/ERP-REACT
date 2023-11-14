@@ -48,6 +48,8 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import NavigationOutlinedIcon from '@mui/icons-material/NavigationOutlined'
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
+import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
+import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -67,41 +69,6 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
     const [isShowCRM, setIsShowCRM] = useState(true)
     const [isShowClinics, setIsShowClinics] = useState(true)
     const [isShowInvitations, setIsShowInvitations] = useState(false)
-
-
-    useEffect(() => {
-        serverRequest.get(`/v1/clinics-requests/users/${user._id}/status/PENDING`)
-        .then(response => {
-            dispatch(setNumberOfInvitations(response.data.clinicsRequests.length))
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }, [])
-
-    useEffect(() => {
-
-        if(!user.roles.includes('DOCTOR') && !user.roles.includes('STAFF')) {
-            return
-        }
-
-        const todayDate = new Date()
-
-        const statsQuery = { specific: format(todayDate, 'yyyy-MM-dd') }
-
-        const endpointURL = user.roles.includes('DOCTOR') ? 
-        `/v1/appointments/doctors/${user._id}/status/UPCOMING`
-        :
-        `/v1/appointments/clinics/${user.clinicId}/status/UPCOMING`
-
-        serverRequest.get(endpointURL, { params: statsQuery })
-        .then(response => {
-            setNumberOfAppointments(response.data.appointments.length)
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }, [])
 
     return <div className="side-bar-container body-text" style={{ width }}>
         <AnimatePresence>
@@ -203,6 +170,22 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                                         <NavLink to="/crm/meetings">
                                             <CalendarMonthOutlinedIcon />
                                             Meetings
+                                        </NavLink>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <NavLink to="/crm/stages">
+                                            <StairsOutlinedIcon />
+                                            Stages
+                                        </NavLink>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <NavLink to="/crm/messages-templates">
+                                            <MessageOutlinedIcon />
+                                            Messages
                                         </NavLink>
                                     </div>
                                 </li>

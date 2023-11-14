@@ -88,7 +88,7 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
         .then(response => {
             setIsSubmit(false)
             const data = response.data
-            setReload(reload + 1)
+            reload ? setReload(reload + 1) : null
             setShowModalForm(false)
             toast.success(data.message, { position: 'top-right', duration: 3000 })
         })
@@ -266,7 +266,7 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         >
                             <option selected disabled>select speciality</option>
                             {specialities.map(special => {
-                                if(special._id === lead.specialityId) {
+                                if(special._id === lead?.specialityId) {
                                     return <option selected value={special._id}>{special.name}</option>
                                 }
 
@@ -338,7 +338,7 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                     className="normal-button cancel-button"
                     onClick={e => {
                         setShowModalForm(false)
-                        setIsUpdate(false)
+                        setIsUpdate ? setIsUpdate(false) : null
                     }}
                     >Close</button>
                 </div>

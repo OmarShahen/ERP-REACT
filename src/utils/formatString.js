@@ -5,3 +5,14 @@ export const capitalizeFirstLetter = str => {
 export const formatPatientName = (patient) => {
   return `${patient?.patient?.firstName} ${patient?.patient?.lastName ? patient?.patient?.lastName : ''}`
 }
+
+export const formatBooleanValue = (value) => {
+
+  if(typeof value !== 'boolean') {
+      return 'Not Registered'
+  } else if(value === true) {
+      return 'Yes'
+  } else if(value === false) {
+      return 'No'
+  }
+}

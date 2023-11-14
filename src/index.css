@@ -381,6 +381,14 @@ button:hover {
   background-color: #5c60f5 !important;
 }
 
+.purple-light-bg {
+  background-color: #E6CFF2;
+}
+
+.purple-light-text {
+  color: #5A3286;
+}
+
 .red-text {
   color: #DE350B;
 }
