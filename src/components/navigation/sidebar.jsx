@@ -50,6 +50,7 @@ import NavigationOutlinedIcon from '@mui/icons-material/NavigationOutlined'
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
 import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
+import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -127,6 +128,19 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                         <NavLink to="/users">
                         <PersonOutlineOutlinedIcon />
                         Users
+                        </NavLink>
+                    </div>
+                </li>
+                :
+                null
+            }
+            {
+                user.roles.includes('ADMIN') ?
+                <li>
+                    <div>
+                        <NavLink to="/values">
+                            <TuneOutlinedIcon />
+                            Values
                         </NavLink>
                     </div>
                 </li>

@@ -8,7 +8,7 @@ import translations from '../../i18n'
 import { leadStatus, leadStages } from '../../utils/values'
 import { capitalizeFirstLetter } from '../../utils/formatString'
 import { formatNumber } from '../../utils/numbers'
-
+import { valuesEntity } from '../../utils/values'
 
 const SearchInput = ({ 
     rows, 
@@ -21,11 +21,16 @@ const SearchInput = ({
     isSpecialityNested=true,
     isShowInsuranceCompanies=false,
     isShowStatus=false,
-    isShowStages=false
+    isShowStages=false,
+    isShowValues=false,
+    isShowMessages=false
 }) => { 
 
     const user = useSelector(state => state.user.user)
     const lang = useSelector(state => state.lang.lang)
+
+    const allValues = useSelector(state => state.values.values)
+    const values = allValues.filter(value => value.entity === 'MESSAGES')
 
     const [clinics, setClinics] = useState(customClinics)
     const [specialities, setSpecialities] = useState([])
@@ -225,6 +230,48 @@ const SearchInput = ({
                     <option disabled selected>Select stage</option>
                     <option value="ALL">All</option>
                     {leadStages.map(stage => <option value={stage}>{`${capitalizeFirstLetter(stage)} (${formatNumber(rows.filter(row => row.stage === stage).length)})`}</option>)}
+                </select>
+            </div>
+            :
+            null
+        }
+        {
+            isShowValues ?
+            <div className="form-input-container">
+                <select 
+                className="form-input"
+                onChange={e => {
+                    if(e.target.value === 'ALL') {
+                        return setRows(rows)
+                    }
+
+                    return setRows(rows.filter(row => row.entity === e.target.value))
+                }}
+                >
+                    <option disabled selected>Select Entity</option>
+                    <option value="ALL">All</option>
+                    {valuesEntity.map(entity => <option value={entity}>{`${capitalizeFirstLetter(entity)} (${formatNumber(rows.filter(row => row.entity === entity).length)})`}</option>)}
+                </select>
+            </div>
+            :
+            null
+        }
+        {
+            isShowMessages ?
+            <div className="form-input-container">
+                <select 
+                className="form-input"
+                onChange={e => {
+                    if(e.target.value === 'ALL') {
+                        return setRows(rows)
+                    }
+
+                    return setRows(rows.filter(row => row?.category?._id === e.target.value))
+                }}
+                >
+                    <option disabled selected>Select Category</option>
+                    <option value="ALL">{`All (${formatNumber(rows.length)})`}</option>
+                    {values.map(value => <option value={value._id}>{`${capitalizeFirstLetter(value.value)} (${formatNumber(rows.filter(row => row?.category?._id === value._id).length)})`}</option>)}
                 </select>
             </div>
             :

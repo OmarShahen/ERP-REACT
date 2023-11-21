@@ -8,7 +8,6 @@ import UserProfileMenu from '../menus/profile/profile'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
-import translations from '../../i18n'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import QuickFormMenu from '../menus/quick-forms/quick-forms'
 import AppointmentFormModal from '../modals/appointment-form'
@@ -20,6 +19,10 @@ import LeadFormModal from '../modals/lead-form'
 import MeetingFormModal from '../modals/meeting-form'
 import StageFormModal from '../modals/stage-form'
 import MessageTemplateFormModal from '../modals/message-template-form'
+import ValueFormModal from '../modals/value-form'
+import { serverRequest } from '../API/request'
+import { setValues } from '../../redux/slices/valueSlice'
+import { toast } from 'react-hot-toast'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -43,6 +46,7 @@ const NavigationBar = ({ pageName }) => {
     const [isShowMeetingForm, setIsShowMeetingForm] = useState(false)
     const [isShowStageForm, setIsShowStageForm] = useState(false)
     const [isShowMessageTemplateForm, setIsShowMessageTemplateForm] = useState(false)
+    const [isShowValuesForm, setIsShowValuesForm] = useState(false)
 
 
     useEffect(() => {
@@ -58,6 +62,17 @@ const NavigationBar = ({ pageName }) => {
 
     }, [user.isLogged])
 
+    useEffect(() => {
+        serverRequest.get(`/v1/values`)
+        .then(response => {
+            const values = response.data.values
+            dispatch(setValues({ values }))
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }, [])
 
     return <div>
         <div className="navigation-bar-container body-text">
@@ -92,6 +107,7 @@ const NavigationBar = ({ pageName }) => {
                         setIsShowMeetingForm={setIsShowMeetingForm}
                         setIsShowStageForm={setIsShowStageForm}
                         setIsShowMessageTemplateForm={setIsShowMessageTemplateForm}
+                        setIsShowValuesForm={setIsShowValuesForm}
                         /> 
                         : 
                         null 
@@ -165,6 +181,12 @@ const NavigationBar = ({ pageName }) => {
         {
             isShowMessageTemplateForm ?
             <MessageTemplateFormModal setShowFormModal={setIsShowMessageTemplateForm} />
+            :
+            null
+        }
+        {
+            isShowValuesForm ?
+            <ValueFormModal setShowFormModal={setIsShowValuesForm} />
             :
             null
         }

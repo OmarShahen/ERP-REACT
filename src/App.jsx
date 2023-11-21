@@ -54,6 +54,7 @@ import LeadLayout from './components/layouts/lead-layout'
 import LeadsStagesPage from './pages/CRM/leads/leads-stages'
 import LeadsMeetingsPage from './pages/CRM/leads/leads-meetings'
 import MessagesTemplatesPage from './pages/CRM/messages/messages-templates'
+import ValuesPage from './pages/values/values'
 
 import DashboardPage from './pages/dashboard'
 
@@ -93,6 +94,7 @@ function App() {
 
             <Route path="/arrival-methods" element={<ArrivalMethodsPage roles={['EMPLOYEE', 'ADMIN']} />} />
             <Route path="/comments" element={<CommentsPage roles={['ADMIN']} />} />
+            <Route path="/values" element={<ValuesPage roles={['ADMIN']} />} />
 
             <Route path="/crm/leads" element={<LeadsPage roles={[]} />} />
             <Route path="/crm/meetings" element={<MeetingsPage roles={[]} />} />

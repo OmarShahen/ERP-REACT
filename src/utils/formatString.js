@@ -16,3 +16,21 @@ export const formatBooleanValue = (value) => {
       return 'No'
   }
 }
+
+export const textShortener = (text, limit) => {
+
+  let output = ''
+
+  if(text.length < limit) {
+    return text
+  }
+
+  for(let i=0;i<text.length;i++) {
+    if(i > limit) {
+      break
+    }
+    output += text[i]
+  }
+
+  return output + '...'
+}

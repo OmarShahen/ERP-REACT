@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { store } from '../../redux/store'
 
-const DEV_URL = 'http://localhost:5000/api'
-const PROD_URL = 'https://barbells-eg.co/api'
+const DEV_URL = 'http://localhost:5007/api'
+const PROD_URL = 'https://us-central1-ra-aya.cloudfunctions.net/app/api'
 
 export const serverRequest = axios.create({
     baseURL: PROD_URL

@@ -8,6 +8,8 @@ import clinicReducer from './slices/clinicSlice'
 import invitationReducer from './slices/invitationSlice'
 import billReducer from './slices/billSlice'
 import langReducer from './slices/langSlice'
+import valueReducer from './slices/valueSlice'
+
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +21,7 @@ export const store = configureStore({
         clinic: clinicReducer,
         invitation: invitationReducer,
         bill: billReducer,
-        lang: langReducer
+        lang: langReducer,
+        values: valueReducer
     }
 })

@@ -12,3 +12,5 @@ export const MessagesTemplatesCategories = [
     'PROMOTIONS', 'FREE-TRIALS', 'PERSONALIZED-RECOMMENDATIONS',
     'ONBOARDING-SUPPORT', 'UP-SELLING', 'CROSS-SELLING', 'CUSTOMER-SUCCESS-STORIES'
 ]
+
+export const valuesEntity = ['LEADS', 'STAGES', 'MESSAGES']

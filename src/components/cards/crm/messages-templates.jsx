@@ -4,7 +4,7 @@ import CardActions from '../components/actions'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../../transitions/card-transitions'
-import { capitalizeFirstLetter } from '../../../utils/formatString'
+import { capitalizeFirstLetter, textShortener } from '../../../utils/formatString'
 import toast from 'react-hot-toast'
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined'
 
@@ -53,7 +53,7 @@ const MessageTemplateCard = ({
     className="patient-card-container body-text"
     onClick={e => {
         e.stopPropagation()
-        setTargetmessage(message)
+        setTargetMessageTemplate(message)
         setIsUpdate(true)
         setIsShowUpdateModal(true)
     }}
@@ -71,14 +71,14 @@ const MessageTemplateCard = ({
         {
             message?.description ?
             <div className="patient-card-body body-text">
-                {message.description}
+                {textShortener(message.description, 50)}
             </div>
             :
             null
         }
         <div className="cards-tags-container margin-top-1">
             <span className="status-btn pending bold-text">
-                {capitalizeFirstLetter(message.category)}
+                {message?.category ? capitalizeFirstLetter(message?.category?.value) : null}
             </span>
         </div>
         <CardDate 

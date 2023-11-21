@@ -6,6 +6,7 @@ import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined'
 import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
+import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined'
 
 
 const QuickFormMenu = ({ 
@@ -13,7 +14,8 @@ const QuickFormMenu = ({
     setIsShowLeadForm,
     setIsShowMeetingForm,
     setIsShowStageForm,
-    setIsShowMessageTemplateForm
+    setIsShowMessageTemplateForm,
+    setIsShowValuesForm
 }) => {
 
     const user = useSelector(state => state.user.user)
@@ -65,6 +67,15 @@ const QuickFormMenu = ({
                     <span>Comment</span>
                     <MapsUgcOutlinedIcon />
                 </li>
+                {
+                    user.roles.includes('ADMIN') ?
+                    <li onClick={e => setIsShowValuesForm(true)}>
+                        <span>Values</span>
+                        <TuneOutlinedIcon />
+                    </li>
+                    :
+                    null
+                }
             </ul>
         </div>
     </div>

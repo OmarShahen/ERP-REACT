@@ -6,23 +6,20 @@ import { TailSpin } from 'react-loader-spinner'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import { capitalizeFirstLetter } from '../../utils/formatString'
+import { valuesEntity } from '../../utils/values'
 
 
-const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIsUpdate, message, setMessage }) => {
+const ValueFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIsUpdate, value, setValue }) => {
 
     const lang = useSelector(state => state.lang.lang)
-    const allValues = useSelector(state => state.values.values)
-    const values = allValues.filter(value => value.entity === 'MESSAGES')
 
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const [name, setName] = useState(isUpdate ? message.name : '')
-    const [description, setDescription] = useState(isUpdate ? message.description : '')
-    const [category, setCategory] = useState(isUpdate ? message?.category?._id : '')
+    const [name, setName] = useState(isUpdate ? value.value : '')
+    const [entity, setEntity] = useState(isUpdate ? value.entity : '')
 
     const [nameError, setNameError] = useState()
-    const [descriptionError, setDescriptionError] = useState()
-    const [categoryError, setCategoryError] = useState()
+    const [entityError, setEntityError] = useState()
     
 
     const handleSubmit = (e) => {
@@ -30,18 +27,15 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
         
         if(!name) return setNameError('Name is required')
 
-        if(!category) return setCategoryError('Category is required')
+        if(!entity) return setEntityError('Entity is required')
 
-        if(!description) return setDescriptionError('Description is required')
-
-        const messageData = {
-            name,
-            categoryId: category,
-            description
+        const valueData = {
+            value: name,
+            entity,
         }
 
         setIsSubmit(true)
-        serverRequest.post(`/v1/crm/messages-templates`, messageData)
+        serverRequest.post(`/v1/values`, valueData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
@@ -59,9 +53,7 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
 
                 if(errorResponse.field === 'name') return setNameError(errorResponse.message)
 
-                if(errorResponse.field === 'category') return setCategoryError(errorResponse.message)
-
-                if(errorResponse.field === 'description') return setDescriptionError(errorResponse.message)
+                if(errorResponse.field === 'entity') return setEntityError(errorResponse.message)
 
                 toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
 
@@ -77,24 +69,19 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
         
         if(!name) return setNameError('Name is required')
 
-        if(!category) return setCategoryError('Category is required')
+        if(!entity) return setEntityError('Entity is required')
 
-        if(!description) return setDescriptionError('Description is required')
-
-        const messageData = {
-            name,
-            categoryId: category,
-            description
+        const valueData = {
+            value: name,
+            entity,
         }
 
         setIsSubmit(true)
-        serverRequest.put(`/v1/crm/messages-templates/${message._id}`, messageData)
+        serverRequest.patch(`/v1/values/${value._id}/value`, valueData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
             toast.success(data.message, { position: 'top-right', duration: 3000 })
-            setIsUpdate(false)
-            setMessage()
             setReload ? setReload(reload + 1) : null
             setShowFormModal(false)
         })
@@ -108,9 +95,7 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
 
                 if(errorResponse.field === 'name') return setNameError(errorResponse.message)
 
-                if(errorResponse.field === 'category') return setCategoryError(errorResponse.message)
-
-                if(errorResponse.field === 'description') return setDescriptionError(errorResponse.message)
+                if(errorResponse.field === 'entity') return setEntityError(errorResponse.message)
 
                 toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
 
@@ -124,12 +109,12 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
     return <div className="modal">
         <div className="modal-container body-text">
             <div className="modal-header">
-                <h2>{isUpdate ? 'Update Message' : 'Create Message'}</h2>
+                <h2>{isUpdate ? 'Update Value' : 'Create Value'}</h2>
             </div>
             <div>
                 <div className="modal-body-container">
                     <form 
-                    id="message-form" 
+                    id="value-form" 
                     className="modal-form-container responsive-form body-text" 
                     onSubmit={isUpdate ? handleUpdate : handleSubmit}>
                         <div className="form-input-container">
@@ -144,34 +129,31 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
                             <span className="red">{nameError}</span>
                         </div>
                         <div className="form-input-container">
-                            <label>Category</label>
-                            <select
-                            className="form-input"
-                            onChange={e => setCategory(e.target.value)}
-                            onClick={e => setCategoryError()}
-                            >
-                                <option disabled selected>Select Category</option>
-                                {values.map(messageCategory => {
-                                    if(messageCategory._id === category) {
-                                        return <option selected value={messageCategory._id}>{capitalizeFirstLetter(messageCategory?.value)}</option>
-                                    }
-                                    return <option value={messageCategory._id}>{capitalizeFirstLetter(messageCategory?.value)}</option>
-                                })}
-                            </select>
-                            <span className="red">{categoryError}</span>
+                            <label>Entity</label>
+                            {
+                                !isUpdate ?
+                                <select
+                                className="form-input"
+                                onChange={e => setEntity(e.target.value)}
+                                onClick={e => setEntityError()}
+                                >
+                                    <option disabled selected>Select Entity</option>
+                                    {valuesEntity.map(entityValue => {
+                                        return <option value={entityValue}>{capitalizeFirstLetter(entityValue)}</option>
+                                    })}
+                                </select>
+                                :
+                                <input 
+                                type="text"
+                                disabled
+                                value={capitalizeFirstLetter(value.entity)}
+                                className="form-input"
+                                />
+                            }
+                            <span className="red">{entityError}</span>
                         </div>
+                        
                     </form>
-                    <div className="form-input-container">
-                        <label>Description</label>
-                        <textarea
-                        rows={12}
-                        value={description}
-                        className="form-input"
-                        onChange={e => setDescription(e.target.value)}
-                        onClick={e => setDescriptionError()}
-                        ></textarea>
-                        <span className="red">{descriptionError}</span>
-                    </div>
                 </div>
                 <div className="modal-form-btn-container">
                     <div>   
@@ -184,7 +166,7 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
                             />
                             :
                             <button
-                            form="message-form"
+                            form="value-form"
                             className="normal-button white-text action-color-bg"
                             >{isUpdate ? 'Update' : 'Create'}</button>
                         } 
@@ -195,7 +177,7 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
                         onClick={e => {
                             e.preventDefault()
                             setIsUpdate ? setIsUpdate() : null
-                            setMessage ? setMessage() : null
+                            setValue ? setValue() : null
                             setShowFormModal(false)
                         }}
                         >{translations[lang]['Close']}</button>
@@ -207,4 +189,4 @@ const MessageTemplateFormModal = ({ setShowFormModal, reload, setReload, isUpdat
 }
 
 
-export default MessageTemplateFormModal
+export default ValueFormModal

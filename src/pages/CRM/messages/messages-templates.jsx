@@ -88,14 +88,6 @@ const MessagesTemplatesPage = ({ roles }) => {
             reload={reload}
             setShowModalForm={setIsShowAddMessageTemplateForm}
             />
-            <div className="cards-3-list-wrapper margin-bottom-1">
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Messages'}
-                number={formatNumber(searchedMessagesTemplates.length)}
-                iconColor={'#5C60F5'}
-                />
-            </div>
             <FiltersSection 
             setStatsQuery={setStatsQuery} 
             statsQuery={statsQuery}
@@ -107,8 +99,7 @@ const MessagesTemplatesPage = ({ roles }) => {
                 setRows={setSearchedMessagesTemplates}
                 searchRows={searchMessagesTemplates}
                 isHideClinics={true}
-                isShowStatus={false}
-                isShowStages={false}
+                isShowMessages={true}
                 />
             </div>
                     
