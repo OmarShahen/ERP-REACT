@@ -51,6 +51,7 @@ import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
 import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined'
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -200,6 +201,14 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                                         <NavLink to="/crm/messages-templates">
                                             <MessageOutlinedIcon />
                                             Messages
+                                        </NavLink>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <NavLink to="/messages-sent">
+                                            <SendOutlinedIcon />
+                                            Messages Sent
                                         </NavLink>
                                     </div>
                                 </li>

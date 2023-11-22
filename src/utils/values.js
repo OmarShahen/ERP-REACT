@@ -14,3 +14,5 @@ export const MessagesTemplatesCategories = [
 ]
 
 export const valuesEntity = ['LEADS', 'STAGES', 'MESSAGES']
+
+export const messagesSentPlatforms = ['REALLIFE', 'WHATSAPP', 'FACEBOOK', 'INSTAGRAM', 'YOUTUBE', 'TIKTOK', 'OTHERS']

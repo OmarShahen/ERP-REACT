@@ -71,7 +71,7 @@ const MessageTemplateCard = ({
         {
             message?.description ?
             <div className="patient-card-body body-text">
-                {textShortener(message.description, 50)}
+                {textShortener(message.description, 70)}
             </div>
             :
             null

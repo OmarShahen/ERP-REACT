@@ -9,6 +9,7 @@ import invitationReducer from './slices/invitationSlice'
 import billReducer from './slices/billSlice'
 import langReducer from './slices/langSlice'
 import valueReducer from './slices/valueSlice'
+import messageTemplateReducer from './slices/messageTemplateSlice'
 
 
 export const store = configureStore({
@@ -22,6 +23,7 @@ export const store = configureStore({
         invitation: invitationReducer,
         bill: billReducer,
         lang: langReducer,
-        values: valueReducer
+        values: valueReducer,
+        messagesTemplates: messageTemplateReducer
     }
 })

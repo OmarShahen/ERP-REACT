@@ -8,15 +8,15 @@ import { capitalizeFirstLetter, formatBooleanValue } from '../../../utils/format
 import { formatMoney } from '../../../utils/numbers'
 import { useNavigate } from 'react-router-dom'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
-import { format } from 'date-fns'
+import { format, formatDistance } from 'date-fns'
 
 
 const MessageSentCard = ({ 
     messageSent, 
-    setTargetLead,
+    setTargetMessageSent,
     setIsUpdate,
-    setIsShowUpdateLead,
-    setIsShowDeleteLead,
+    setIsShowUpdateModal,
+    setIsShowDeleteModal,
 }) => {
 
     const navigate = useNavigate()
@@ -27,8 +27,8 @@ const MessageSentCard = ({
             icon: <DeleteOutlineOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
-                setTargetLead(lead)
-                setIsShowDeleteLead(true)
+                setTargetMessageSent(messageSent)
+                setIsShowDeleteModal(true)
             }
         },
         {
@@ -37,14 +37,22 @@ const MessageSentCard = ({
             onAction: (e) => {
                 e.stopPropagation()
                 setIsUpdate(true)
-                setTargetLead(lead)
-                setIsShowUpdateLead(true)
+                setTargetMessageSent(messageSent)
+                setIsShowUpdateModal(true)
             }
         },
      ]
 
     return <CardTransition>
-        <div className="patient-card-container body-text">
+        <div 
+        className="patient-card-container body-text"
+        onClick={e => {
+            e.stopPropagation()
+            setIsUpdate(true)
+            setTargetMessageSent(messageSent)
+            setIsShowUpdateModal(true)
+        }}
+        >
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
                     <img src={`https://avatars.dicebear.com/api/initials/${messageSent?.lead?.name}.svg`} alt="lead-image" />
@@ -62,6 +70,10 @@ const MessageSentCard = ({
                         <span>{messageSent?.messageTemplate?.name ? capitalizeFirstLetter(messageSent?.messageTemplate?.name) : 'Not Registered'}</span>
                     </li>
                     <li>
+                        <strong>Platform</strong>
+                        <span>{capitalizeFirstLetter(messageSent?.platform)}</span>
+                    </li>
+                    <li>
                         <strong>Opened</strong>
                         <span>{formatBooleanValue(messageSent.isOpened)}</span>
                     </li>
@@ -70,7 +82,7 @@ const MessageSentCard = ({
                         <span>
                             {
                                 messageSent.openedDate ?
-                                format(new Date(messageSent.openedDate), 'yyyy/MM/dd hh:mm:ss a')
+                                formatDistance(new Date(messageSent.openedDate), new Date(), { addSuffix: true })
                                 :
                                 'Not Registered'
                             }
@@ -85,7 +97,7 @@ const MessageSentCard = ({
                         <span>
                             {
                                 messageSent.respondedDate ?
-                                format(new Date(messageSent.respondedDate), 'yyyy/MM/dd hh:mm:ss a')
+                                formatDistance(new Date(messageSent.respondedDate), new Date(), { addSuffix: true })
                                 :
                                 'Not Registered'
                             }

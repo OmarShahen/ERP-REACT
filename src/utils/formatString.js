@@ -17,6 +17,18 @@ export const formatBooleanValue = (value) => {
   }
 }
 
+export const formatStringToBoolean = (value) => {
+  let boolValue = ''
+
+  if(value === 'YES') {
+    boolValue = true 
+  } else if(value === 'NO') {
+    boolValue = false
+  }
+
+  return boolValue
+}
+
 export const textShortener = (text, limit) => {
 
   let output = ''

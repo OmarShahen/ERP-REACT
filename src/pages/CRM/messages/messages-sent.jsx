@@ -5,7 +5,7 @@ import CircularLoading from '../../../components/loadings/circular'
 import FloatingButton from '../../../components/buttons/floating-button'
 import EmptySection from '../../../components/sections/empty/empty'
 import SearchInput from '../../../components/inputs/search'
-import { searchMessagesTemplates } from '../../../utils/searches/search-messages-templates'
+import { searchMessagesSent } from '../../../utils/searches/search-messages-sent'
 import { toast } from 'react-hot-toast'
 import FiltersSection from '../../../components/sections/filters/filters'
 import PageHeader from '../../../components/sections/page-header'
@@ -16,14 +16,16 @@ import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
 import Card from '../../../components/cards/card'
 import { formatNumber } from '../../../utils/numbers'
 import MessageSentCard from '../../../components/cards/crm/messages-sent'
+import MessageSentDeleteConfirmationModal from '../../../components/modals/confirmation/crm/message-sent-confirmation-modal'
+import MessageSentFormModal from '../../../components/modals/message-sent-form'
 
 
 const MessagesSentPage = ({ roles }) => {
 
-    const [isShowDeleteMessageTemplateModal, setIsShowDeleteMessageTemplateModal] = useState(false)
-    const [isShowAddMessageTemplateForm, setIsShowAddMessageTemplateForm] = useState(false)
+    const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
+    const [isShowAddModal, setIsShowAddModal] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
-    const [targetMessageTemplate, setTargetMessageTemplate] = useState({})
+    const [targetMessageSent, setTargetMessageSent] = useState({})
 
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
@@ -51,33 +53,33 @@ const MessagesSentPage = ({ roles }) => {
 
     return <div className="page-container page-white-background">
         {
-            isShowAddMessageTemplateForm ?
-            <MessageTemplateFormModal 
+            isShowAddModal ?
+            <MessageSentFormModal 
             reload={reload} 
             setReload={setReload} 
-            setShowFormModal={setIsShowAddMessageTemplateForm}  
+            setShowFormModal={setIsShowAddModal}  
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
-            message={targetMessageTemplate}
-            setMessage={setTargetMessageTemplate}
+            messageSent={targetMessageSent}
+            setMessageSent={setTargetMessageSent}
             />
             :
             null
         }
         {
-            isShowDeleteMessageTemplateModal ?
-            <MessageTemplateDeleteConfirmationModal
+            isShowDeleteModal ?
+            <MessageSentDeleteConfirmationModal
             reload={reload}
             setReload={setReload}
-            messageTemplate={targetMessageTemplate}
-            setIsShowModal={setIsShowDeleteMessageTemplateModal}
+            messageSent={targetMessageSent}
+            setIsShowModal={setIsShowDeleteModal}
             />
             :
             null
         }
 
         <div className="show-mobile">
-            <FloatingButton setIsShowForm={setIsShowAddMessageTemplateForm} />
+            <FloatingButton setIsShowForm={setIsShowAddModal} />
         </div>
 
         <div className="padded-container">
@@ -87,7 +89,7 @@ const MessagesSentPage = ({ roles }) => {
             addBtnText={'Add Message'}
             setReload={setReload}
             reload={reload}
-            setShowModalForm={setIsShowAddMessageTemplateForm}
+            setShowModalForm={setIsShowAddModal}
             />
             <div className="cards-3-list-wrapper margin-bottom-1">
                 <Card 
@@ -106,10 +108,8 @@ const MessagesSentPage = ({ roles }) => {
                 <SearchInput 
                 rows={messagesSent} 
                 setRows={setSearchedMessagesSent}
-                searchRows={searchMessagesTemplates}
+                searchRows={searchMessagesSent}
                 isHideClinics={true}
-                isShowStatus={false}
-                isShowStages={false}
                 />
             </div>
                     
@@ -124,9 +124,9 @@ const MessagesSentPage = ({ roles }) => {
                                 setReload={setReload} 
                                 reload={reload}
                                 setIsUpdate={setIsUpdate}
-                                setIsShowUpdateModal={setIsShowAddMessageTemplateForm}
-                                setIsShowDeleteModal={setIsShowDeleteMessageTemplateModal}
-                                setTargetMessageTemplate={setTargetMessageTemplate}
+                                setIsShowUpdateModal={setIsShowAddModal}
+                                setIsShowDeleteModal={setIsShowDeleteModal}
+                                setTargetMessageSent={setTargetMessageSent}
                                 />
                             )}
                     </div>

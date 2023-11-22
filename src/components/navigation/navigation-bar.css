@@ -99,6 +99,8 @@
 
 .quick-form-container {
     position: relative;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .app-navigation-bar-container ul {

@@ -22,6 +22,7 @@ import MessageTemplateFormModal from '../modals/message-template-form'
 import ValueFormModal from '../modals/value-form'
 import { serverRequest } from '../API/request'
 import { setValues } from '../../redux/slices/valueSlice'
+import { setMessagesTemplates } from '../../redux/slices/messageTemplateSlice'
 import { toast } from 'react-hot-toast'
 
 
@@ -67,6 +68,18 @@ const NavigationBar = ({ pageName }) => {
         .then(response => {
             const values = response.data.values
             dispatch(setValues({ values }))
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }, [])
+
+    useEffect(() => {
+        serverRequest.get(`/v1/crm/messages-templates`)
+        .then(response => {
+            const messagesTemplates = response.data.messagesTemplates
+            dispatch(setMessagesTemplates({ messagesTemplates }))
         })
         .catch(error => {
             console.error(error)
