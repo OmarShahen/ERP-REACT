@@ -12,6 +12,7 @@ import translations from '../../i18n'
 import { formatNumber } from '../../utils/numbers'
 import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined'
 import { getHealthImprovementNameByNumber } from '../../utils/experience-translator'
+import CardImage from './components/image'
 
 const TreatmentSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsShowUpdateSurvey, setIsShowDeleteSurveyModal }) => {
 
@@ -74,7 +75,7 @@ const TreatmentSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIs
         className="patient-card-container body-text">
             <div className="patient-card-header">
             <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${patientName}.svg`} alt="patient-image" />
+                <CardImage name={patientName} />
                     <div>
                         <strong>{patientName}</strong>
                         <span className="grey-text">{patientPhone}</span>

@@ -23,7 +23,9 @@ const SearchInput = ({
     isShowStatus=false,
     isShowStages=false,
     isShowValues=false,
-    isShowMessages=false
+    isShowMessages=false,
+    isSearchRemote=false,
+    setIsLoading,
 }) => { 
 
     const user = useSelector(state => state.user.user)
@@ -99,6 +101,40 @@ const SearchInput = ({
 
     }, [])
 
+    const filterLeadsByStatus = (status) => {
+
+        const endpointURL = status !== 'ALL' ? '/v1/crm/leads/status/stages/filter' : '/v1/crm/leads'
+
+        setIsLoading(true)
+        serverRequest.get(endpointURL, { params: { status } })
+        .then(response => {
+            setIsLoading(false)
+            setRows(response.data.leads)
+        })
+        .catch(error => {
+            setIsLoading(false)
+            console.error(error)
+            toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const filterLeadsByStage = (stage) => {
+
+        const endpointURL = stage !== 'ALL' ? '/v1/crm/leads/status/stages/filter' : '/v1/crm/leads'
+
+        setIsLoading(true)
+        serverRequest.get(endpointURL, { params: { stage } })
+        .then(response => {
+            setIsLoading(false)
+            setRows(response.data.leads)
+        })
+        .catch(error => {
+            setIsLoading(false)
+            console.error(error)
+            toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
     return <div className="cards-3-list-wrapper">
         <div className="search-field-input-container">
             <span>
@@ -108,7 +144,7 @@ const SearchInput = ({
             type="text" 
             className="form-input"
             placeholder={translations[lang]["Search..."]}
-            onChange={e => setRows(rows.filter(row => searchRows(row, e.target.value)))}
+            onChange={e => isSearchRemote ? searchRows(e.target.value) : setRows(rows.filter(row => searchRows(row, e.target.value)))}
             />
         </div>
         {
@@ -196,15 +232,9 @@ const SearchInput = ({
         {
             isShowStatus ?
             <div className="form-input-container">
-                <select 
+                <select
                 className="form-input"
-                onChange={e => {
-                    if(e.target.value === 'ALL') {
-                        return setRows(rows)
-                    }
-
-                    return setRows(rows.filter(row => row.status === e.target.value))
-                }}
+                onChange={e => filterLeadsByStatus(e.target.value)}
                 >
                     <option disabled selected>Select status</option>
                     <option value="ALL">All</option>
@@ -219,17 +249,11 @@ const SearchInput = ({
             <div className="form-input-container">
                 <select 
                 className="form-input"
-                onChange={e => {
-                    if(e.target.value === 'ALL') {
-                        return setRows(rows)
-                    }
-
-                    return setRows(rows.filter(row => row.stage === e.target.value))
-                }}
+                onChange={e => filterLeadsByStage(e.target.value)}
                 >
                     <option disabled selected>Select stage</option>
                     <option value="ALL">All</option>
-                    {leadStages.map(stage => <option value={stage}>{`${capitalizeFirstLetter(stage)} (${formatNumber(rows.filter(row => row.stage === stage).length)})`}</option>)}
+                    {leadStages.map(stage => <option value={stage}>{capitalizeFirstLetter(stage)}</option>)}
                 </select>
             </div>
             :
@@ -250,7 +274,7 @@ const SearchInput = ({
                 >
                     <option disabled selected>Select Entity</option>
                     <option value="ALL">All</option>
-                    {valuesEntity.map(entity => <option value={entity}>{`${capitalizeFirstLetter(entity)} (${formatNumber(rows.filter(row => row.entity === entity).length)})`}</option>)}
+                    {valuesEntity.map(entity => <option value={entity}>{capitalizeFirstLetter(entity)}</option>)}
                 </select>
             </div>
             :

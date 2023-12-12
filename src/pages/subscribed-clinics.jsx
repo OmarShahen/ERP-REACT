@@ -57,6 +57,7 @@ const SubscribedClinicsPage = ({ roles }) => {
         reload={reload}
         setReload={setReload} 
         isHideBackButton={true}
+        totalNumber={clinics.length}
         />
         <div className="cards-3-list-wrapper margin-bottom-1 margin-top-1">
             <Card

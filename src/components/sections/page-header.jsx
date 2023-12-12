@@ -5,6 +5,9 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import CachedIcon from '@mui/icons-material/Cached'
 import translations from '../../i18n'
 import { useSelector } from 'react-redux'
+import { formatNumber } from '../../utils/numbers'
+import CountUp from 'react-countup'
+
 
 const PageHeader = ({ 
     pageName, 
@@ -18,7 +21,8 @@ const PageHeader = ({
     setReload, 
     reload, 
     isHideRefresh=false,
-    isHideBackButton
+    isHideBackButton,
+    totalNumber=0
 }) => {
 
     const navigate = useNavigate()
@@ -39,6 +43,17 @@ const PageHeader = ({
                 <h1>
                     {pageName}
                 </h1>
+                {
+                    totalNumber ?
+                    <span className="header-number-container">
+                        <CountUp 
+                        end={totalNumber}
+                        duration={1.5}
+                        />
+                    </span>
+                    :
+                    null
+                }
             </div>
                 <div className="header-buttons-container">
                     {

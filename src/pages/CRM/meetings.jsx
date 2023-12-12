@@ -1,21 +1,9 @@
 import { useState, useEffect } from 'react'
 import '../prescriptions.css'
 import { serverRequest } from "../../components/API/request"
-import CircularLoading from '../../components/loadings/circular'
 import FloatingButton from '../../components/buttons/floating-button'
-import EmptySection from '../../components/sections/empty/empty'
-import SearchInput from '../../components/inputs/search'
-import { searchLeads } from '../../utils/searches/search-leads'
 import { toast } from 'react-hot-toast'
-import FiltersSection from '../../components/sections/filters/filters'
-import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
-import Card from '../../components/cards/card'
-import { formatNumber, formatMoney } from '../../utils/numbers'
 import PageHeader from '../../components/sections/page-header'
-import LeadCard from '../../components/cards/crm/leads'
-import LeadFormModal from '../../components/modals/lead-form'
-import LeadDeleteConfirmationModal from '../../components/modals/confirmation/crm/lead-delete-confirmation-modal'
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'
 import Calender from '../../components/calenders/calender'
 import MeetingFormModal from '../../components/modals/meeting-form'
 
@@ -76,6 +64,7 @@ const MeetingsPage = ({ roles }) => {
                     setReload={setReload}
                     addBtnText={'Add Meeting'}
                     setShowModalForm={setIsShowAddMeetingForm}
+                    totalNumber={meetings.length}
                     />
                 <div>
             </div>   

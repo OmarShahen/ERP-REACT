@@ -80,6 +80,7 @@ const ValuesPage = ({ roles }) => {
                 setReload={setReload}
                 addBtnText={'Add Value'}
                 setShowModalForm={setIsShowAddModal}
+                totalNumber={values.length}
                 />
                 <div>
                     <div className="search-input-container">

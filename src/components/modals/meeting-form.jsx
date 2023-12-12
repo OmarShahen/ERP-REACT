@@ -19,14 +19,16 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
     const [isSubmit, setIsSubmit] = useState(false)
 
     const [lead, setLead] = useState()
-    const [status, setStatus] = useState('UPCOMING')
+    const [status, setStatus] = useState(isUpdate ? meeting.status : 'UPCOMING')
     const [reservationDate, setReservationDate] = useState(isUpdate ? format(new Date(meeting.reservationTime), 'yyyy-MM-dd') : null)
     const [reservationTime, setReservationTime] = useState(isUpdate ? format(new Date(meeting.reservationTime), 'HH:mm') : null)
+    const [note, setNote] = useState(isUpdate ? meeting.note : '')
 
     const [leadError, setLeadError] = useState()
     const [statusError, setStatusError] = useState()
     const [reservationDateError, setReservationDateError] = useState()
     const [reservationTimeError, setReservationTimeError] = useState()
+    const [noteError, setNoteError] = useState()
 
     const meetingStatus = ['UPCOMING', 'DONE', 'RESCHEDULED', 'CANCELLED']
 
@@ -68,6 +70,7 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
             leadId: lead._id,
             reservationTime: bookDate,
             status,
+            note
         }
 
         setIsSubmit(true)
@@ -105,10 +108,11 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
 
         const meetingData = {
             status,
+            note
         }
 
         setIsSubmit(true)
-        serverRequest.patch(`/v1/crm/meetings/${meeting._id}/status`, meetingData)
+        serverRequest.put(`/v1/crm/meetings/${meeting._id}`, meetingData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
@@ -214,6 +218,59 @@ const MeetingFormModal = ({ setShowFormModal, reload, setReload, isUpdate, setIs
                             </select>
                             <span className="red">{statusError}</span>
                         </div>
+                        <div className="form-input-container">
+                            <label>Note</label>
+                            <input 
+                            type="text"
+                            className="form-input"
+                            onChange={e => setNote(e.target.value)}
+                            onClick={e => setNoteError()}
+                            value={note}
+                            />
+                            <span className="red">{noteError}</span>
+                        </div>
+                        {
+                            isUpdate ?
+                            <div className="form-input-container">
+                                <label>Lead Phone</label>
+                                <input 
+                                type="tel" 
+                                className="form-input" 
+                                disabled
+                                value={meeting?.lead?.phone ? `+${meeting?.lead?.countryCode}${meeting?.lead?.phone}` : ''}
+                                />
+                            </div>
+                            :
+                            null
+                        }
+                        {
+                            isUpdate ?
+                            <div className="form-input-container">
+                                <label>Lead County</label>
+                                <input 
+                                type="text" 
+                                className="form-input" 
+                                disabled
+                                value={meeting?.lead?.county ? meeting?.lead?.county : ''}
+                                />
+                            </div>
+                            :
+                            null
+                        }
+                        {
+                            isUpdate ?
+                            <div className="form-input-container">
+                                <label>Lead Address</label>
+                                <input 
+                                type="text" 
+                                className="form-input" 
+                                disabled
+                                value={meeting?.lead?.address ? meeting?.lead?.address : ''}
+                                />
+                            </div>
+                            :
+                            null
+                        }
                     </form>
                 </div>
                 <div className="modal-form-btn-container">

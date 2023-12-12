@@ -37,6 +37,7 @@ const LeadLayout = () => {
             />
             <div className="mini-page-navigator-container">
                 <ul>
+                    <li><NavLink to={`/crm/leads/${leadId}/schedules`}>Schedules</NavLink></li>
                     <li><NavLink to={`/crm/leads/${leadId}/stages`}>Stages</NavLink></li>
                     <li><NavLink to={`/crm/leads/${leadId}/meetings`}>Meetings</NavLink></li>
                 </ul>

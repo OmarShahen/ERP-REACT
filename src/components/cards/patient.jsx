@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { formatDistance, format  } from 'date-fns'
+import CardImage from './components/image'
 
 
 
@@ -79,7 +80,7 @@ const PatientCard = ({
         className="patient-card-container body-text">
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${patientName}.svg`} alt="patient-image" />
+                    <CardImage name={patientName} />
                 <div>
                         <strong>{patientName}</strong>
                         <span className="grey-text">#{patient?.patient?.patientId}</span>

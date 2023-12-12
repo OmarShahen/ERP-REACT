@@ -5,46 +5,18 @@ import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined'
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined'
 import MedicationOutlinedIcon from '@mui/icons-material/MedicationOutlined'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined'
 import StoreMallDirectoryOutlinedIcon from '@mui/icons-material/StoreMallDirectoryOutlined'
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
-import { setIsLogged, setMode } from '../../redux/slices/userSlice'
-import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined'
-import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined'
-import { serverRequest } from '../API/request'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
-import { formatNumber } from '../../utils/numbers'
-import { setNumberOfInvitations } from '../../redux/slices/invitationSlice'
-import { toast } from 'react-hot-toast'
-import { capitalizeFirstLetter } from '../../utils/formatString'
-import UpgradeOutlinedIcon from '@mui/icons-material/UpgradeOutlined'
 import { motion, AnimatePresence } from "framer-motion";
 import logoImage from '../../assets/memories.png'
-import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined'
-import format from 'date-fns/format'
 import translations from '../../i18n'
-import HomeWorkOutlinedIcon from '@mui/icons-material/HomeWorkOutlined'
-import HealthAndSafetyOutlinedIcon from '@mui/icons-material/HealthAndSafetyOutlined'
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined'
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
-import ContactEmergencyOutlinedIcon from '@mui/icons-material/ContactEmergencyOutlined'
-import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined'
-import InsertInvitationOutlinedIcon from '@mui/icons-material/InsertInvitationOutlined'
-import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined'
-import SyncProblemOutlinedIcon from '@mui/icons-material/SyncProblemOutlined'
-import RuleOutlinedIcon from '@mui/icons-material/RuleOutlined'
-import AssignmentLateOutlinedIcon from '@mui/icons-material/AssignmentLateOutlined'
-import AssignmentReturnOutlinedIcon from '@mui/icons-material/AssignmentReturnOutlined'
 import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined'
-import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import NavigationOutlinedIcon from '@mui/icons-material/NavigationOutlined'
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
@@ -52,6 +24,7 @@ import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined'
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -177,6 +150,14 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                                         <NavLink to="/crm/leads">
                                             <PeopleAltOutlinedIcon />
                                             Leads
+                                        </NavLink>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <NavLink to="/crm/opening-times">
+                                            <ScheduleOutlinedIcon />
+                                            Opening Times
                                         </NavLink>
                                     </div>
                                 </li>

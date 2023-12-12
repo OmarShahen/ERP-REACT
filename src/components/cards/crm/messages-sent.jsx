@@ -9,6 +9,7 @@ import { formatMoney } from '../../../utils/numbers'
 import { useNavigate } from 'react-router-dom'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 import { format, formatDistance } from 'date-fns'
+import CardImage from '../components/image'
 
 
 const MessageSentCard = ({ 
@@ -55,7 +56,7 @@ const MessageSentCard = ({
         >
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${messageSent?.lead?.name}.svg`} alt="lead-image" />
+                    <CardImage name={messageSent?.lead?.name} />
                     <div>
                         <strong>{messageSent?.lead?.name}</strong>
                         <span className="grey-text">#{messageSent?.lead?.leadId}</span>

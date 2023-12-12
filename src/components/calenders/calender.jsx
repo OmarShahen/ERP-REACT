@@ -27,7 +27,7 @@ const Calender = ({ meetings, setTargetMeeting, setIsUpdate, setShowModalForm })
 
     const formatMeetings = (meetings) => {
         meetings.forEach(meeting => {
-            const title = meeting?.lead?.name
+            const title = meeting?.note ? `${meeting?.lead?.name} (${meeting.note})` : `${meeting?.lead?.name}`
             meeting.title = `${title}`
             meeting.start = new Date(meeting.reservationTime)
             let endDate = new Date(meeting.reservationTime)
@@ -48,7 +48,7 @@ const Calender = ({ meetings, setTargetMeeting, setIsUpdate, setShowModalForm })
                 }}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 450 }}
+                style={{ height: 550 }}
                 eventPropGetter={event => {
                     return { style: { backgroundColor: getBackgroundColor(event.status) } }
                 }}

@@ -4,6 +4,7 @@ import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
 import { cities } from '../../utils/cities'
+import { counties } from '../../utils/counties'
 import { capitalizeFirstLetter } from '../../utils/formatString'
 import { leadStatus, leadStages } from '../../utils/values'
 
@@ -155,6 +156,25 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
 
     }
 
+    const addLeadStage = (value, type) => {
+        if(type === 'STAGE') {
+            setStage(value)
+        } else if(type === 'STATUS') {
+            setStatus(value)
+        }
+
+        const stageData = { leadId: lead._id, stage: value }
+        serverRequest.post('/v1/crm/stages', stageData)
+        .then(response => {
+            const data = response.data
+            toast.success(data.message, { duration: 3000, position: 'top-right' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
 
     return <div className="modal">
         <div className="modal-container body-text">
@@ -208,6 +228,23 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                             })}
                         </select>
                         <span className="red">{genderError}</span>
+                    </div>
+                    <div className="form-input-container">
+                        <label>County</label>
+                        <select
+                        onClick={e => setCountyError()}
+                        onChange={e => setCounty(e.target.value)}
+                        className="form-input"
+                        >
+                            <option selected disabled>select county</option>
+                            {counties.map(tempCounty => {
+                                if(tempCounty === county) {
+                                    return <option selected value={tempCounty}>{tempCounty}</option>
+                                }
+                                return <option value={tempCounty}>{tempCounty}</option>
+                            })}
+                        </select>
+                        <span className="red">{countyError}</span>
                     </div>
                     <div className="form-input-container">
                         <label>Address</label>
@@ -279,7 +316,7 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         <label>Status</label>
                         <select
                         className="form-input"
-                        onChange={e => setStatus(e.target.value)}
+                        onChange={e => isUpdate ? addLeadStage(e.target.value, 'STATUS') : setStatus(e.target.value)}
                         onClick={e => setStatusError()}
                         >
                             {leadStatus.map(leadState => {
@@ -295,7 +332,7 @@ const LeadFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         <label>Stage</label>
                         <select
                         className="form-input"
-                        onChange={e => setStage(e.target.value)}
+                        onChange={e => isUpdate ? addLeadStage(e.target.value, 'STAGE') : setStage(e.target.value)}
                         onClick={e => setStageError()}
                         >
                             {leadStages.map(leadStage => {

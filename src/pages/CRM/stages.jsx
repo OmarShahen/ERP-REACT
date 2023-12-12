@@ -84,6 +84,7 @@ const StagesPage = ({ roles }) => {
                 setShowModalForm={setIsShowAddStageForm}
                 reload={reload}
                 setReload={setReload}
+                totalNumber={stages.length}
                 />
             <div>
         </div>

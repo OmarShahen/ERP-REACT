@@ -83,15 +83,9 @@ const PatientsSurveysPage = ({ roles }) => {
                 pageName={'Impression Surveys'}
                 reload={reload}
                 setReload={setReload}
+                totalNumber={patientsSurveys.length}
                 />
-                <div className="cards-3-list-wrapper margin-bottom-1">
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Surveys'}
-                    number={formatNumber(searchedPatientsSurveys.length)}
-                    iconColor={'#5C60F5'}
-                    />
-                </div>
+                
                 <div>
                     <FiltersSection 
                     setStatsQuery={setStatsQuery} 

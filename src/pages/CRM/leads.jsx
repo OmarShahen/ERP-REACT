@@ -5,7 +5,6 @@ import CircularLoading from '../../components/loadings/circular'
 import FloatingButton from '../../components/buttons/floating-button'
 import EmptySection from '../../components/sections/empty/empty'
 import SearchInput from '../../components/inputs/search'
-import { searchLeads } from '../../utils/searches/search-leads'
 import { toast } from 'react-hot-toast'
 import FiltersSection from '../../components/sections/filters/filters'
 import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
@@ -28,18 +27,15 @@ const LeadsPage = ({ roles }) => {
     const [reload, setReload] = useState(1)
     const [isLoading, setIsLoading] = useState(true)
     const [leads, setLeads] = useState([])
+    const [totalLeads, setTotalLeads] = useState(0)
+    const [totalOpened, setTotalOpened] = useState(0)
+    const [totalClosed, setTotalClosed] = useState(0)
+    const [totalWon, setTotalWon] = useState(0)
+    const [totalLost, setTotalLost] = useState(0)
+    const [potentialEarnings, setPotentialEarnings] = useState(0)
     const [searchedLeads, setSearchedLeads] = useState([])
 
     const [statsQuery, setStatsQuery] = useState({})
-
-    const getTotalByValue = (leads) => {
-        let total = 0
-        for(let i=0;i<leads.length;i++) {
-            total += leads[i].value
-        }
-
-        return total
-    }
 
     useEffect(() => {
         setIsLoading(true)    
@@ -47,8 +43,15 @@ const LeadsPage = ({ roles }) => {
         serverRequest.get(endpointURL,  { params: statsQuery })
         .then(response => {
             setIsLoading(false)
-            setLeads(response.data.leads)
-            setSearchedLeads(response.data.leads)
+            const data = response.data
+            setLeads(data.leads)
+            setSearchedLeads(data.leads)
+            setTotalLeads(data.totalLeads)
+            setTotalOpened(data.totalOpened)
+            setTotalClosed(data.totalClosed)
+            setTotalWon(data.totalWon)
+            setTotalLost(data.totalLost)
+            setPotentialEarnings(data.potentialEarnings)
         })
         .catch(error => {
             setIsLoading(false)
@@ -57,6 +60,21 @@ const LeadsPage = ({ roles }) => {
         })
     }, [reload, statsQuery])
 
+    const searchLeads = (value) => {
+        const endpointURL = `/v1/crm/leads/name/search?name=${value}`
+        setIsLoading(true)
+        serverRequest.get(endpointURL)
+        .then(response => {
+            setIsLoading(false)
+            const data = response.data
+            setLeads(data.leads)
+        })
+        .catch(error => {
+            setIsLoading(false)
+            console.error(error)
+            toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
+        })
+    }
 
     return <div className="page-container page-white-background">
         {
@@ -97,42 +115,43 @@ const LeadsPage = ({ roles }) => {
                     setReload={setReload}
                     addBtnText={'Add Lead'}
                     setShowModalForm={setIsShowAddLeadForm}
+                    totalNumber={totalLeads}
                     />
                     <div className="cards-3-list-wrapper margin-bottom-1">
                         <Card 
                         icon={<NumbersOutlinedIcon />}
                         cardHeader={'Leads'}
-                        number={formatNumber(searchedLeads.length)}
+                        number={formatNumber(totalLeads)}
                         iconColor={'#5C60F5'}
                         />
                         <Card 
                         icon={<NumbersOutlinedIcon />}
                         cardHeader={'Opened'}
-                        number={formatNumber(searchedLeads.filter(lead => lead.status === 'OPENED').length)}
+                        number={formatNumber(totalOpened)}
                         iconColor={'#5C60F5'}
                         />
                         <Card 
                         icon={<NumbersOutlinedIcon />}
                         cardHeader={'Closed'}
-                        number={formatNumber(searchedLeads.filter(lead => lead.status === 'CLOSED').length)}
+                        number={formatNumber(totalClosed)}
                         iconColor={'#5C60F5'}
                         />
                         <Card 
                         icon={<NumbersOutlinedIcon />}
                         cardHeader={'Won'}
-                        number={formatNumber(searchedLeads.filter(lead => lead.status === 'WON').length)}
+                        number={formatNumber(totalWon)}
                         iconColor={'#5C60F5'}
                         />
                         <Card 
                         icon={<NumbersOutlinedIcon />}
                         cardHeader={'Lost'}
-                        number={formatNumber(searchedLeads.filter(lead => lead.status === 'LOST').length)}
+                        number={formatNumber(totalLost)}
                         iconColor={'#5C60F5'}
                         />
                         <Card 
                         icon={<PaidOutlinedIcon />}
                         cardHeader={'Potential Earnings'}
-                        number={formatMoney(getTotalByValue(searchedLeads.filter(lead => lead.status === 'OPENED')))}
+                        number={formatMoney(potentialEarnings)}
                         iconColor={'#5C60F5'}
                         isMoney={true}
                         />
@@ -148,11 +167,13 @@ const LeadsPage = ({ roles }) => {
                     <div className="search-input-container">
                         <SearchInput 
                         rows={leads} 
-                        setRows={setSearchedLeads}
+                        setRows={setLeads}
                         searchRows={searchLeads}
+                        isSearchRemote={true}
                         isHideClinics={true}
                         isShowStatus={true}
                         isShowStages={true}
+                        setIsLoading={setIsLoading}
                         />
                     </div>
                     
@@ -160,9 +181,9 @@ const LeadsPage = ({ roles }) => {
                     isLoading ?
                     <CircularLoading />
                     :
-                    searchedLeads.length !== 0 ?
+                    leads.length !== 0 ?
                     <div className="cards-grey-container cards-3-list-wrapper">
-                            {searchedLeads.map((lead, index) => <LeadCard 
+                            {leads.map((lead, index) => <LeadCard 
                                 lead={lead} 
                                 setReload={setReload} 
                                 reload={reload}

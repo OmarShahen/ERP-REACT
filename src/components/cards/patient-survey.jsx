@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import { formatNumber } from '../../utils/numbers'
 import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined'
+import CardImage from './components/image'
 
 
 const PatientSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsShowUpdateSurvey }) => {
@@ -73,7 +74,7 @@ const PatientSurveyCard = ({ survey, reload, setReload, setTargetSurvey, setIsSh
         className="patient-card-container body-text">
             <div className="patient-card-header">
             <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${patientName}.svg`} alt="patient-image" />
+                <CardImage name={patientName} />
                     <div>
                         <strong>{patientName}</strong>
                         <span className="grey-text">{patientPhone}</span>

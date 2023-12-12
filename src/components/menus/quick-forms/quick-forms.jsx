@@ -7,6 +7,7 @@ import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined'
 import StairsOutlinedIcon from '@mui/icons-material/StairsOutlined'
 import MessageOutlinedIcon from '@mui/icons-material/MessageOutlined'
 import TuneOutlinedIcon from '@mui/icons-material/TuneOutlined'
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined'
 
 
 const QuickFormMenu = ({ 
@@ -15,7 +16,8 @@ const QuickFormMenu = ({
     setIsShowMeetingForm,
     setIsShowStageForm,
     setIsShowMessageTemplateForm,
-    setIsShowValuesForm
+    setIsShowValuesForm,
+    setIsShowOpeningTime
 }) => {
 
     const user = useSelector(state => state.user.user)
@@ -36,6 +38,10 @@ const QuickFormMenu = ({
                     :
                     null
                 }
+                <li onClick={e => setIsShowOpeningTime(true)}>
+                    <span>Opening Time</span>
+                    <ScheduleOutlinedIcon />
+                </li>
                 {
                     user.roles.includes('ADMIN') ?
                     <li onClick={e => setIsShowMeetingForm(true)}>

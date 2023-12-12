@@ -113,6 +113,22 @@
     font-size: .9rem;
 }
 
+.page-header-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-header-title-container .header-number-container {
+    background-color: #1321441A;
+    color: #1E2022;
+    font-size: 1rem;
+    padding: .3rem .6rem;
+    border-radius: .3215rem;
+    margin-left: .5rem;
+    font-weight: 700;
+}
+
 @media only screen and (max-width: 600px) {
     .btns-container {
         display: none !important;

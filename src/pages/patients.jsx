@@ -131,6 +131,7 @@ const PatientsPage = ({ roles }) => {
                     setReload={setReload}
                     addBtnText={'Add Patient'}
                     setShowModalForm={setIsShowAddPatientForm}
+                    totalNumber={patients.length}
                     />
                     <div className="cards-3-list-wrapper margin-bottom-1">
                         <Card 

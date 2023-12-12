@@ -12,6 +12,7 @@ import translations from '../../i18n'
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
 import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined'
 import { format, formatDistance  } from 'date-fns'
+import CardImage from './components/image'
 
 
 const UserCard = ({ user, reload, setReload, setTargetUser, setIsShowUpdateUser}) => {
@@ -29,7 +30,7 @@ const UserCard = ({ user, reload, setReload, setTargetUser, setIsShowUpdateUser}
         className="patient-card-container body-text disable-hover">
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${userName}.svg`} alt="patient-image" />
+                    <CardImage name={userName} />
                     <div>
                         <strong>{userName}</strong>
                         <span className="grey-text">{user.email}</span>

@@ -53,7 +53,13 @@ const ClinicsPage = ({ roles }) => {
 
 
     return <div className="page-container">
-        <PageHeader pageName="Clinics" reload={reload} setReload={setReload} isHideBackButton={true} />
+        <PageHeader 
+        pageName="Clinics" 
+        reload={reload} 
+        setReload={setReload} 
+        isHideBackButton={true} 
+        totalNumber={clinics.length}
+        />
         <div className="cards-3-list-wrapper margin-bottom-1 margin-top-1">
             <Card
             icon={<NumbersOutlinedIcon />}

@@ -24,6 +24,7 @@ import { serverRequest } from '../API/request'
 import { setValues } from '../../redux/slices/valueSlice'
 import { setMessagesTemplates } from '../../redux/slices/messageTemplateSlice'
 import { toast } from 'react-hot-toast'
+import OpeningTimeFormModal from '../modals/opening-time-form'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -48,6 +49,7 @@ const NavigationBar = ({ pageName }) => {
     const [isShowStageForm, setIsShowStageForm] = useState(false)
     const [isShowMessageTemplateForm, setIsShowMessageTemplateForm] = useState(false)
     const [isShowValuesForm, setIsShowValuesForm] = useState(false)
+    const [isShowOpeningTime, setIsShowOpeningTime] = useState(false)
 
 
     useEffect(() => {
@@ -121,6 +123,7 @@ const NavigationBar = ({ pageName }) => {
                         setIsShowStageForm={setIsShowStageForm}
                         setIsShowMessageTemplateForm={setIsShowMessageTemplateForm}
                         setIsShowValuesForm={setIsShowValuesForm}
+                        setIsShowOpeningTime={setIsShowOpeningTime}
                         /> 
                         : 
                         null 
@@ -200,6 +203,12 @@ const NavigationBar = ({ pageName }) => {
         {
             isShowValuesForm ?
             <ValueFormModal setShowFormModal={setIsShowValuesForm} />
+            :
+            null
+        }
+        {
+            isShowOpeningTime ?
+            <OpeningTimeFormModal setShowFormModal={setIsShowOpeningTime} />
             :
             null
         }

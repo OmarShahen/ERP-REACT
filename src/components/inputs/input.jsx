@@ -1,7 +1,14 @@
 
-const InputField = () => {
+const InputField = ({ label, type='text' }) => {
 
-    return <input type="text" placeholder=""/>
+    return <div className="form-input-container">
+        { label ? <label>{label}</label> : null }
+        <input 
+        className="form-input"
+        type={type}
+        />
+        <span className="red"></span>
+    </div>
 }
 
 export default InputField

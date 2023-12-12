@@ -8,6 +8,7 @@ import { capitalizeFirstLetter } from '../../../utils/formatString'
 import { formatMoney } from '../../../utils/numbers'
 import { useNavigate } from 'react-router-dom'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
+import CardImage from '../components/image'
 
 
 const LeadCard = ({ 
@@ -47,12 +48,10 @@ const LeadCard = ({
             icon: <RemoveRedEyeOutlinedIcon />,
             onAction: e => {
                 e.stopPropagation()
-                setIsUpdate(true)
-                setTargetLead(lead)
-                setIsShowUpdateLead(true) 
+                navigate(`/crm/leads/${lead._id}/schedules`)
             }
         }
-     ]
+    ]
 
      const renderLeadStage = (stage) => {
 
@@ -90,12 +89,14 @@ const LeadCard = ({
         <div 
         onClick={e => {
             e.stopPropagation()
-            navigate(`/crm/leads/${lead._id}/stages`)
+            setIsUpdate(true)
+            setTargetLead(lead)
+            setIsShowUpdateLead(true)
         }}
         className="patient-card-container body-text">
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
-                    <img src={`https://avatars.dicebear.com/api/initials/${lead.name}.svg`} alt="lead-image" />
+                    <CardImage name={lead.name} />
                     <div>
                         <strong>{lead.name}</strong>
                         <span className="grey-text">#{lead.leadId}</span>
@@ -124,6 +125,10 @@ const LeadCard = ({
                     <li>
                         <strong>Stage</strong>
                         <span>{lead?.stage ? renderLeadStage(lead?.stage) : null}</span>
+                    </li>
+                    <li>
+                        <strong>County</strong>
+                        <span>{lead?.county ? lead.county : 'Not registered'}</span>
                     </li>
                 </ul>
             </div>

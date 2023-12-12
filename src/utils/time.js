@@ -16,3 +16,7 @@ export const mergeDateWithTime = (dateValue, timeValue) => {
 
     return dateTimeValue
 }
+
+export const WEEK_DAYS = [
+    'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'
+]

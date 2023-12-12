@@ -12,10 +12,6 @@ import PageHeader from '../../../components/sections/page-header'
 import MessageTemplateCard from '../../../components/cards/crm/messages-templates'
 import MessageTemplateDeleteConfirmationModal from '../../../components/modals/confirmation/crm/message-template-delete-confirmation-modal'
 import MessageTemplateFormModal from '../../../components/modals/message-template-form'
-import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
-import Card from '../../../components/cards/card'
-import { formatNumber } from '../../../utils/numbers'
-
 
 const MessagesTemplatesPage = ({ roles }) => {
 
@@ -87,6 +83,7 @@ const MessagesTemplatesPage = ({ roles }) => {
             setReload={setReload}
             reload={reload}
             setShowModalForm={setIsShowAddMessageTemplateForm}
+            totalNumber={messagesTemplates.length}
             />
             <FiltersSection 
             setStatsQuery={setStatsQuery} 

@@ -11,10 +11,6 @@ import { searchComments } from '../utils/searches/search-comments'
 import { toast } from 'react-hot-toast'
 import PageHeader from '../components/sections/page-header'
 import { isRolesValid } from '../utils/roles'
-import Card from '../components/cards/card'
-import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
-import { formatNumber } from '../utils/numbers'
-import translations from '../i18n'
 import CommentCard from '../components/cards/comment'
 import CommentDeleteConfirmationModal from '../components/modals/confirmation/comment-delete-confirmation-modal'
 import CommentFormModal from '../components/modals/comment-form'
@@ -100,15 +96,8 @@ const CommentsPage = ({ roles }) => {
             setReload={setReload}
             addBtnText={'Add Comment'}
             setShowModalForm={setIsShowAddModal}
+            totalNumber={comments.length}
             />
-            <div className="cards-list-wrapper margin-bottom-1">
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Comments'}
-                number={formatNumber(comments.length)}
-                iconColor={'#5C60F5'}
-                />
-            </div>
             <FiltersSection 
             setStatsQuery={setStatsQuery} 
             statsQuery={statsQuery}

@@ -8,6 +8,7 @@ import { capitalizeFirstLetter } from '../../utils/formatString'
 import { format } from 'date-fns'
 import translations from '../../i18n'
 import { useSelector } from 'react-redux'
+import CardImage from './components/image'
 
 
 const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, isShowRenew, disableOnClickView }) => {
@@ -39,7 +40,7 @@ const ClinicCard = ({ clinic, isOwner, setIsShowDeleteModal, setTargetClinic, is
     <div className={`patient-card-container body-text`}>
         <div className="patient-card-header">
             <div className="patient-image-info-container">
-                <img src={`https://avatars.dicebear.com/api/initials/${name}.svg`} alt="patient-image" />
+                <CardImage name={name} />
                 <div>
                     <strong>{name}</strong>
                     <span className="grey-text">#{clinicId}</span>

@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import '../prescriptions.css'
 import { serverRequest } from "../../components/API/request"
-import { useSelector } from 'react-redux'
-import PatientFormModal from '../../components/modals/patient-form'
 import CircularLoading from '../../components/loadings/circular'
 import FloatingButton from '../../components/buttons/floating-button'
 import EmptySection from '../../components/sections/empty/empty'
@@ -10,9 +8,6 @@ import SearchInput from '../../components/inputs/search'
 import { searchArrivalMethods } from '../../utils/searches/search-arrival-methods'
 import { toast } from 'react-hot-toast'
 import { isRolesValid } from '../../utils/roles'
-import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
-import Card from '../../components/cards/card'
-import { formatNumber } from '../../utils/numbers'
 import PageHeader from '../../components/sections/page-header'
 import ArrivalMethodCard from '../../components/cards/arrival-method'
 import ArrivalMethodFormModal from '../../components/modals/arrival-method-form'
@@ -91,15 +86,8 @@ const ArrivalMethodsPage = ({ roles }) => {
                 setReload={setReload}
                 addBtnText={'Add Arrival Method'}
                 setShowModalForm={setIsShowAddArrivalMethodForm}
+                totalNumber={arrivalMethods.length}
                 />
-                <div className="cards-3-list-wrapper margin-bottom-1">
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Arrival Methods'}
-                    number={formatNumber(searchedArrivalMethods.length)}
-                    iconColor={'#5C60F5'}
-                    />
-                </div>
                 <div>
                     <div className="search-input-container">
                         <SearchInput 

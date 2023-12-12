@@ -56,6 +56,8 @@ import LeadsMeetingsPage from './pages/CRM/leads/leads-meetings'
 import MessagesTemplatesPage from './pages/CRM/messages/messages-templates'
 import MessagesSentPage from './pages/CRM/messages/messages-sent'
 import ValuesPage from './pages/values/values'
+import OpeningTimesPage from './pages/CRM/opening-times'
+import LeadOpeningTimesPage from './pages/CRM/leads/leads-opening-times'
 
 import DashboardPage from './pages/dashboard'
 
@@ -99,6 +101,7 @@ function App() {
 
             <Route path="/crm/leads" element={<LeadsPage roles={[]} />} />
             <Route path="/crm/meetings" element={<MeetingsPage roles={[]} />} />
+            <Route path="/crm/opening-times" element={<OpeningTimesPage roles={[]} />} />
             <Route path="/crm/stages" element={<StagesPage roles={[]} />} />
             <Route path="/crm/messages-templates" element={<MessagesTemplatesPage roles={[]} />} />
             <Route path="/messages-sent" element={<MessagesSentPage roles={[]} />} />
@@ -106,6 +109,7 @@ function App() {
             <Route element={<LeadLayout />}>
               <Route path="/crm/leads/:leadId/stages" element={<LeadsStagesPage roles={[]} />} />
               <Route path="/crm/leads/:leadId/meetings" element={<LeadsMeetingsPage roles={[]} />} />
+              <Route path="/crm/leads/:leadId/schedules" element={<LeadOpeningTimesPage roles={[]} />} />
             </Route>
 
             <Route path="/dashboard" element={<DashboardPage />} />

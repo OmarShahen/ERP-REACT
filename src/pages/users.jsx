@@ -73,32 +73,13 @@ const UsersPage = ({ roles }) => {
 
 
     return <div className="page-container">
-        { 
-            isShowUpdateSurveyModal ? 
-            <PrescriptionUpdateSurveyConfirmationModal 
-            prescription={targetPrescription}
-            isSurveyed={!targetPrescription?.survey?.isDone}
-            reload={reload}
-            setReload={setReload} 
-            setIsShowModal={setIsShowUpdateSurveyModal}
-            /> 
-            : 
-            null 
-        }
         <div className="padded-container">
             <PageHeader 
             pageName={'Users'} 
             reload={reload}
             setReload={setReload}
+            totalNumber={users.length}
             />
-            <div className="cards-3-list-wrapper margin-bottom-1">
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Users'}
-                number={formatNumber(searchedUsers.length)}
-                iconColor={'#5C60F5'}
-                />
-            </div>
             <FiltersSection 
             setStatsQuery={setStatsQuery} 
             statsQuery={statsQuery}

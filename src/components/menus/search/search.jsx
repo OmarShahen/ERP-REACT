@@ -1,3 +1,4 @@
+import CardImage from '../../cards/components/image'
 import './search.css'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -27,10 +28,7 @@ const SearchMenu = ({ leads, setLead, setLeads, setSearchName }) => {
                 >
                     <div>
                         <div className="image-container">
-                            <img 
-                            src={`https://avatars.dicebear.com/api/initials/${lead.name}.svg`} 
-                            alt="lead image" 
-                            />
+                            <CardImage name={lead.name} />
                         </div>
                         <div className="search-list-item-description">
                             <strong className="body-text">{lead.name}</strong>
