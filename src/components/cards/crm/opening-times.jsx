@@ -72,6 +72,19 @@ const OpeningTimeCard = ({
         return hour >= 12 ? 'PM' : 'AM'
     }
 
+    const renderLeadStatus = (stage) => {
+
+        if(stage === 'WON') {
+            return <span className="label-container done bold-text">{capitalizeFirstLetter(stage)}</span>
+        } else if(stage === 'LOST') {
+            return <span className="label-container declined bold-text">{capitalizeFirstLetter(stage)}</span>         
+        } else if(stage === 'OPENED') {
+            return <span className="label-container pending bold-text">{capitalizeFirstLetter(stage)}</span>      
+        } else {
+            return <span className="label-container grey-bg bold-text">{capitalizeFirstLetter(stage)}</span>
+        }
+    }
+
     const getOpeningTimeStatus = (openingTime) => {
         const todayDate = new Date()
         const openingDate = new Date()
@@ -108,7 +121,8 @@ const OpeningTimeCard = ({
                     <CardImage name={openingTime?.lead?.name} />
                     <div>
                         <strong>{openingTime?.lead?.name}</strong>
-                        <span className="grey-text">#{openingTime?.lead?.leadId}</span>
+                        {renderLeadStatus(openingTime?.lead?.status)}
+                        <span className="grey-text"> #{openingTime?.lead?.leadId}</span>
                     </div>
                 </div>
                 <CardActions actions={cardActionsList} />

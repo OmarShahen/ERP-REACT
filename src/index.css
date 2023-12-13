@@ -496,6 +496,11 @@ button:hover {
   border-radius: .25rem;
 }
 
+.label-container {
+  padding: .3rem;
+  border-radius: .5rem;
+}
+
 .status-btn {
   padding: 3px 7px;
   border: none;

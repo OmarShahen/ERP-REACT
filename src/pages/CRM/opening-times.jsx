@@ -27,13 +27,14 @@ const OpeningTimesPage = ({ roles }) => {
     const [totalOpeningTimes, setTotalOpeningTimes] = useState(0)
 
 
-    const [statsQuery, setStatsQuery] = useState({})
     const [weekday, setWeekday] = useState()
     const [county, setCounty] = useState()
 
     useEffect(() => {
+
+        const endpointURL = !weekday && !county ? '/v1/opening-times' : '/v1/opening-times/search'
         setIsLoading(true)    
-        serverRequest.get(`/v1/opening-times` ,  { params: statsQuery })
+        serverRequest.get(endpointURL ,  { params: { weekday, county } })
         .then(response => {
             setIsLoading(false)
             const data = response.data
@@ -45,24 +46,8 @@ const OpeningTimesPage = ({ roles }) => {
             console.error(error)
             toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
         })
-    }, [reload, statsQuery])
+    }, [reload, weekday, county])
 
-    useEffect(() => {
-        setIsLoading(true)
-        serverRequest.get('/v1/opening-times/search', { params: { weekday, county } })
-        .then(response => {
-            setIsLoading(false)
-            const data = response.data
-            setOpeningTimes(data.openingTimes)
-            setTotalOpeningTimes(data.totalOpeningTimes)
-        })
-        .catch(error => {
-            setIsLoading(false)
-            console.error(error)
-            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
-        })
-
-    }, [weekday, county])
 
     const setCountyFunction = (value) => {
         if(value === 'ALL') {
