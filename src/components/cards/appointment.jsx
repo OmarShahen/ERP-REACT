@@ -12,6 +12,7 @@ import { formatMoney } from '../../utils/numbers'
 import CardTransition from '../transitions/card-transitions'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
+import CardImage from './components/image'
 
 const AppointmentCard = ({ 
     appointment, 
@@ -24,76 +25,7 @@ const AppointmentCard = ({
     const user = useSelector(state => state.user.user)
     const lang = useSelector(state => state.lang.lang)
 
-    const renderAppointmentStatus = (status) => {
-
-        if(status === 'DONE') {
-            return <span className="status-btn done bold-text">{translations[lang]['Done']}</span>
-        } else if(status === 'CANCELLED') {
-            return <span className="status-btn declined bold-text">{translations[lang]['Cancelled']}</span>         
-        } else if(status === 'UPCOMING') {
-            return <span className="status-btn pending bold-text">{translations[lang]['Upcoming']}</span>      
-        } else if(status === 'WAITING') {
-            return <span className="status-btn tag-purple-bg white-text bold-text">{translations[lang]['Waiting']}</span>      
-        } else if(status === 'ACTIVE') {
-            return <span className="status-btn tag-green-bg white-text bold-text">{translations[lang]['Active']}</span>    
-        } else if(status === 'EXPIRED'){
-            return <span className="status-btn grey-bg bold-text">{translations[lang]['Expired']}</span>
-        }
-    }
-
-
-    const cardActionsList = [
-        {
-            name: translations[lang]['Upcoming'],
-            icon: <UpcomingOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetAppointment(appointment)
-                setStatus('UPCOMING')
-                setIsShowStatusModal(true)
-            }
-        },
-        {
-            name: translations[lang]['Waiting'],
-            icon: <HourglassEmptyOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetAppointment(appointment)
-                setStatus('WAITING')
-                setIsShowStatusModal(true)
-            }
-        },
-        {
-            name: translations[lang]['Active'],
-            icon: <MeetingRoomOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetAppointment(appointment)
-                setStatus('ACTIVE')
-                setIsShowStatusModal(true)
-            }
-        },
-        {
-            name: translations[lang]['Done'],
-            icon: <CheckCircleOutlineOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetAppointment(appointment)
-                setStatus('DONE')
-                setIsShowStatusModal(true)
-            }
-        },
-        {
-            name: translations[lang]['Cancelled'],
-            icon: <CancelOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                setTargetAppointment(appointment)
-                setStatus('CANCELLED')
-                setIsShowStatusModal(true)
-            }
-        },
-    ]
+    const cardActionsList = []
 
     user.roles.includes('STAFF') ?
     cardActionsList.push({
@@ -112,60 +44,66 @@ const AppointmentCard = ({
     <div className="patient-card-container disable-hover body-text">
         <div className="patient-card-header">
             <div className="patient-image-info-container">
-                <img src={`https://avatars.dicebear.com/api/initials/${appointment?.patient?.firstName + ' ' + appointment?.patient?.lastName}.svg`} alt="patient-image" />
+                <CardImage name={appointment?.seeker?.firstName} />
                 <div>
-                    <strong>{appointment?.patient?.firstName + ' ' + appointment?.patient?.lastName}</strong>
+                    <strong>{appointment?.seeker?.firstName}</strong>
                     <span 
                     className="grey-text"
                     >
-                        {`+${String(appointment?.patient?.countryCode) + String(appointment?.patient?.phone)}`}
+                        #{appointment?.seeker?.userId}
                     </span>
                 </div>
             </div>
-            { user.roles.includes('STAFF') || user.roles.includes('DOCTOR') ? <CardActions actions={cardActionsList} /> : null }
+            <CardActions actions={cardActionsList} />
         </div>
         <div className="patient-card-body">
         
             <ul>
-                {
-                    user.roles.includes('DOCTOR') || user.roles.includes('OWNER') ?
-                    <li>
-                        <strong>
-                            {translations[lang]['Clinic']}
-                        </strong>
-                        <span>{appointment?.clinic?.name}</span>
-                    </li>
-                    :
-                    null
-                }
                 <li>
-                    <strong>{translations[lang]['Doctor']}</strong>
-                    <span>{appointment?.doctor?.firstName + ' ' + appointment?.doctor?.lastName}</span>
+                    <strong>ID</strong>
+                    <span>#{appointment.appointmentId}</span>
                 </li>
                 <li>
-                    <strong>{translations[lang]['Date']}</strong>
-                    <span>{format(new Date(appointment?.reservationTime), lang === 'en' ? 'dd MMM yyyy' : 'MM/dd/yyyy')}</span>
+                    <strong>Expert</strong>
+                    <span>{appointment?.expert?.firstName}</span>
                 </li>
                 <li>
-                    <strong>{translations[lang]['Time']}</strong>
-                    <span>{new Date(appointment?.reservationTime).toLocaleTimeString()}</span>
+                    <strong>Seeker</strong>
+                    <span>{appointment?.seeker?.firstName}</span>
                 </li>
                 <li>
-                    <strong>{translations[lang]['Service']}</strong>
-                    <span>{appointment?.service ? appointment.service.name : translations[lang]['Not Registered']}</span>
+                    <strong>Payment</strong>
+                    {
+                        appointment.isPaid ?
+                        <span className="status-btn done">Paid</span>
+                        :
+                        <span className="status-btn pending">Pending</span>
+                    }
                 </li>
-                {/*
-                    !user.roles.includes('DOCTOR') ?
-                    <li>
-                        <strong>{translations[lang]['Cost']}</strong>
-                        <span>{appointment?.service ? formatMoney(appointment.service.cost) : translations[lang]['Not Registered']}</span>
-                    </li>
-                    :
-                    null
-                */}
                 <li>
-                    <strong>{translations[lang]['Status']}</strong>
-                    {renderAppointmentStatus(appointment?.status)}
+                    <strong>Date</strong>
+                    <span>{format(new Date(appointment?.startTime), 'dd MMM yyyy')}</span>
+                </li>
+                <li>
+                    <strong>Start Time</strong>
+                    <span>{format(new Date(appointment?.startTime), 'hh:mm a')}</span>
+                </li>
+                <li>
+                    <strong>Duration</strong>
+                    <span>{appointment?.duration} minutes</span>
+                </li>
+                
+                <li>
+                    <strong>Status</strong>
+                    {
+                        appointment.status === 'CANCELLED' ?
+                        <span className="status-btn declined">Cancelled</span>
+                        :
+                        new Date(appointment.startTime) > new Date() ?
+                        <span className="status-btn pending">Upcoming</span>
+                        :
+                        <span className="status-btn grey-bg">Expired</span>
+                    }
                 </li>
             </ul>
         </div>

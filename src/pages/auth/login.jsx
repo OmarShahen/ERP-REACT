@@ -48,7 +48,7 @@ const LoginPage = () => {
             const isLogged = true
             sessionStorage.setItem('user', JSON.stringify({ ...data.user, isLogged }))
             dispatch(setUser({ ...data.user, isLogged }))
-            return navigate('/patients')
+            return navigate('/appointments')
         })
         .catch(error => {
             setIsSubmit(false)

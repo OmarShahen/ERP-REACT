@@ -2,8 +2,8 @@ export const experienceRateList = [
     { name: 'Very poor', number: 1 },
     { name: 'Poor', number: 2 },
     { name: 'Neutral', number: 3 },
-    { name: 'Satisfied', number: 4 },
-    { name: 'Very satisfied', number: 5 },
+    { name: 'Good', number: 4 },
+    { name: 'Excellent', number: 5 },
 ]
 
 export const explanationRateList = [

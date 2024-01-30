@@ -65,29 +65,6 @@ const NavigationBar = ({ pageName }) => {
 
     }, [user.isLogged])
 
-    useEffect(() => {
-        serverRequest.get(`/v1/values`)
-        .then(response => {
-            const values = response.data.values
-            dispatch(setValues({ values }))
-        })
-        .catch(error => {
-            console.error(error)
-            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
-        })
-    }, [])
-
-    useEffect(() => {
-        serverRequest.get(`/v1/crm/messages-templates`)
-        .then(response => {
-            const messagesTemplates = response.data.messagesTemplates
-            dispatch(setMessagesTemplates({ messagesTemplates }))
-        })
-        .catch(error => {
-            console.error(error)
-            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
-        })
-    }, [])
 
     return <div>
         <div className="navigation-bar-container body-text">
@@ -95,7 +72,7 @@ const NavigationBar = ({ pageName }) => {
                     <span onClick={e => dispatch(setIsShowSidebar(!sidebar.isShowSidebar))}>
                         <MenuOpenIcon />
                     </span>
-                <span>{`${user.firstName} ${user.lastName}`}</span>
+                <span>{`${user.firstName}`}</span>
             </div>
             
             <div className="navigation-bar-options-container">
