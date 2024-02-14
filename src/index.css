@@ -932,9 +932,13 @@ button:hover {
   grid-template-columns: auto auto;
 }
 
+.flex {
+  display: flex;
+}
+
 .appointments-categories-container {
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto auto auto auto;
   gap: 1rem;
   padding-bottom: 1rem;
 }

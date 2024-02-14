@@ -23,9 +23,9 @@ serverRequest.interceptors.request.use(config => {
 
     return config
 
-}, 
-error => {
-    console.log('error in request interceptor', error)
-    return Promise.reject(error)
-}
+    }, 
+    error => {
+        console.log('error in request interceptor', error)
+        return Promise.reject(error)
+    }
 )

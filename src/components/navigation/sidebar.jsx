@@ -12,6 +12,8 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
+import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
+
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
 
@@ -38,6 +40,14 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
         </div>
         <ul>
             <ul className="nav-nested-list-container">
+                <li>
+                    <div>
+                        <NavLink to="/dashboard">
+                            <InsertChartOutlinedIcon />
+                            Dashboard
+                        </NavLink>
+                    </div>
+                </li>
                 <li>
                     <div>
                         <NavLink to="/payments">

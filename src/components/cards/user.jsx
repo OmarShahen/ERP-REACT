@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import { formatDistance  } from 'date-fns'
 import CardImage from './components/image'
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
@@ -26,6 +27,14 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
                 setTargetUser(user)
                 setIsShowDeleteModal(true)
             }
+        },
+        {
+            name: 'View Profile',
+            icon: <RemoveRedEyeOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                window.location.href = `https://ra-aya.web.app/experts/${user._id}`
+            }
         }
     ]
 
@@ -34,7 +43,10 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
         className="patient-card-container body-text disable-hover">
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
-                    <CardImage name={userName} />
+                    <CardImage 
+                    name={userName}  
+                    imageURL={user.profileImageURL}
+                    />
                     <div>
                         <strong>{userName}</strong>
                         <span className="grey-text">{user.email}</span>
@@ -72,6 +84,19 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
                     <li>
                         <strong>Type</strong>
                         <span>{user.type ? capitalizeFirstLetter(user.type) : 'Not Registered'}</span>
+                    </li>
+                    <li>
+                        <strong>Onboarding</strong>
+                        {
+                            user.isOnBoarded ?
+                            <span className="status-btn done bold-text">Done</span>
+                            :
+                            <span className="status-btn pending bold-text">Pending</span>
+                        }
+                    </li>
+                    <li>
+                        <strong>Setup</strong>
+                        <span>{user.profileCompletion ? `${user.profileCompletion}%` : 'Not Registered'}</span>
                     </li>
                     <li>
                         <strong>Last Login</strong>

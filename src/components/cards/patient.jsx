@@ -12,7 +12,7 @@ import translations from '../../i18n'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import { formatDistance, format  } from 'date-fns'
 import CardImage from './components/image'
-
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 
 
 const PatientCard = ({ 

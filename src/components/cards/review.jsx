@@ -59,7 +59,10 @@ const ReviewCard = ({ review, reload, setReload, setTargetReview, setIsShowDelet
         className="patient-card-container body-text">
             <div className="patient-card-header">
             <div className="patient-image-info-container">
-                <CardImage name={review?.seeker?.firstName} />
+                <CardImage 
+                name={review?.seeker?.firstName} 
+                imageURL={review?.seeker?.profileImageURL}
+                />
                     <div>
                         <strong>{review?.seeker?.firstName}</strong>
                         <span className="grey-text">{`+${review?.seeker?.countryCode}${review?.seeker?.phone}`}</span>

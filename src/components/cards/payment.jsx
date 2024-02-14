@@ -15,8 +15,6 @@ const PaymentCard = ({
     setIsShowDeleteModal,
 }) => {
 
-
-
     const cardActionsList = [
         {
             name: 'Refund Payment',
@@ -27,7 +25,7 @@ const PaymentCard = ({
                 setIsShowDeleteModal(true)
             }
         },
-     ]
+    ]
 
     return <CardTransition>
     <div className={"patient-card-container body-text"}>
@@ -59,10 +57,19 @@ const PaymentCard = ({
                 <li>
                     <strong>Status</strong>
                     {
-                        payment.isRefunded ?
-                        <span className="status-btn declined">Refunded</span>
+                        payment.success ?
+                        <span className="status-btn done bold-text">Accepted</span>
                         :
-                        <span className="status-btn done">Paid</span>
+                        <span className="status-btn declined bold-text">Declined</span>
+                    }
+                </li>
+                <li>
+                    <strong>Refunded</strong>
+                    {
+                        payment.isRefunded ?
+                        <span>Yes</span>
+                        :
+                        <span>No</span>
                     }
                 </li>
                 <li>

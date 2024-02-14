@@ -1,60 +1,62 @@
 import { useState, useEffect } from 'react'
 import './prescriptions.css'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import { serverRequest } from "../components/API/request"
 import { useSelector } from 'react-redux'
 import PageHeader from '../components/sections/page-header'
-import Card from '../components/cards/card';
-import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined'
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined'
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
-import UpcomingOutlinedIcon from '@mui/icons-material/UpcomingOutlined'
-import AppointmentFormModal from '../components/modals/appointment-form'
-import TimerOffOutlinedIcon from '@mui/icons-material/TimerOffOutlined'
-import MeetingRoomOutlinedIcon from '@mui/icons-material/MeetingRoomOutlined'
-import NavigationBar from '../components/navigation/navigation-bar';
 import CircularLoading from '../components/loadings/circular';
 import FiltersSection from '../components/sections/filters/filters'
-import FloatingButton from '../components/buttons/floating-button'
 import AppointmentCard from '../components/cards/appointment'
 import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
-import { searchAppointments } from '../utils/searches/search-appointments'
 import { format } from 'date-fns'
 import { formatNumber } from '../utils/numbers'
 import AppointmentDeleteConfirmationModal from '../components/modals/confirmation/appointment-delete-confirmation-modal'
 import AppointmentStatusConfirmationModal from '../components/modals/confirmation/appointment-status-confirmation-modal'
 import { isRolesValid } from '../utils/roles'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import translations from '../i18n'
+import MeetingLinkFormModal from '../components/modals/meeting-link-form'
+import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
+import Card from '../components/cards/card'
+import VerificationStatusFormModal from '../components/modals/verification-status-form'
 
 
 const AppointmentsPage = ({ roles }) => {
 
     const [targetAppointment, setTargetAppointment] = useState({})
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
-    const [isShowUpdateModal, setIsShowUpdateModal] = useState(false)
+    const [isShowVerificationModal, setIsShowVerificationModal] = useState(false)
     const [status, setStatus] = useState()
-
+    const [viewStatus, setViewStatus] = useState('ALL')
+    const [meetingLink, setMeetingLink] = useState()
+    const [verification, setVerification] = useState()
 
     const [isLoading, setIsLoading] = useState(true)
     const [reload, setReload] = useState(1)
     const [showModalForm, setShowModalForm] = useState(false)
     const [appointments, setAppointments] = useState([])
+
     const [totalAppointments, setTotalAppointments] = useState(0)
+    const [totalAppointmentsNotPaid, setTotalAppointmentsNotPaid] = useState(0)
+    const [totalAppointmentsPaid, setTotalAppointmentsPaid] = useState(0)
+    const [totalAppointmentsWithoutLink, setTotalAppointmentsWithoutLink] = useState(0)
+    const [totalPassedAppointments, setTotalPassedAppointments] = useState(0)
+    const [totalTodayAppointments, setTotalTodayAppointments] = useState(0)
+    const [totalUpcomingAppointments, setTotalUpcomingAppointments] = useState(0) 
+
+    const [stats, setStats] = useState({})
 
     const [statsQuery, setStatsQuery] = useState({})
 
+    const activeElementColor = { border: '2px solid #4c83ee', color: '#4c83ee' }
+
     useEffect(() => { 
-        scroll(0,0) 
+        scroll(0, 0) 
         //isRolesValid(user.roles, roles) ? null : navigate('/login')
     }, [])
 
     useEffect(() => {
         setIsLoading(true)
-        const endpointURL = `/v1/appointments?status=PAID`
-
-        serverRequest.get(endpointURL, { params: statsQuery })
+        const endpointURL = `/v1/appointments`
+        serverRequest.get(endpointURL, { params: { ...statsQuery, status, meetingLink, verification } })
         .then(response => {
             setIsLoading(false)
             setAppointments(response.data.appointments)
@@ -64,35 +66,80 @@ const AppointmentsPage = ({ roles }) => {
             setIsLoading(false)
             console.error(error)
         })
-    }, [reload, statsQuery])
+    }, [reload, statsQuery, status, meetingLink, verification])
+
+    useEffect(() => {
+        const endpointURL = `/v1/stats/appointments`
+        serverRequest.get(endpointURL)
+        .then(response => {
+            setTotalAppointmentsNotPaid(response.data.totalAppointmentsNotPaid)
+            setTotalAppointmentsPaid(response.data.totalAppointmentsPaid)
+            setTotalAppointmentsWithoutLink(response.data.totalAppointmentsWithoutLink)
+            setTotalPassedAppointments(response.data.totalPassedAppointments)
+            setTotalTodayAppointments(response.data.totalTodayAppointments)
+            setTotalUpcomingAppointments(response.data.totalUpcomingAppointments)
+            setStats(response.data)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }, [reload])
+
+    const searchAppointmentsByName = (name) => {
+        if(!name) {
+            setReload(reload + 1)
+            return
+        }
+
+        setIsLoading(true)
+        serverRequest.get(`/v1/appointments/search/name`, { params: { name } })
+        .then(response => {
+            setIsLoading(false)
+            setAppointments(response.data.appointments)
+        })
+        .catch(error => {
+            setIsLoading(false)
+            console.error(error)
+        })
+    }
 
 
     return <div className="page-container">
-         { 
-        isShowDeleteModal ? 
-        <AppointmentDeleteConfirmationModal 
-        appointment={targetAppointment}
-        reload={reload}
-        setReload={setReload} 
-        setIsShowModal={setIsShowDeleteModal}
-        setViewStatus={setViewStatus}
-        /> 
-        : 
-        null 
+        {
+            showModalForm ?
+            <MeetingLinkFormModal
+            reload={reload}
+            setReload={setReload}
+            appointment={targetAppointment}
+            setShowModalForm={setShowModalForm}
+            />
+            :
+            null
+        }
+        {
+            isShowVerificationModal ?
+            <VerificationStatusFormModal
+            reload={reload}
+            setReload={setReload}
+            appointment={targetAppointment}
+            setShowModalForm={setIsShowVerificationModal}
+            />
+            :
+            null
         }
         { 
-        isShowUpdateModal ? 
-        <AppointmentStatusConfirmationModal 
-        appointment={targetAppointment}
-        reload={reload}
-        setReload={setReload} 
-        setIsShowModal={setIsShowUpdateModal}
-        status={status}
-        setViewStatus={setViewStatus}
-        /> 
-        : 
-        null 
+            isShowDeleteModal ? 
+            <AppointmentDeleteConfirmationModal 
+            appointment={targetAppointment}
+            reload={reload}
+            setReload={setReload} 
+            setIsShowModal={setIsShowDeleteModal}
+            setViewStatus={setViewStatus}
+            /> 
+            : 
+            null 
         }
+        
         <div className="padded-container">
             <PageHeader 
             pageName={'Appointments'} 
@@ -100,15 +147,144 @@ const AppointmentsPage = ({ roles }) => {
             reload={reload}
             totalNumber={totalAppointments}
             /> 
-            
+            <div className="cards-3-list-wrapper">
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Upcoming'}
+                number={formatNumber(totalUpcomingAppointments)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Today'}
+                number={formatNumber(totalTodayAppointments)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Passed'}
+                number={formatNumber(totalPassedAppointments)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Paid'}
+                number={formatNumber(totalAppointmentsPaid)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Not Paid'}
+                number={formatNumber(totalAppointmentsNotPaid)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Without Link'}
+                number={formatNumber(totalAppointmentsWithoutLink)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Accepted Verifications'}
+                number={formatNumber(stats.totalAcceptedVerifications ? stats.totalAcceptedVerifications : 0)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Rejected Verifications'}
+                number={formatNumber(stats.totalRejectedVerifications ? stats.totalRejectedVerifications : 0)}
+                iconColor={'#FF579A'}
+                />
+                <Card 
+                icon={<NumbersOutlinedIcon />}
+                cardHeader={'Reviewing Verifications'}
+                number={formatNumber(stats.totalReviewedVerifications ? stats.totalReviewedVerifications : 0)}
+                iconColor={'#FF579A'}
+                />
+            </div>
+            <br />
             <FiltersSection 
             statsQuery={statsQuery} 
             setStatsQuery={setStatsQuery} 
             isShowUpcomingDates={true}
             defaultValue={'LIFETIME'}
             />
-            
-            <br />
+            <div className="search-input-container">
+                <SearchInput 
+                searchRows={searchAppointmentsByName}
+                isSearchRemote={true}
+                isHideClinics={true}
+                isShowStatus={true}
+                isShowStages={true}
+                />
+            </div>
+            <div className="appointments-categories-container margin-top-1">
+                <div style={ viewStatus === 'ALL' ?  activeElementColor : null } onClick={e => {
+                    setStatus()
+                    setMeetingLink()
+                    setVerification()
+                    setViewStatus('ALL')
+                }}>
+                    All
+                </div>
+                <div style={ viewStatus === 'PAID' ?  activeElementColor : null } onClick={e => {
+                    setStatus('PAID')
+                    setViewStatus('PAID')
+                    setVerification()
+                    setMeetingLink()
+                }}>
+                    Paid
+                </div>
+                <div style={ viewStatus === 'UNPAID' ?  activeElementColor : null } onClick={e => {
+                    setStatus('UNPAID')
+                    setViewStatus('UNPAID')
+                    setVerification()
+                    setMeetingLink()
+                }}>
+                    Not Paid
+                </div>
+                <div style={ viewStatus === 'NO-LINK' ?  activeElementColor : null } onClick={e => {
+                    setStatus('PAID')
+                    setMeetingLink('FALSE')
+                    setViewStatus('NO-LINK')
+                    setVerification()
+                }}>
+                    Without Link
+                </div> 
+                <div style={ viewStatus === 'WITH-LINK' ?  activeElementColor : null } onClick={e => {
+                    setStatus('PAID')
+                    setMeetingLink('TRUE')
+                    setViewStatus('WITH-LINK')
+                    setVerification()
+                }}>
+                    With Link
+                </div>  
+                <div style={ viewStatus === 'REVIEW' ?  activeElementColor : null } onClick={e => {
+                    setStatus()
+                    setMeetingLink()
+                    setViewStatus('REVIEW')
+                    setVerification('REVIEW')
+                }}>
+                    Review
+                </div>  
+                <div style={ viewStatus === 'ACCEPTED' ?  activeElementColor : null } onClick={e => {
+                    setStatus()
+                    setMeetingLink()
+                    setViewStatus('ACCEPTED')
+                    setVerification('ACCEPTED')
+                }}>
+                    Accepted
+                </div>  
+                <div style={ viewStatus === 'REJECTED' ?  activeElementColor : null } onClick={e => {
+                    setStatus()
+                    setMeetingLink()
+                    setViewStatus('REJECTED')
+                    setVerification('REJECTED')
+                }}>
+                    Rejected
+                </div>  
+            </div>
             {
                 isLoading ?
                 <CircularLoading />
@@ -120,8 +296,9 @@ const AppointmentsPage = ({ roles }) => {
                         reload={reload} 
                         setReload={setReload} 
                         setIsShowDeleteModal={setIsShowDeleteModal}
-                        setIsShowStatusModal={setIsShowUpdateModal}
                         setTargetAppointment={setTargetAppointment}
+                        setIsShowFormModal={setShowModalForm}
+                        setIsShowVerificationModal={setIsShowVerificationModal}
                         setStatus={setStatus}
                         />)}                    
                 </div>

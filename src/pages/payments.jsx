@@ -174,7 +174,7 @@ const PaymentsPage = ({ roles }) => {
                         Refunded
                     </div>
                     
-                </div>
+            </div>
             {
                 isLoading ?
                 <CircularLoading />
