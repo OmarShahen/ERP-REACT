@@ -10,13 +10,28 @@ import translations from '../../i18n'
 import { formatDistance  } from 'date-fns'
 import CardImage from './components/image'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import { serverRequest } from '../API/request'
+import { toast } from 'react-hot-toast'
 
 
-const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
+const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, reload, setReload }) => {
 
     const lang = useSelector(state => state.lang.lang)
 
     const userName = `${user.firstName}`
+
+    const updateOnboardingStatus = (isOnBoarded) => {
+        serverRequest.patch(`/v1/experts/${user._id}/onboarding`, { isOnBoarded })
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            setReload(reload + 1)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
 
     const cardActionsList = [
         {
@@ -34,6 +49,14 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
             onAction: (e) => {
                 e.stopPropagation()
                 window.location.href = `https://ra-aya.web.app/experts/${user._id}`
+            }
+        },
+        {
+            name: 'Change Onboarding',
+            icon: <HomeOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateOnboardingStatus(!user.isOnBoarded)
             }
         }
     ]
@@ -71,6 +94,15 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal }) => {
                     <li>
                         <strong>{translations[lang]['Age']}</strong>
                         <span>{user.dateOfBirth ? getAge(user.dateOfBirth) : translations[lang]['Not Registered']}</span>
+                    </li>
+                    <li>
+                        <strong>Speciality</strong>
+                        {
+                            user.speciality && user.speciality.length !== 0 ?
+                            <span>{user.speciality[0].name}</span>
+                            :
+                            <span>Not Registered</span>
+                        }
                     </li>
                     <li>
                         <strong>Status</strong>

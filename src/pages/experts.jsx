@@ -9,12 +9,11 @@ import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
 import { useNavigate } from 'react-router-dom'
 import { isRolesValid } from '../utils/roles'
-import FloatingButton from '../components/buttons/floating-button'
 import ExpertFormModal from '../components/modals/expert-form'
 import DeleteConfirmationModal from '../components/modals/confirmation/delete-confirmation-modal'
 import UserCard from '../components/cards/user'
 import { toast } from 'react-hot-toast'
-
+import SelectInputField from '../components/inputs/select'
 
 
 const UsersPage = ({ roles }) => {
@@ -35,6 +34,9 @@ const UsersPage = ({ roles }) => {
     const [experts, setExperts] = useState([])
     const [totalExperts, setTotalExperts] = useState(0)
 
+    const [specialities, setSpecialities] = useState([])
+    const [speciality, setSpeciality] = useState()
+
     const [statsQuery, setStatsQuery] = useState({})
 
     useEffect(() => {
@@ -43,9 +45,22 @@ const UsersPage = ({ roles }) => {
     }, [])
 
     useEffect(() => {
+        serverRequest.get('/v1/specialities')
+        .then(response => {
+            let specialities = response.data.specialities
+            specialities = [{ name: 'All', _id: 'ALL' }, ...specialities]
+            setSpecialities(specialities)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }, [])
+
+    useEffect(() => {
 
         setIsLoading(true)
-        serverRequest.get(`/v1/experts`, { params: statsQuery })
+        serverRequest.get(`/v1/experts`, { params: { ...statsQuery, speciality } })
         .then(response => {
             setIsLoading(false)
             setExperts(response.data.experts)
@@ -55,7 +70,7 @@ const UsersPage = ({ roles }) => {
             setIsLoading(false)
             console.error(error)
         })
-    }, [reload, statsQuery])
+    }, [reload, statsQuery, speciality])
 
     const searchExpertsByName = (name) => {
         setIsLoading(true)
@@ -124,13 +139,27 @@ const UsersPage = ({ roles }) => {
             statsQuery={statsQuery}
             defaultValue={'LIFETIME'}
             />
+            
             <div className="search-input-container">
-                <SearchInput 
-                searchRows={searchExpertsByName}
-                isSearchRemote={true}
-                isHideClinics={true}
-                isShowStatus={true}
-                isShowStages={true}
+                    <SearchInput 
+                    searchRows={searchExpertsByName}
+                    isSearchRemote={true}
+                    isHideClinics={true}
+                    isShowStatus={true}
+                    isShowStages={true}
+                    />
+            </div>
+            <div className="cards-3-list-wrapper margin-bottom-1">
+                <SelectInputField 
+                selectLabel='Select Speciality'
+                options={specialities}
+                isNested={true}
+                actionFunction={(specialityId) => {
+                    if(specialityId === 'ALL') {
+                        return setSpeciality()
+                    }
+                    setSpeciality(specialityId)
+                }}
                 />
             </div>
             
