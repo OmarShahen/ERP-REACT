@@ -85,6 +85,16 @@ const VerificationStatusFormModal = ({ reload, setReload, setShowModalForm, appo
                         placeholder='Transaction ID'
                         />
                     </div>
+                    <div className="form-input-container">
+                        <label>Gateway</label>
+                        <input
+                        type="text"
+                        className="form-input"
+                        disabled
+                        value={appointment?.payment?.gateway ? capitalizeFirstLetter(appointment?.payment?.gateway) : ''}
+                        placeholder='Gateway'
+                        />
+                    </div>
                 </form>
             </div>
             <div className="modal-form-btn-container">

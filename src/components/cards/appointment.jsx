@@ -62,7 +62,7 @@ const AppointmentCard = ({
                     <span 
                     className="grey-text"
                     >
-                        #{appointment?.seeker?.userId}
+                        +{appointment?.seeker?.countryCode}{appointment?.seeker?.phone} (#{appointment?.seeker?.userId})
                     </span>
                 </div>
             </div>
