@@ -1,22 +1,21 @@
 import { useState, useEffect } from 'react'
 import './prescriptions.css'
 import { serverRequest } from "../components/API/request"
-import { useSelector } from 'react-redux'
 import PageHeader from '../components/sections/page-header'
 import CircularLoading from '../components/loadings/circular';
 import FiltersSection from '../components/sections/filters/filters'
 import AppointmentCard from '../components/cards/appointment'
 import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
-import { format } from 'date-fns'
 import { formatNumber } from '../utils/numbers'
 import AppointmentDeleteConfirmationModal from '../components/modals/confirmation/appointment-delete-confirmation-modal'
-import AppointmentStatusConfirmationModal from '../components/modals/confirmation/appointment-status-confirmation-modal'
 import { isRolesValid } from '../utils/roles'
 import MeetingLinkFormModal from '../components/modals/meeting-link-form'
 import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
 import Card from '../components/cards/card'
 import VerificationStatusFormModal from '../components/modals/verification-status-form'
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined'
+import { toast } from 'react-hot-toast'
 
 
 const AppointmentsPage = ({ roles }) => {
@@ -24,7 +23,7 @@ const AppointmentsPage = ({ roles }) => {
     const [targetAppointment, setTargetAppointment] = useState({})
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
     const [isShowVerificationModal, setIsShowVerificationModal] = useState(false)
-    const [status, setStatus] = useState()
+    const [status, setStatus] = useState('PAID')
     const [viewStatus, setViewStatus] = useState('ALL')
     const [meetingLink, setMeetingLink] = useState()
     const [verification, setVerification] = useState()
@@ -103,6 +102,21 @@ const AppointmentsPage = ({ roles }) => {
         })
     }
 
+    const sendAppointmentsReminders = () => {
+        setIsLoading(true)
+        serverRequest.post(`/v1/appointments/reminder/send`)
+        .then(response => {
+            setReload(reload + 1)
+            const successMessage = `${response.data.message} (${response.data.total} record)`
+            toast.success(successMessage, { duration: 3000, position: 'top-right' })            
+        })
+        .catch(error => {
+            setIsLoading(false)
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
 
     return <div className="page-container">
         {
@@ -146,8 +160,11 @@ const AppointmentsPage = ({ roles }) => {
             setReload={setReload}
             reload={reload}
             totalNumber={totalAppointments}
+            addBtnText2={'Send Reminders'}
+            addBtnText2Icon={<NotificationsActiveOutlinedIcon />}
+            button2Action={sendAppointmentsReminders}
             /> 
-            <div className="cards-3-list-wrapper">
+            <div className="cards-4-list-wrapper">
                 <Card 
                 icon={<NumbersOutlinedIcon />}
                 cardHeader={'Upcoming'}
@@ -186,20 +203,14 @@ const AppointmentsPage = ({ roles }) => {
                 />
                 <Card 
                 icon={<NumbersOutlinedIcon />}
-                cardHeader={'Accepted Verifications'}
-                number={formatNumber(stats.totalAcceptedVerifications ? stats.totalAcceptedVerifications : 0)}
+                cardHeader={'Reminder Sent'}
+                number={formatNumber(stats.totalAppointmentsReminderSent ? stats.totalAppointmentsReminderSent : 0)}
                 iconColor={'#FF579A'}
                 />
                 <Card 
                 icon={<NumbersOutlinedIcon />}
-                cardHeader={'Rejected Verifications'}
-                number={formatNumber(stats.totalRejectedVerifications ? stats.totalRejectedVerifications : 0)}
-                iconColor={'#FF579A'}
-                />
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'Reviewing Verifications'}
-                number={formatNumber(stats.totalReviewedVerifications ? stats.totalReviewedVerifications : 0)}
+                cardHeader={'No Reminder Sent'}
+                number={formatNumber(stats.totalAppointmentsReminderNotSent ? stats.totalAppointmentsReminderNotSent : 0)}
                 iconColor={'#FF579A'}
                 />
             </div>

@@ -3,7 +3,7 @@ import { createAvatar } from '@dicebear/core'
 import { initials } from '@dicebear/collection'
 
 
-const CardImage = ({ name='', imageURL }) => {
+const CardImage = ({ name='', imageURL, borderRadius, width, height }) => {
 
     const avatar = useMemo(() => {
         if(imageURL) {
@@ -15,7 +15,11 @@ const CardImage = ({ name='', imageURL }) => {
         }).toDataUriSync();
       }, [])
 
-    return <img src={imageURL ? imageURL : avatar} alt="avatar" />
+    return <img 
+    src={imageURL ? imageURL : avatar} 
+    alt="avatar" 
+    style={{ borderRadius, width, height }}
+    />
 }
 
 export default CardImage

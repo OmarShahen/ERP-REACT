@@ -3,17 +3,32 @@ import CardDate from './components/date'
 import CardActions from './components/actions'
 import CardTransition from '../transitions/card-transitions'
 import CardImage from './components/image'
-import { textShortener, capitalizeFirstLetter } from '../../utils/formatString'
+import { textShortener } from '../../utils/formatString'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined'
+import { serverRequest } from '../API/request'
+import { toast } from 'react-hot-toast'
 
 
 const AppointmentCard = ({ 
     appointment, 
     setTargetAppointment, 
     setIsShowFormModal,
-    setIsShowVerificationModal
+    reload,
+    setReload
 }) => {
+
+    const sendReminder = () => {
+        serverRequest.post(`/v1/appointments/${appointment._id}/reminder/send`)
+        .then(response => {
+            setReload(reload + 1)
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
 
     const cardActionsList = [
         {
@@ -26,28 +41,14 @@ const AppointmentCard = ({
             }
         },
         {
-            name: 'Update Verification',
-            icon: <VerifiedOutlinedIcon />,
+            name: 'Send Reminder',
+            icon: <NotificationsActiveOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
-                setTargetAppointment(appointment)
-                setIsShowVerificationModal(true)
+                sendReminder()
             }
         }
     ]
-
-    const renderVerificationStatus = (verification) => {
-
-        if(verification == 'REVIEW') {
-            return <span className="status-btn pending bold-text">{capitalizeFirstLetter(verification)}</span>
-        } else if(verification == 'ACCEPTED') {
-            return <span className="status-btn done bold-text">{capitalizeFirstLetter(verification)}</span>
-        } else if(verification == 'REJECTED') {
-            return <span className="status-btn declined bold-text">{capitalizeFirstLetter(verification)}</span>
-        }
-
-        return <span className="status-btn grey-bg bold-text">Not Registered</span>
-    }
 
     return <CardTransition>
     <div className="patient-card-container disable-hover body-text">
@@ -105,8 +106,8 @@ const AppointmentCard = ({
                     <span>{appointment?.duration} minutes</span>
                 </li>
                 <li>
-                    <strong>Verification</strong>
-                    {renderVerificationStatus(appointment?.verification)}
+                    <strong>Notified</strong>
+                    {appointment.isReminderSent ? 'Yes' : 'No'}
                 </li>
                 <li>
                     <strong>Link</strong>

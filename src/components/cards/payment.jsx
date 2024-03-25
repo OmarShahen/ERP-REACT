@@ -35,7 +35,7 @@ const PaymentCard = ({
                 name={payment?.seeker?.firstName ? payment?.seeker?.firstName : 'Unknown'} />
                 <div>
                     <strong>{payment?.seeker?.firstName ? payment?.seeker?.firstName : 'Not Registered'}</strong>
-                    <span className="grey-text">{`${payment?.seeker?.userId ? payment?.seeker?.userId : 'Not Registered'}`}</span>
+                    <span className="grey-text">#{`${payment?.seeker?.userId ? payment?.seeker?.userId : 'Not Registered'}`}</span>
                 </div>
             </div>
             <CardActions actions={cardActionsList} />

@@ -936,6 +936,17 @@ button:hover {
   display: flex;
 }
 
+.flex-space-between-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
 .appointments-categories-container {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto;

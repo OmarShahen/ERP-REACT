@@ -13,6 +13,9 @@ import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
 import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined'
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
+import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
+import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -101,6 +104,30 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                         <NavLink to="/experts-verifications">
                             <VerifiedOutlinedIcon />
                             Verifications
+                        </NavLink>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <NavLink to="/promo-codes">
+                            <LoyaltyOutlinedIcon />
+                            Coupons
+                        </NavLink>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <NavLink to="/questions">
+                            <ContactSupportOutlinedIcon />
+                            Questions
+                        </NavLink>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <NavLink to="/settings">
+                            <SettingsOutlinedIcon />
+                            Settings
                         </NavLink>
                     </div>
                 </li>

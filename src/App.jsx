@@ -24,6 +24,9 @@ import SpecialtyPage from './pages/specialty'
 import SeekersPage from './pages/seekers'
 import PaymentsPage from './pages/payments'
 import ExpertsVerificationsPage from './pages/expertsVerifications'
+import PromoCodesPage from './pages/promo-codes'
+import QuestionsPage from './pages/questions'
+import SettingsPage from './pages/settings'
 
 
 function App() {
@@ -49,6 +52,9 @@ function App() {
             <Route path="/users/experts" element={<UsersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/users/seekers" element={<SeekersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/experts-verifications" element={<ExpertsVerificationsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/promo-codes" element={<PromoCodesPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/questions" element={<QuestionsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/settings" element={<SettingsPage roles={['ADMIN', 'EMPLOYEE']} />} />
 
             <Route path="/dashboard" element={<DashboardPage />} />
 
@@ -61,6 +67,7 @@ function App() {
               <Route path="/settings/speciality" element={<SpecialityPage roles={['DOCTOR']} />} />
               <Route path="/settings/account-delete" element={<DeleteAccountPage roles={['DOCTOR', 'STAFF', 'OWNER']} />} />
             </Route>
+
        
           </Route>
 

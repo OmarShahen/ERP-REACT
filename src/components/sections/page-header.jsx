@@ -17,6 +17,7 @@ const PageHeader = ({
     addBtnText2Icon,
     setShowModalForm,
     setShowModalForm2, 
+    button2Action,
     formURL, 
     setReload, 
     reload, 
@@ -72,23 +73,24 @@ const PageHeader = ({
                         className="btns-container subheader-text" 
                         onClick={e => formURL ? navigate(formURL) : setShowModalForm(true)}
                         >
-                            {
-                                addBtnText2 ?
-                                <button 
-                                onClick={e => { 
-                                    e.stopPropagation()
-                                    setShowModalForm2(true)
-                                }}
-                                >
-                                    { addBtnText2Icon ? addBtnText2Icon : <AddOutlinedIcon /> }
-                                    <strong>{addBtnText2}</strong>
-                                </button>
-                                :
-                                null
-                            }
                             <button>
                                 { addBtnTextIcon ? addBtnTextIcon : <AddOutlinedIcon /> }
                                 <strong>{addBtnText}</strong>
+                            </button>
+                        </div>
+                        :
+                        null
+                    }
+                    {
+                        addBtnText2 ?
+                        <div className="btns-container subheader-text">
+                            <button 
+                            onClick={() => { 
+                                button2Action()
+                            }}
+                            >
+                                { addBtnText2Icon ? addBtnText2Icon : <AddOutlinedIcon /> }
+                                <strong>{addBtnText2}</strong>
                             </button>
                         </div>
                         :
