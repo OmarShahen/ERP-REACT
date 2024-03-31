@@ -6,9 +6,10 @@ import CardImage from './components/image'
 import { textShortener } from '../../utils/formatString'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined'
+import LinkIcon from '@mui/icons-material/Link'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
-
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
 const AppointmentCard = ({ 
     appointment, 
@@ -19,6 +20,7 @@ const AppointmentCard = ({
 }) => {
 
     const sendReminder = () => {
+        toast.loading('Sending reminder...', { duration: 2000, position: 'top-right' })
         serverRequest.post(`/v1/appointments/${appointment._id}/reminder/send`)
         .then(response => {
             setReload(reload + 1)
@@ -27,6 +29,30 @@ const AppointmentCard = ({
         .catch(error => {
             console.error(error)
             toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const sendMeetingLink = () => {
+        toast.loading('Sending meeting link...', { duration: 2000, position: 'top-right' })
+        serverRequest.post(`/v1/appointments/${appointment._id}/meeting-link/send`)
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const copyMeetingLink = () => {
+        if(!appointment.meetingLink) {
+            return toast.error('No meeting link registered', { duration: 3000, position: 'top-right' })
+        }
+
+        navigator.clipboard.writeText(appointment.meetingLink)
+        .then(() => toast.success('Copied to clipboard', { duration: 3000, position: 'top-right' }))
+        .catch(error => {
+            toast.error(error.message, { duration: 3000, position: 'top-right' })
         })
     }
 
@@ -46,6 +72,22 @@ const AppointmentCard = ({
             onAction: (e) => {
                 e.stopPropagation()
                 sendReminder()
+            }
+        },
+        {
+            name: 'Send Meeting Link',
+            icon: <LinkIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                sendMeetingLink()
+            }
+        },
+        {
+            name: 'Copy Meeting Link',
+            icon: <ContentCopyIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                copyMeetingLink()
             }
         }
     ]

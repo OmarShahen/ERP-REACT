@@ -21,16 +21,17 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
         return todayDate
     }
 
+    const pagePath = window.location.pathname
+    const expertId = pagePath.split('/')[2]
+
     const lang = useSelector(state => state.lang.lang)
 
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const [lead, setLead] = useState()
     const [weekday, setWeekday] = useState(isUpdate ? openingTimeObj.weekday : '')
     const [openingTime, setOpeningTime] = useState(isUpdate ? format(integrateTimeToDate(openingTimeObj.openingTime.hour, openingTimeObj.openingTime.minute), 'HH:mm') : null)
     const [closingTime, setClosingTime] = useState(isUpdate ? format(integrateTimeToDate(openingTimeObj.closingTime.hour, openingTimeObj.closingTime.minute), 'HH:mm') : null)
 
-    const [leadError, setLeadError] = useState()
     const [weekdayError, setWeekdayError] = useState()
     const [openingTimeError, setOpeningTimeError] = useState()
     const [closingTimeError, setClosingTimeError] = useState()
@@ -38,8 +39,6 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
     const handleSubmit = (e) => {
         e.preventDefault()
         
-        if(!lead) return setLeadError('Lead is required')
-
         if(!weekday) return setWeekdayError('Weekday is required')
 
         if(!openingTime) return setOpeningTimeError('Opening time is required')
@@ -47,7 +46,7 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
         if(!closingTime) return setClosingTimeError('Closing time is required')
 
         const openingTimeData = {
-            leadId: lead._id,
+            expertId,
             weekday,
             openingTime,
             closingTime
@@ -69,8 +68,6 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
             try {
 
                 const errorResponse = error.response.data
-
-                if(errorResponse.field === 'leadId') return setLeadError(errorResponse.message)
 
                 if(errorResponse.field === 'weekday') return setWeekdayError(errorResponse.message)
 
@@ -109,6 +106,8 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
             const data = response.data
             toast.success(data.message, { position: 'top-right', duration: 3000 })
             reload ? setReload(reload + 1) : null
+            setIsUpdate(false)
+            setOpeningTimeObj({})
             setShowFormModal(false)
         })
         .catch(error => {
@@ -131,7 +130,6 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
                 toast.error(error.message, { position: 'top-right', duration: 3000 })
             }
         })
-
     }
 
     return <div className="modal">
@@ -145,24 +143,6 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
                     id="opening-time-form" 
                     className="modal-form-container responsive-form body-text" 
                     onSubmit={isUpdate ? handleUpdate : handleSubmit}>
-                        {
-                            isUpdate ?
-                            <div className="form-input-container">
-                                <label>Lead</label>
-                                <input 
-                                type="text"
-                                className="form-input"
-                                value={openingTimeObj?.lead?.name}
-                                disabled
-                                />
-                            </div>
-                            :
-                            <SearchLeadsInputField 
-                            setTargetLead={setLead}
-                            setTargetLeadError={setLeadError}
-                            targetLeadError={leadError}
-                            />
-                        }
                         <div className="form-input-container">
                             <label>Day</label>
                             <select 
@@ -172,7 +152,7 @@ const OpeningTimeFormModal = ({ setShowFormModal, reload, setReload, isUpdate, s
                             >
                                 <option selected disabled>Select Day</option>
                                 {WEEK_DAYS.map(targetWeekday => {
-                                    if(targetWeekday === weekday) {
+                                    if(targetWeekday?.toUpperCase() === weekday?.toUpperCase()) {
                                         return <option selected value={targetWeekday}>{capitalizeFirstLetter(targetWeekday)}</option>
                                     }
                                     return <option value={targetWeekday}>{capitalizeFirstLetter(targetWeekday)}</option>

@@ -997,6 +997,28 @@ background-color: #a8bbbf;
   font-weight: 600;
 }
 
+.mini-page-navigator-container ul {
+  display: flex;
+  width: 100%;
+  border-bottom: 2px solid #F2F2F2;
+  padding-bottom: .3rem;
+}
+
+.mini-page-navigator-container ul li {
+  list-style-type: none;
+  margin-right: 2rem;
+}
+
+.mini-page-navigator-container ul li a {
+  font-weight: 500;
+  color: #000;
+  padding-bottom: .3rem;
+}
+
+.mini-page-navigator-container ul li a:hover, .mini-page-navigator-container ul li .active {
+  border-bottom: 3px solid var(--main-color);
+}
+
 @media only screen and (max-width: 950px) {
   .page-container {
     padding: 0;

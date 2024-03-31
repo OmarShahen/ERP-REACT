@@ -4,7 +4,7 @@ import CardDate from './components/date'
 import CardActions from './components/actions'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import CardTransition from '../transitions/card-transitions'
-import { capitalizeFirstLetter } from '../../utils/formatString'
+import { capitalizeFirstLetter, textShortener } from '../../utils/formatString'
 import { useSelector } from 'react-redux'
 import translations from '../../i18n'
 import { formatDistance  } from 'date-fns'
@@ -16,6 +16,7 @@ import { toast } from 'react-hot-toast'
 import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
 import { useNavigate } from 'react-router-dom'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
+import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
 
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateModal, reload, setReload }) => {
@@ -27,6 +28,7 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
     const userName = `${user.firstName}`
 
     const updateOnboardingStatus = (isOnBoarded) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
         serverRequest.patch(`/v1/experts/${user._id}/onboarding`, { isOnBoarded })
         .then(response => {
             toast.success(response.data.message, { duration: 3000, position: 'top-right' })
@@ -40,7 +42,21 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
 
     
     const updatePromoCodeAcceptance = (isAcceptPromoCodes) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
         serverRequest.patch(`/v1/experts/${user._id}/promo-codes-acceptance`, { isAcceptPromoCodes })
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            setReload(reload + 1)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const updateUserType = (type) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
+        serverRequest.patch(`/v1/users/${user._id}/type`, { type })
         .then(response => {
             toast.success(response.data.message, { duration: 3000, position: 'top-right' })
             setReload(reload + 1)
@@ -93,11 +109,23 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
                 e.stopPropagation()
                 updatePromoCodeAcceptance(!user.isAcceptPromoCodes)
             }
+        },
+        {
+            name: 'Update Type',
+            icon: <BadgeOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateUserType(user.type === 'SEEKER' ? 'EXPERT' : 'SEEKER')
+            }
         }
     ]
 
     return <CardTransition>
         <div 
+        onClick={e => {
+            e.stopPropagation()
+            navigate(`/experts/${user._id}/appointments`)
+        }}
         className="patient-card-container body-text disable-hover hoverable">
             <div className="patient-card-header">
                 <div className="patient-image-info-container">
@@ -170,6 +198,15 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
                         <li>
                             <strong>Accept Coupons</strong>
                             <span>{user.isAcceptPromoCodes ? 'Yes' : 'No'}</span>
+                        </li>
+                        :
+                        null
+                    }
+                    {
+                        user.type === 'EXPERT' ?
+                        <li>
+                            <strong>Meeting Link</strong>
+                            <span>{user.meetingLink ? textShortener(user.meetingLink, 20) : 'Not Registered'}</span>
                         </li>
                         :
                         null

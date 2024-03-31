@@ -18,10 +18,12 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
 
     const [title, setTitle] = useState(expert.title)
     const [description, setDescription] = useState(expert.description)
+    const [meetingLink, setMeetingLink] = useState(expert.meetingLink)
     
     const [titleError, setTitleError] = useState()
     const [descriptionError, setDescriptionError] = useState()
     const [imageError, setImageError] = useState()
+    const [meetingLinkError, setMeetingLinkError] = useState()
 
     const [isImageUploading, setIsImageUploading] = useState(false)
     const [imageURL, setImageURL] = useState(expert.profileImageURL)
@@ -36,10 +38,13 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
 
         if(!title) return setTitleError('Title is required')
 
+        if(!meetingLink) return setMeetingLinkError('Meeting link is required')
+
         if(!stripHTMLTags(description)) return setDescriptionError('Description is required')
 
         const updatedData = {
             title, 
+            meetingLink,
             description
         }
 
@@ -158,6 +163,18 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
                         onClick={e => setTitleError()}
                         />
                         <span className="red">{titleError}</span>
+                    </div>
+                    <div className="form-input-container">
+                        <label>Meeting Link</label>
+                        <input 
+                        type="url"
+                        className="form-input" 
+                        placeholder=""
+                        value={meetingLink}
+                        onChange={e => setMeetingLink(e.target.value)}
+                        onClick={() => setMeetingLinkError()}
+                        />
+                        <span className="red">{meetingLinkError}</span>
                     </div>
                 </form>
                 <div className="form-input-container">

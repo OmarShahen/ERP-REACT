@@ -18,7 +18,7 @@ const EmptySection = ({ setIsShowForm, url }) => {
             </div>
             <span>{translations[lang]['Oops! No results found']}</span>
         </div>
-        {/*
+        {
             !url && !setIsShowForm ?
             null
             :
@@ -29,7 +29,7 @@ const EmptySection = ({ setIsShowForm, url }) => {
                 <AddIcon />
                 Add New
             </button>
-        */}
+        }
     </div>
 }
 

@@ -1,87 +1,63 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './modals.css'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
 import { useSelector, useDispatch } from 'react-redux'
-import CircularLoading from '../loadings/circular'
-import { setIsShowModal, setIsShowRenewModal } from '../../redux/slices/modalSlice'
-import CloseIcon from '@mui/icons-material/Close'
 import translations from '../../i18n'
+
 
 const ServiceFormModal = ({ 
     setShowFormModal, 
     reload, 
     setReload, 
     service, 
-    setService, 
-    clinicId,
-    isClinicService,
-    setIsShowRequestModel,
-    isShowCloseButton
+    setService,
+    setIsUpdate,
+    isUpdate
 }) => {
 
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.user.user)
+    const pagePath = window.location.pathname
+    const expertId = pagePath.split('/')[2]
+
     const lang = useSelector(state => state.lang.lang)
 
     const [isSubmit, setIsSubmit] = useState(false)
-    const [isClinicsLoading, setIsClinicsLoading] = useState(false)
 
-    const [clinics, setClinics] = useState([])
+    const [title, setTitle] = useState(isUpdate ? service.title : '')
+    const [description, setDescription] = useState(isUpdate ? service.description : '')
+    const [duration, setDuration] = useState(isUpdate ? service.duration : '')
+    const [price, setPrice] = useState(isUpdate ? service.price : '')
+    const [internationalPrice, setInternationalPrice] = useState(isUpdate ? service.internationalPrice : '')
 
-    const [name, setName] = useState(service ? service.name : '')
-    const [cost, setCost] = useState(service ? service.cost : '')
-    const [clinic, setClinic] = useState(clinicId ? clinicId : '')
+    const [titleError, setTitleError] = useState()
+    const [descriptionError, setDescriptionError] = useState()
+    const [durationError, setDurationError] = useState()
+    const [priceError, setPriceError] = useState()
+    const [internationalPriceError, setInternationalPriceError] = useState()
 
-
-    const [nameError, setNameError] = useState()
-    const [costError, setCostError] = useState()
-    const [clinicError, setClinicError] = useState()
-
-
-    useEffect(() => {
-
-        if(service || clinicId) {
-            return
-        }
-        
-        setIsClinicsLoading(true)
-        serverRequest.get(`/v1/clinics-owners/owners/${user._id}`)
-        .then(response => {
-            setIsClinicsLoading(false)
-            const data = response.data
-            setClinics(data.clinics)
-        })
-        .catch(erorr => {
-            setIsClinicsLoading(false)
-            console.error(error)
-            toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
-        })
-    }, [])
-
-    const resetForm = () => {
-        setName('')
-        setCost('')
-
-        setNameError()
-        setCostError()
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        if(!name) return setNameError(translations[lang]['name is required'])
+        if(!title) return setTitleError('Title is required')
 
-        if(!clinic) return setClinicError(translations[lang]['clinic is required'])
+        if(!duration) return setDurationError('Duration is required')
 
-        if(!cost) return setCostError(translations[lang]['cost is required'])
-        
+        if(!price) return setPriceError('Price is required')
+
+        if(!internationalPrice) return setInternationalPriceError('International price is required')
+
+        if(!description) return setDescriptionError('Description is required')
 
         const service = {
-            name,
-            clinicId: clinic,
-            cost: Number.parseFloat(cost)
+            expertId,
+            title,
+            description,
+            duration: Number.parseInt(duration),
+            price: Number.parseInt(price),
+            internationalPrice: Number.parseInt(internationalPrice),
+            isActive: true
         }
 
         setIsSubmit(true)
@@ -89,12 +65,9 @@ const ServiceFormModal = ({
         .then(response => {
             setIsSubmit(false)
             const data = response.data
+            setReload(reload + 1)
+            setShowFormModal(false)
             toast.success(data.message, { position: 'top-right', duration: 3000 })
-            isClinicService ? setReload(reload + 1) : null
-            isClinicService ? setShowFormModal(false) : null
-            clinicId ? null : setReload(reload + 1)
-            !clinicId ? setShowFormModal(false) : null
-            clinicId ? resetForm() : null
         })
         .catch(error => {
             setIsSubmit(false)
@@ -104,21 +77,15 @@ const ServiceFormModal = ({
 
                 const errorResponse = error.response.data
 
-                if(errorResponse.field === 'name') return setNameError(errorResponse.message)
+                if(errorResponse.field === 'title') return setTitleError(errorResponse.message)
 
-                if(errorResponse.field === 'cost') return setCostError(errorResponse.message)
+                if(errorResponse.field === 'duration') return setDurationError(errorResponse.message)
 
-                if(errorResponse.field === 'mode') {
-                    setShowFormModal(false)
-                    dispatch(setIsShowModal(true))
-                    return
-                }
+                if(errorResponse.field === 'price') return setPriceError(errorResponse.message)
 
-                if(errorResponse.field === 'activeUntilDate') {
-                    setShowFormModal(false)
-                    dispatch(setIsShowRenewModal(true))
-                    return
-                }
+                if(errorResponse.field === 'internationalPrice') return setInternationalPriceError(errorResponse.message)
+
+                if(errorResponse.field === 'description') return setDescriptionError(errorResponse.message)
 
                 toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
 
@@ -130,14 +97,22 @@ const ServiceFormModal = ({
     const handleUpdate = (e) => {
         e.preventDefault()
 
-        if(!name) return setNameError(translations[lang]['name is required'])
+        if(!title) return setTitleError('Title is required')
 
-        if(!cost) return setCostError(translations[lang]['cost is required'])
-        
+        if(!duration) return setDurationError('Duration is required')
+
+        if(!price) return setPriceError('Price is required')
+
+        if(!internationalPrice) return setInternationalPriceError('International price is required')
+
+        if(!description) return setDescriptionError('Description is required')
 
         const serviceData = {
-            name,
-            cost: Number.parseFloat(cost)
+            title,
+            description,
+            duration: Number.parseInt(duration),
+            price: Number.parseInt(price),
+            internationalPrice: Number.parseInt(internationalPrice),
         }
 
         setIsSubmit(true)
@@ -145,10 +120,11 @@ const ServiceFormModal = ({
         .then(response => {
             setIsSubmit(false)
             const data = response.data
-            toast.success(data.message, { position: 'top-right', duration: 3000 })
-            setService()
             setReload(reload + 1)
             setShowFormModal(false)
+            setIsUpdate(false)
+            setService({})
+            toast.success(data.message, { position: 'top-right', duration: 3000 })
         })
         .catch(error => {
             setIsSubmit(false)
@@ -158,9 +134,15 @@ const ServiceFormModal = ({
 
                 const errorResponse = error.response.data
 
-                if(errorResponse.field === 'name') return setNameError(errorResponse.message)
+                if(errorResponse.field === 'title') return setTitleError(errorResponse.message)
 
-                if(errorResponse.field === 'cost') return setCostError(errorResponse.message)
+                if(errorResponse.field === 'duration') return setDurationError(errorResponse.message)
+
+                if(errorResponse.field === 'price') return setPriceError(errorResponse.message)
+
+                if(errorResponse.field === 'internationalPrice') return setInternationalPriceError(errorResponse.message)
+
+                if(errorResponse.field === 'description') return setDescriptionError(errorResponse.message)
 
                 toast.error(error.response.data.message, { position: 'top-right', duration: 3000 })
 
@@ -173,100 +155,105 @@ const ServiceFormModal = ({
     return <div className="modal">
         <div className="modal-container body-text">
             <div className="modal-header">
-                <h2>{ service ? translations[lang]['Update Service'] : translations[lang]['Create Service']}</h2>
-                <span className="hover" onClick={e => { 
-                    setService ? setService() : null
-                    setShowFormModal(false)
-                }}>
-                    <CloseIcon />
-                </span>
-            </div>
-            {
-                isClinicsLoading ?
-                <CircularLoading />
-                :
-                <div>
-                <div className="modal-body-container">
+                <h2>{ isUpdate ? translations[lang]['Update Service'] : translations[lang]['Create Service']}</h2>
+            </div>                
+            <div className="modal-body-container">
                     <form 
                     id="service-form" 
                     className="modal-form-container responsive-form body-text" 
-                    onSubmit={service ? handleUpdate : handleSubmit}
+                    onSubmit={isUpdate ? handleUpdate : handleSubmit}
                     >
                         <div className="form-input-container">
-                            <label>{translations[lang]['Name']}</label>
+                            <label>Title</label>
                             <input 
                             type="text" 
                             className="form-input" 
                             placeholder=""
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            onClick={e => setNameError()}
+                            value={title}
+                            onChange={e => setTitle(e.target.value)}
+                            onClick={e => setTitleError()}
                             />
-                            <span className="red">{nameError}</span>
+                            <span className="red">{titleError}</span>
                         </div>
-                        {
-                            service || clinicId ?
-                            null
-                            :
-                            <div className="form-input-container">
-                                <label>{translations[lang]['Clinic']}</label>
-                                <select
-                                className="form-input"
-                                onChange={e => setClinic(e.target.value)}
-                                onClick={e => setClinicError()}
-                                >
-                                    <option selected disabled>{translations[lang]['Select Clinic']}</option>
-                                    {clinics.map(clinic => <option value={clinic?.clinic?._id}>
-                                        {clinic?.clinic?.name}
-                                    </option>)}
-                                </select>
-                                <span className="red">{clinicError}</span>
-                            </div> 
-                        }
                         <div className="form-input-container">
-                            <label>{translations[lang]['Cost']}</label>
+                            <label>Duration (minutes)</label>
                             <input 
                             type="number" 
                             className="form-input" 
                             placeholder=""
-                            value={cost}
-                            onChange={e => setCost(e.target.value)}
-                            onClick={e => setCostError()}
+                            value={duration}
+                            onChange={e => setDuration(e.target.value)}
+                            onClick={e => setDurationError()}
                             />
-                            <span className="red">{costError}</span>
+                            <span className="red">{durationError}</span>
+                        </div>
+                        <div className="form-input-container">
+                            <label>Price (EGP)</label>
+                            <input 
+                            type="number" 
+                            className="form-input" 
+                            placeholder=""
+                            value={price}
+                            onChange={e => setPrice(e.target.value)}
+                            onClick={e => setPriceError()}
+                            />
+                            <span className="red">{priceError}</span>
                         </div>                       
+                        <div className="form-input-container">
+                            <label>International Price (EGP)</label>
+                            <input 
+                            type="number" 
+                            className="form-input" 
+                            placeholder=""
+                            value={internationalPrice}
+                            onChange={e => setInternationalPrice(e.target.value)}
+                            onClick={e => setInternationalPriceError()}
+                            />
+                            <span className="red">{internationalPriceError}</span>
+                        </div>                                           
                     </form>
-                </div>
-                <div className="modal-form-btn-container">
-                            <div>   
-                                { 
-                                    isSubmit ?
-                                    <TailSpin
-                                    height="25"
-                                    width="25"
-                                    color="#4c83ee"
-                                    />
-                                    :
-                                    <button
-                                    form="service-form"
-                                    className="normal-button white-text action-color-bg"
-                                    >{service ? translations[lang]['Update'] : clinicId ? translations[lang]['Create Service'] : translations[lang]['Create'] }</button>
-                                } 
-                            </div>
-                            <div>
-                                <button 
-                                className="normal-button cancel-button"
-                                onClick={e => {
-                                    e.preventDefault()
-                                    setService ? setService() : null
-                                    setShowFormModal(false)
-                                }}
-                                >{translations[lang]['Close']}</button>
-                            </div>
+                    <div className="form-input-container">
+                        <label>Description</label>
+                        <textarea
+                        rows={7}
+                        value={description}
+                        className="form-input"
+                        onChange={e => setDescription(e.target.value)}
+                        onClick={e => setDescriptionError()}
+                        >
+
+                        </textarea>
+                        <span className="red">{descriptionError}</span>
                     </div>
+            </div>
+            <div className="modal-form-btn-container">
+                <div>   
+                    { 
+                        isSubmit ?
+                        <TailSpin
+                        height="25"
+                        width="25"
+                        color="#4c83ee"
+                        />
+                        :
+                        <button
+                        form="service-form"
+                        className="normal-button white-text action-color-bg"
+                        >{isUpdate ? translations[lang]['Update']  : translations[lang]['Create'] }</button>
+                    } 
                 </div>
-            }
-            
+                <div>
+                    <button 
+                    className="normal-button cancel-button"
+                    onClick={e => {
+                        e.preventDefault()
+                        setService ? setService({}) : null
+                        setIsUpdate(false)
+                        setShowFormModal(false)
+                    }}
+                    >{translations[lang]['Close']}</button>
+                </div>
+            </div>
         </div>
     </div>
 }

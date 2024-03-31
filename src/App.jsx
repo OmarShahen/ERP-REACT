@@ -27,6 +27,11 @@ import ExpertsVerificationsPage from './pages/expertsVerifications'
 import PromoCodesPage from './pages/promo-codes'
 import QuestionsPage from './pages/questions'
 import SettingsPage from './pages/settings'
+import ExpertPaymentsPage from './pages/experts/expert-payments'
+import ExpertProfileLayout from './components/layouts/expert-profile-layout'
+import ExpertServicesPage from './pages/experts/expert-services'
+import ExpertOpeningTimesPage from './pages/experts/expert-opening-times'
+import ExpertAppointmentsPage from './pages/experts/expert-appointments'
 
 
 function App() {
@@ -60,6 +65,13 @@ function App() {
 
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
+
+            <Route element={<ExpertProfileLayout />}>
+              <Route path="/experts/:id/appointments" element={<ExpertAppointmentsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+              <Route path="/experts/:id/payments" element={<ExpertPaymentsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+              <Route path="/experts/:id/services" element={<ExpertServicesPage roles={['ADMIN', 'EMPLOYEE']} />} />
+              <Route path="/experts/:id/schedule" element={<ExpertOpeningTimesPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            </Route>
 
             <Route element={<UserProfileLayout />}>
               <Route path="/settings/profile" element={<ProfilePage roles={['DOCTOR', 'STAFF', 'OWNER']} />} />

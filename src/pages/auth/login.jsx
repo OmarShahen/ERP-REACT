@@ -9,7 +9,6 @@ import { NavLink } from 'react-router-dom'
 import logo from '../../assets/khatab.png'
 import PageTransition from '../../components/transitions/page-transitions'
 import translations from '../../i18n'
-import { setLang } from '../../redux/slices/langSlice'
 
 const LoginPage = () => {
 
@@ -68,10 +67,6 @@ const LoginPage = () => {
 
     return <PageTransition>
     <div>
-        <div className="language-container grey-text">
-            <span onClick={e => dispatch(setLang('en'))}>English</span>
-            <span onClick={e => dispatch(setLang('ar'))}>عربي</span>
-        </div>
         <div className="form-page-center">
                 <form className="login-form-container" onSubmit={handleSubmit}>
                     <div className="login-form-header-container subheader-text">

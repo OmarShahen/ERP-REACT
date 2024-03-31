@@ -8,12 +8,31 @@ import { formatMoney } from '../../utils/numbers'
 import { useSelector } from 'react-redux'
 import CardTransition from '../transitions/card-transitions'
 import CardImage from './components/image'
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined'
+import { toast } from 'react-hot-toast'
+import { serverRequest } from '../API/request'
+import { format } from 'date-fns'
+
 
 const PaymentCard = ({ 
     payment, 
     setTarget, 
     setIsShowDeleteModal,
+    setReload,
+    reload
 }) => {
+
+    const updateExpertPaid = (isExpertPaid) => {
+        serverRequest.patch(`/v1/payments/${payment._id}/expert-paid`, { isExpertPaid })
+        .then(response => {
+            setReload(reload + 1)
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
 
     const cardActionsList = [
         {
@@ -25,6 +44,14 @@ const PaymentCard = ({
                 setIsShowDeleteModal(true)
             }
         },
+        {
+            name: 'Update Expert Paid',
+            icon: <PaymentsOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateExpertPaid(!payment.isExpertPaid)
+            }
+        }
     ]
 
     return <CardTransition>
@@ -32,10 +59,10 @@ const PaymentCard = ({
         <div className="patient-card-header">
             <div className="patient-image-info-container">
                 <CardImage 
-                name={payment?.seeker?.firstName ? payment?.seeker?.firstName : 'Unknown'} />
+                name={payment?.expert?.firstName ? payment?.expert?.firstName : 'Unknown'} />
                 <div>
-                    <strong>{payment?.seeker?.firstName ? payment?.seeker?.firstName : 'Not Registered'}</strong>
-                    <span className="grey-text">#{`${payment?.seeker?.userId ? payment?.seeker?.userId : 'Not Registered'}`}</span>
+                    <strong>{payment?.expert?.firstName ? payment?.expert?.firstName : 'Not Registered'}</strong>
+                    <span className="grey-text">#{`${payment?.expert?.userId ? payment?.expert?.userId : 'Not Registered'}`}</span>
                 </div>
             </div>
             <CardActions actions={cardActionsList} />
@@ -79,6 +106,25 @@ const PaymentCard = ({
                 <li>
                     <strong>Commission</strong>
                     <span>{formatMoney(payment.amountCents * (payment.commission ? payment.commission : 0.1) / 100)}</span>
+                </li>
+                <li>
+                    <strong>Expert Paid</strong>
+                    <span>
+                        {
+                            payment.isExpertPaid ? 
+                            <span className="status-btn done bold-text">Paid</span>
+                            : 
+                            <span className="status-btn pending bold-text">Unpaid</span>
+                        }
+                    </span>
+                </li>
+                <li>
+                    <strong>Appointment ID</strong>
+                    <span>#{payment.appointment.appointmentId}</span>
+                </li>
+                <li>
+                    <strong>Appointment Date</strong>
+                    <span>{format(new Date(payment.appointment?.startTime), 'dd MMM yyyy')}</span>
                 </li>
             </ul>
         </div>
