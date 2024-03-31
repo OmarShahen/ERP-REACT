@@ -17,6 +17,8 @@ import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
 import { useNavigate } from 'react-router-dom'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
+import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
 
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateModal, reload, setReload }) => {
@@ -57,6 +59,32 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
     const updateUserType = (type) => {
         toast.loading('Updating...', { duration: 1000, position: 'top-right' })
         serverRequest.patch(`/v1/users/${user._id}/type`, { type })
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            setReload(reload + 1)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const updateUserVisibility = (isShow) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
+        serverRequest.patch(`/v1/users/${user._id}/visibility`, { isShow })
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            setReload(reload + 1)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
+    const updateUserWorking = (isDeactivated) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
+        serverRequest.patch(`/v1/users/${user._id}/activation`, { isDeactivated })
         .then(response => {
             toast.success(response.data.message, { duration: 3000, position: 'top-right' })
             setReload(reload + 1)
@@ -116,6 +144,22 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
             onAction: (e) => {
                 e.stopPropagation()
                 updateUserType(user.type === 'SEEKER' ? 'EXPERT' : 'SEEKER')
+            }
+        },
+        {
+            name: 'Update Visibility',
+            icon: <VisibilityOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateUserVisibility(!user.isShow)
+            }
+        },
+        {
+            name: 'Update Working',
+            icon: <EngineeringOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateUserWorking(!user.isDeactivated)
             }
         }
     ]
@@ -207,6 +251,24 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
                         <li>
                             <strong>Meeting Link</strong>
                             <span>{user.meetingLink ? textShortener(user.meetingLink, 20) : 'Not Registered'}</span>
+                        </li>
+                        :
+                        null
+                    }
+                    {
+                        user.type === 'EXPERT' ?
+                        <li>
+                            <strong>Visible</strong>
+                            <span>{user.isShow ? 'Yes' : 'No'}</span>
+                        </li>
+                        :
+                        null
+                    }
+                    {
+                        user.type === 'EXPERT' ?
+                        <li>
+                            <strong>Working</strong>
+                            <span>{user.isDeactivated ? 'No' : 'Yes'}</span>
                         </li>
                         :
                         null
