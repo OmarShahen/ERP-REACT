@@ -19,11 +19,13 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
     const [title, setTitle] = useState(expert.title)
     const [description, setDescription] = useState(expert.description)
     const [meetingLink, setMeetingLink] = useState(expert.meetingLink)
+    const [price, setPrice] = useState(expert.sessionPrice)
     
     const [titleError, setTitleError] = useState()
     const [descriptionError, setDescriptionError] = useState()
     const [imageError, setImageError] = useState()
     const [meetingLinkError, setMeetingLinkError] = useState()
+    const [priceError, setPriceError] = useState()
 
     const [isImageUploading, setIsImageUploading] = useState(false)
     const [imageURL, setImageURL] = useState(expert.profileImageURL)
@@ -40,11 +42,14 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
 
         if(!meetingLink) return setMeetingLinkError('Meeting link is required')
 
+        if(!price) return setPriceError('Session price is required')
+
         if(!stripHTMLTags(description)) return setDescriptionError('Description is required')
 
         const updatedData = {
             title, 
             meetingLink,
+            sessionPrice: Number.parseInt(price),
             description
         }
 
@@ -175,6 +180,18 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
                         onClick={() => setMeetingLinkError()}
                         />
                         <span className="red">{meetingLinkError}</span>
+                    </div>
+                    <div className="form-input-container">
+                        <label>Session Price</label>
+                        <input 
+                        type="number"
+                        className="form-input" 
+                        placeholder=""
+                        value={price}
+                        onChange={e => setPrice(e.target.value)}
+                        onClick={() => setPriceError()}
+                        />
+                        <span className="red">{priceError}</span>
                     </div>
                 </form>
                 <div className="form-input-container">

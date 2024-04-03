@@ -19,7 +19,7 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
-
+import { formatNumber } from '../../utils/numbers'
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateModal, reload, setReload }) => {
 
@@ -269,6 +269,15 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
                         <li>
                             <strong>Working</strong>
                             <span>{user.isDeactivated ? 'No' : 'Yes'}</span>
+                        </li>
+                        :
+                        null
+                    }
+                    {
+                        user.type === 'EXPERT' ?
+                        <li>
+                            <strong>Session Price</strong>
+                            <span>{user.sessionPrice ? `${formatNumber(user.sessionPrice)} EGP` : 'Not Registered'}</span>
                         </li>
                         :
                         null
