@@ -168,7 +168,7 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
             icon: <ContentCopyIcon />,
             onAction: (e) => {
                 e.stopPropagation()
-                navigator.clipboard.writeText(`https://ra-aya.web.app/experts/${user._id}`)
+                navigator.clipboard.writeText(`https://ra-aya.web.app/experts/${user._id}/${user.firstName}`)
                 .then(() => toast.success('Copied to clipboard', { duration: 3000, position: 'top-right' }))
                 .catch(error => {
                     toast.error(error.message, { duration: 3000, position: 'top-right' })
