@@ -20,6 +20,7 @@ import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
 import { formatNumber } from '../../utils/numbers'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateModal, reload, setReload }) => {
 
@@ -160,6 +161,18 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
             onAction: (e) => {
                 e.stopPropagation()
                 updateUserWorking(!user.isDeactivated)
+            }
+        },
+        {
+            name: 'Copy Profile Link',
+            icon: <ContentCopyIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                navigator.clipboard.writeText(`https://ra-aya.web.app/experts/${user._id}`)
+                .then(() => toast.success('Copied to clipboard', { duration: 3000, position: 'top-right' }))
+                .catch(error => {
+                    toast.error(error.message, { duration: 3000, position: 'top-right' })
+                })
             }
         }
     ]
