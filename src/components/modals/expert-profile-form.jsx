@@ -20,12 +20,14 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
     const [description, setDescription] = useState(expert.description)
     const [meetingLink, setMeetingLink] = useState(expert.meetingLink)
     const [price, setPrice] = useState(expert.sessionPrice)
+    const [whatsappPaymentNumber, setWhatsappPaymentNumber] = useState(expert.whatsappPaymentNumber)
     
     const [titleError, setTitleError] = useState()
     const [descriptionError, setDescriptionError] = useState()
     const [imageError, setImageError] = useState()
     const [meetingLinkError, setMeetingLinkError] = useState()
     const [priceError, setPriceError] = useState()
+    const [whatsappPaymentNumberError, setWhatsappPaymentNumberError] = useState()
 
     const [isImageUploading, setIsImageUploading] = useState(false)
     const [imageURL, setImageURL] = useState(expert.profileImageURL)
@@ -44,12 +46,15 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
 
         if(!price) return setPriceError('Session price is required')
 
+        if(!whatsappPaymentNumber) return setWhatsappPaymentNumberError('Payment number is required')
+
         if(!stripHTMLTags(description)) return setDescriptionError('Description is required')
 
         const updatedData = {
             title, 
             meetingLink,
             sessionPrice: Number.parseInt(price),
+            whatsappPaymentNumber,
             description
         }
 
@@ -180,6 +185,18 @@ const ExpertProfileFormModal = ({ reload, setReload, setShowModalForm, expert })
                         onClick={() => setMeetingLinkError()}
                         />
                         <span className="red">{meetingLinkError}</span>
+                    </div>
+                    <div className="form-input-container">
+                        <label>Payment Number</label>
+                        <input 
+                        type="text"
+                        className="form-input" 
+                        placeholder="e.g. 201065630331"
+                        value={whatsappPaymentNumber}
+                        onChange={e => setWhatsappPaymentNumber(e.target.value)}
+                        onClick={() => setWhatsappPaymentNumberError()}
+                        />
+                        <span className="red">{whatsappPaymentNumberError}</span>
                     </div>
                     <div className="form-input-container">
                         <label>Session Price</label>
