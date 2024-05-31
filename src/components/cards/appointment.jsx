@@ -10,6 +10,7 @@ import LinkIcon from '@mui/icons-material/Link'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import { formatNumber } from '../../utils/numbers'
 
 const AppointmentCard = ({ 
     appointment, 
@@ -149,7 +150,15 @@ const AppointmentCard = ({
                 </li>
                 <li>
                     <strong>Notified</strong>
-                    {appointment.isReminderSent ? 'Yes' : 'No'}
+                    <span>{appointment.isReminderSent ? 'Yes' : 'No'}</span>
+                </li>
+                <li>
+                    <strong>Price</strong>
+                    <span>{formatNumber(appointment.price)} {appointment.currency}</span>
+                </li>
+                <li>
+                    <strong>Commission</strong>
+                    <span>{formatNumber(appointment.price * appointment.commission)} {appointment.currency}</span>
                 </li>
                 <li>
                     <strong>Link</strong>

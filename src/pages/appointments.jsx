@@ -23,7 +23,7 @@ const AppointmentsPage = ({ roles }) => {
     const [targetAppointment, setTargetAppointment] = useState({})
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
     const [isShowVerificationModal, setIsShowVerificationModal] = useState(false)
-    const [status, setStatus] = useState('PAID')
+    const [status, setStatus] = useState('ALL')
     const [viewStatus, setViewStatus] = useState('ALL')
     const [meetingLink, setMeetingLink] = useState()
     const [verification, setVerification] = useState()

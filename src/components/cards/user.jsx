@@ -21,6 +21,8 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
 import { formatNumber } from '../../utils/numbers'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined'
+
 
 const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateModal, reload, setReload }) => {
 
@@ -96,6 +98,19 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
         })
     }
 
+    const updateUserPlan = (isSubscribed) => {
+        toast.loading('Updating...', { duration: 1000, position: 'top-right' })
+        serverRequest.patch(`/v1/experts/${user._id}/subscription`, { isSubscribed })
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            setReload(reload + 1)
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }
+
     const cardActionsList = [
         {
             name: 'Delete User',
@@ -161,6 +176,14 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
             onAction: (e) => {
                 e.stopPropagation()
                 updateUserWorking(!user.isDeactivated)
+            }
+        },
+        {
+            name: 'Update Plan',
+            icon: <ConfirmationNumberOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                updateUserPlan(!user.isSubscribed)
             }
         },
         {
@@ -291,6 +314,20 @@ const UserCard = ({ user, setTargetUser, setIsShowDeleteModal, setIsShowUpdateMo
                         <li>
                             <strong>Session Price</strong>
                             <span>{user.sessionPrice ? `${formatNumber(user.sessionPrice)} EGP` : 'Not Registered'}</span>
+                        </li>
+                        :
+                        null
+                    }
+                    {
+                        user.type === 'EXPERT' ?
+                        <li>
+                            <strong>Plan</strong>
+                            {
+                                user.isSubscribed ?
+                                <span className="status-btn pending bold-text">Paid</span>
+                                :
+                                <span className="status-btn pending bold-text">Commission</span>
+                            }
                         </li>
                         :
                         null
