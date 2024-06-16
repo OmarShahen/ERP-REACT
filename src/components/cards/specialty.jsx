@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
+import { textShortener } from '../../utils/formatString'
 
 
 const SpecialtyCard = ({ 
@@ -77,7 +78,13 @@ const SpecialtyCard = ({
                 <CardActions actions={cardActionsList} />
             </div>
             <div className="patient-card-body">
-                <div className="flex">
+                <ul>
+                    <li>
+                        <strong>Image</strong>
+                        <span>{specialty.imageURL ? textShortener(specialty.imageURL, 20) : 'Not registered'}</span>
+                    </li>
+                </ul>
+                <div className="flex margin-top-1">
                     {
                        specialty.isShow ?
                        <span className="status-btn done bold-text">Visible</span> 

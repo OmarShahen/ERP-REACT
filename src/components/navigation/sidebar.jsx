@@ -16,6 +16,8 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
 import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined'
+import CarRepairOutlinedIcon from '@mui/icons-material/CarRepairOutlined'
 
 
 const SideBar = ({ width, isHideText, setHideSideBar }) => {
@@ -51,7 +53,7 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                         </NavLink>
                     </div>
                 </li>
-                <li>
+                {/*<li>
                     <div>
                         <NavLink to="/payments">
                             <PaymentOutlinedIcon />
@@ -74,12 +76,36 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                         Seekers
                         </NavLink>
                     </div>
-                </li>
+                </li>*/}
                 <li>
+                    <div>
+                        <NavLink to="/brands">
+                            <AddBusinessOutlinedIcon />
+                            Brands
+                        </NavLink>
+                    </div>
+                </li>
+                {/*<li>
                     <div>
                         <NavLink to="/users/experts">
                             <BadgeOutlinedIcon />
                             Experts
+                        </NavLink>
+                    </div>
+                </li>*/}
+                <li>
+                    <div>
+                        <NavLink to="/customers">
+                            <BadgeOutlinedIcon />
+                            Customers
+                        </NavLink>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <NavLink to="/items">
+                            <CarRepairOutlinedIcon />
+                            Items
                         </NavLink>
                     </div>
                 </li>
@@ -91,7 +117,7 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                         </NavLink>
                     </div>
                 </li>
-                <li>
+                {/*<li>
                     <div>
                         <NavLink to="/reviews">
                             <MapsUgcOutlinedIcon />
@@ -130,7 +156,7 @@ const SideBar = ({ width, isHideText, setHideSideBar }) => {
                             Settings
                         </NavLink>
                     </div>
-                </li>
+</li>*/}
             </ul>
         </ul>
     </motion.div>

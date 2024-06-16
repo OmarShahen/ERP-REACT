@@ -32,6 +32,12 @@ import ExpertProfileLayout from './components/layouts/expert-profile-layout'
 import ExpertServicesPage from './pages/experts/expert-services'
 import ExpertOpeningTimesPage from './pages/experts/expert-opening-times'
 import ExpertAppointmentsPage from './pages/experts/expert-appointments'
+import BrandsPage from './pages/brands'
+import CustomersPage from './pages/customers'
+import ItemsPage from './pages/items'
+import CustomerItemsPage from './pages/customer-items'
+import ItemImagesPage from './pages/item-images'
+import DashboardV2Page from './pages/dashboard-v2'
 
 
 function App() {
@@ -54,6 +60,11 @@ function App() {
             <Route path="/specialties" element={<SpecialtiesPage roles={[]} />} />
             <Route path="/specialties/:id" element={<SpecialtyPage roles={[]} />} />
 
+            <Route path="/brands" element={<BrandsPage />} />
+            <Route path="/customers" element={<CustomersPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/items" element={<ItemsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/items/customers/:id" element={<CustomerItemsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/items/:id/images" element={<ItemImagesPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/users/experts" element={<UsersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/users/seekers" element={<SeekersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/experts-verifications" element={<ExpertsVerificationsPage roles={['ADMIN', 'EMPLOYEE']} />} />
@@ -61,7 +72,8 @@ function App() {
             <Route path="/questions" element={<QuestionsPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/settings" element={<SettingsPage roles={['ADMIN', 'EMPLOYEE']} />} />
 
-            <Route path="/dashboard" element={<DashboardPage />} />
+            {/*<Route path="/dashboard" element={<DashboardPage />} />*/}
+            <Route path="/dashboard" element={<DashboardV2Page roles={['ADMIN', 'EMPLOYEE']} />} />
 
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />

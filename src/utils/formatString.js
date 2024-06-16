@@ -29,6 +29,15 @@ export const formatStringToBoolean = (value) => {
   return boolValue
 }
 
+export const formatBooleanAndString = (value) => {
+
+  if(typeof value === 'string') {
+    return formatStringToBoolean(value)
+  } else if(typeof value === 'boolean') {
+    return formatBooleanValue(value)
+  }
+}
+
 export const textShortener = (text, limit) => {
 
   let output = ''

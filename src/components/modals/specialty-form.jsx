@@ -14,8 +14,10 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
     const [isSubmit, setIsSubmit] = useState(false)
 
     const [name, setName] = useState(isUpdate ? specialty?.name : '')
+    const [imageURL, setImageURL] = useState(isUpdate ? specialty?.imageURL : '')
 
     const [nameError, setNameError] = useState()
+    const [imageURLError, setImageURLError] = useState()
     
 
     const handleSubmit = (e) => {
@@ -23,9 +25,12 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
         
         if(!name) return setNameError('Name is required')
 
+        //if(!imageURL) return setImageURLError('Image URL is required')
+
         const specialtyData = {
             name,
-            type
+            type,
+            imageURL
         }
 
         if(type === 'SUB') {
@@ -65,8 +70,11 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
         
         if(!name) return setNameError('Name is required')
 
+        //if(!imageURL) return setImageURLError('Image URL is required')
+
         const specialtyData = {
             name,
+            imageURL
         }
 
         setIsSubmit(true)
@@ -121,7 +129,17 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
                             />
                             <span className="red">{nameError}</span>
                         </div>
-                        
+                        <div className="form-input-container">
+                            <label>Image URL</label>
+                            <input 
+                            type="url"
+                            className="form-input"
+                            onClick={e => setImageURLError()}
+                            onChange={e => setImageURL(e.target.value)}
+                            value={imageURL}
+                            />
+                            <span className="red">{imageURLError}</span>
+                        </div>
                     </form>
                 </div>
                 <div className="modal-form-btn-container">
