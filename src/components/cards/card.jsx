@@ -6,10 +6,10 @@ const Card = ({ cardHeader, icon, iconColor, number, isMoney=false }) => {
     return <div className="card-container body-text disable-hover cards-white-bg">
         <div className="card-header-container">
             <span>
-                {cardHeader}
+                {icon}
             </span>
             <span>
-                {icon}
+                {cardHeader}
             </span>
         </div>
         <div className="card-number-container">

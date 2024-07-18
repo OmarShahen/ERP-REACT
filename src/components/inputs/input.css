@@ -1,6 +1,7 @@
 .search-field-input-container {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     justify-content: space-between;
 }
 
@@ -13,7 +14,7 @@
     margin-right: 0rem;
     padding: .2rem;
     border-radius: .25rem;
-    margin-right: .2rem;
+    margin-left: .2rem;
 }
 
 

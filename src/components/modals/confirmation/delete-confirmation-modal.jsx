@@ -4,6 +4,7 @@ import ErrorIcon from '@mui/icons-material/Error'
 import './confirmation-modal.css'
 import translations from '../../../i18n'
 import { useSelector } from 'react-redux'
+import CardTransition from '../../transitions/card-transitions'
 
 
 const DeleteConfirmationModal = ({ id, isLoading, setIsShowModal, deleteAction }) => {
@@ -11,6 +12,7 @@ const DeleteConfirmationModal = ({ id, isLoading, setIsShowModal, deleteAction }
     const lang = useSelector(state => state.lang.lang)   
 
     return <div className="modal">
+        <CardTransition>
         <div className="confirmation-modal-container body-text">
              <div className="confirmation-modal-header">
                 <h3>
@@ -44,6 +46,7 @@ const DeleteConfirmationModal = ({ id, isLoading, setIsShowModal, deleteAction }
                 >{translations[lang]['Cancel']}</button>
             </div>        
         </div>
+        </CardTransition>
     </div>
 }
 

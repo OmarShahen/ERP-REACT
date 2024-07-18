@@ -10,6 +10,7 @@ import billReducer from './slices/billSlice'
 import langReducer from './slices/langSlice'
 import valueReducer from './slices/valueSlice'
 import messageTemplateReducer from './slices/messageTemplateSlice'
+import itemReducer from './slices/itemSlice'
 
 
 export const store = configureStore({
@@ -24,6 +25,7 @@ export const store = configureStore({
         bill: billReducer,
         lang: langReducer,
         values: valueReducer,
-        messagesTemplates: messageTemplateReducer
+        messagesTemplates: messageTemplateReducer,
+        items: itemReducer
     }
 })

@@ -1,7 +1,7 @@
 .user-profile-menu-container {
     position: absolute;
     top: 2rem;
-    right: 0;
+    left: 0;
     background-color: #FFF;
     z-index: 1;
     border-radius: .25rem;

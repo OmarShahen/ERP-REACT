@@ -110,6 +110,10 @@ a {
   font-weight: 500;
 }
 
+.bold-font {
+  font-weight: bold;
+}
+
 .small-description-text {
   font-size: .8rem;
 }
@@ -163,6 +167,7 @@ a {
   margin-bottom: 0rem !important;
   display: block;
   font-size: .9rem;
+  text-align: right;
 }
 
 .form-input {
@@ -173,11 +178,12 @@ a {
   outline: none;
   border: none;
   width: 100%;
-  padding-left: 2% !important;
+  padding-right: 2% !important;
   padding: .3rem 0rem;
   font-size: 1rem;
   font-family: 'Inter', 'Cairo', sans-serif !important;
   box-sizing: border-box;
+  text-align: right;
 }
 
 .form-input:focus {
@@ -218,7 +224,9 @@ select {
 .search-input-container {
   padding: 1rem 0 1rem 0;
   display: grid;
-  grid-template-columns: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 1rem;
+  direction: rtl;
 }
 
 .icon-button svg {
@@ -369,12 +377,20 @@ button:hover {
 }
 
 .btns-container button {
-  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .btns-container button:hover {
   cursor: pointer;
   opacity: .8;
+}
+
+.right-direction {
+  direction: rtl;
+}
+
+.left-direction {
+  direction: ltr;
 }
 
 .purple-bg {
@@ -667,6 +683,12 @@ button:hover {
   border-radius: .25rem;
   text-align: right;
   padding: 0 .5rem;
+}
+
+.pos-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 3fr;
+  column-gap: 1rem;
 }
 
 .list-container {
@@ -1077,6 +1099,11 @@ background-color: #a8bbbf;
 
   .appointments-categories-container {
     grid-template-columns: auto auto auto auto;
+  }
+
+  .search-input-container {
+    grid-template-columns: 1fr;
+    row-gap: 1rem;
   }
 
 }

@@ -10,12 +10,39 @@
     transition: .3s;
 }
 
+.pos-item-card-container {
+    padding: 1rem;
+    /*border-radius: .25rem;
+    box-shadow: var(--box-shadow);
+    background-color: #FFF;*/
+    border-radius: .75rem;
+    border: 0.0625rem solid rgba(231, 234, 243, 0.7);
+    box-shadow: 0rem 0.375rem 0.75rem #8c98a413;
+    background-color: #FFF;
+}
+
+.pos-item-card-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pos-item-card-icon-container svg {
+    font-size: 3rem;
+}
+
+.pos-item-card-container:hover {
+    cursor: pointer;
+    border: 2px solid var(--main-color);
+}
+
 .patient-card-container:hover {
     cursor: pointer;
 }
 
 .patient-card-header {
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
 }
 
@@ -52,6 +79,7 @@
     font-size: .9rem;
     list-style-type: none;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
 }

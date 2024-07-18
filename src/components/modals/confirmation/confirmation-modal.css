@@ -6,6 +6,7 @@
     margin-bottom: 2rem;
     padding: 1rem 1rem;
     border-radius: .25rem;
+    direction: rtl;
 }
 
 .confirmation-modal-header h3 {
@@ -21,7 +22,7 @@
 
 .confirmation-modal-header h3 svg {
     color: #DE350B;
-    margin-right: .5rem;
+    margin-left: .5rem;
     font-size: 1.4rem;
 }
 

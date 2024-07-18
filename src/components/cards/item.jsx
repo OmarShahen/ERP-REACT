@@ -4,14 +4,17 @@ import CardActions from './components/actions'
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../transitions/card-transitions'
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import { useNavigate } from 'react-router-dom'
+import { formatNumber } from '../../utils/numbers'
+import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'
+
 
 const ItemCard = ({ 
     item, 
     setTarget, 
     setIsShowDeleteModal,
     setIsShowUpdateModal,
+    setIsShowStockOrderModal,
     setIsUpdate
 }) => {    
 
@@ -19,7 +22,7 @@ const ItemCard = ({
 
     const cardActionsList = [
         {
-            name: 'Delete Item',
+            name: 'مسح منتج',
             icon: <DeleteOutlineOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
@@ -28,7 +31,7 @@ const ItemCard = ({
             }
         },
         {
-            name: 'Update Item',
+            name: 'تحديث منتج',
             icon: <CreateOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
@@ -38,11 +41,12 @@ const ItemCard = ({
             }
         },
         {
-            name: 'View Images',
-            icon: <ImageOutlinedIcon />,
+            name: 'تسجيل معاملة',
+            icon: <SwapHorizOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
-                navigate(`/items/${item._id}/images`)
+                setTarget(item)
+                setIsShowStockOrderModal(true)
             }
         }
     ]
@@ -57,37 +61,34 @@ const ItemCard = ({
         setIsShowUpdateModal(true)
     }}
     >
-        <div className="patient-card-header">
-            <div className="patient-image-info-container">
-                <div>
-                    <strong>#{item.itemId}</strong>
-                </div>
-            </div>
+        <div className="patient-card-header left-direction">
+            <strong>{item.name}</strong>
             <CardActions actions={cardActionsList} />
         </div>
         <div className="patient-card-body">
             <ul>
                 <li>
-                    <strong>Category</strong>
-                    <span>{item?.category?.name}</span>
+                    <span>#{item?.itemId}</span>
+                    <strong>الرقم</strong>
+
                 </li>
                 <li>
-                    <strong>Subcategory</strong>
-                    <span>{item?.subcategory?.name}</span>
+                    <span>{item.barcode ? item.barcode : 'غير مسجل'}</span>
+                    <strong>الباركود</strong>
+
                 </li>
                 <li>
-                    <strong>Brand</strong>
-                    <span>{item?.brand?.name}</span>
+                    <span>{formatNumber(item.stock ? item.stock : 0)}</span>
+                    <strong>الكمية</strong>
                 </li>
                 <li>
-                    <strong>Owner</strong>
-                    <span>{item?.owner?.name ? item?.owner?.name : 'Not Registered'}</span>
-                </li>
-                <li>
-                    <strong>Phone</strong>
-                    <span>{item?.owner?.phone ? item?.owner?.phone : 'Not Registered'}</span>
+                    <span>{formatNumber(item?.price)} EGP</span>
+                    <strong>السعر</strong>
                 </li>
             </ul>
+            <div className="flex left-direction margin-top-1">
+                <span className="status-btn pending bold-text">{item?.category?.name}</span>      
+            </div>
         </div>
         <CardDate 
         creationDate={item.createdAt}

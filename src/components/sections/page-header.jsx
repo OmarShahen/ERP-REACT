@@ -3,10 +3,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigate } from 'react-router-dom'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import CachedIcon from '@mui/icons-material/Cached'
-import translations from '../../i18n'
 import { useSelector } from 'react-redux'
-import { formatNumber } from '../../utils/numbers'
 import CountUp from 'react-countup'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 
 const PageHeader = ({ 
@@ -27,7 +26,6 @@ const PageHeader = ({
 }) => {
 
     const navigate = useNavigate()
-    const lang = useSelector(state => state.lang.lang)
 
     return <div className="page-header-wrapper">
         {
@@ -35,38 +33,28 @@ const PageHeader = ({
             null
             :
             <div className="back-button-container">
-                <ArrowBackIcon />
-                <span onClick={e => navigate(-1)}>{translations[lang]['Back']}</span>
+                <ArrowForwardIcon />
+                <span onClick={e => navigate(-1)}>الرجوع</span>
             </div>
         }
             <div className="page-header-container">
-            <div className="page-header-title-container">
-                <h1>
-                    {pageName}
-                </h1>
+                <div className="page-header-title-container">
                 {
-                    totalNumber ?
-                    <span className="header-number-container">
-                        <CountUp 
-                        end={totalNumber}
-                        duration={1.5}
-                        />
-                    </span>
-                    :
-                    null
-                }
-            </div>
-                <div className="header-buttons-container">
-                    {
-                        isHideRefresh ?
-                        null
+                        totalNumber ?
+                        <span className="header-number-container">
+                            <CountUp 
+                            end={totalNumber}
+                            duration={1.5}
+                            />
+                        </span>
                         :
-                        <div className="header-mobile-icons-container">
-                            <div onClick={e => setReload(reload + 1)}>
-                                <CachedIcon />
-                            </div>
-                        </div>
+                        null
                     }
+                    <h1>
+                        {pageName}
+                    </h1>
+                </div>
+                <div className="header-buttons-container">
                     {
                         addBtnText ?
                         <div 
@@ -74,8 +62,8 @@ const PageHeader = ({
                         onClick={e => formURL ? navigate(formURL) : setShowModalForm(true)}
                         >
                             <button>
-                                { addBtnTextIcon ? addBtnTextIcon : <AddOutlinedIcon /> }
                                 <strong>{addBtnText}</strong>
+                                { addBtnTextIcon ? addBtnTextIcon : <AddOutlinedIcon /> }
                             </button>
                         </div>
                         :
@@ -95,6 +83,16 @@ const PageHeader = ({
                         </div>
                         :
                         null
+                    }
+                    {
+                        isHideRefresh ?
+                        null
+                        :
+                        <div className="header-mobile-icons-container">
+                            <div onClick={e => setReload(reload + 1)}>
+                                <CachedIcon />
+                            </div>
+                        </div>
                     }
                 </div>
                 

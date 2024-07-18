@@ -6,57 +6,33 @@ import { TailSpin } from 'react-loader-spinner'
 import CardTransition from '../transitions/card-transitions'
 
 
-const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpdate, item }) => {
+const SupplierFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpdate, supplier }) => {
 
     const [isSubmit, setIsSubmit] = useState(false)
 
-    const [categories, setCategories] = useState([])
-
-    const [name, setName] = useState(isUpdate ? item.name : '')
-    const [categoryId, setCategoryId] = useState(isUpdate ? item.categoryId : '')
-    const [price, setPrice] = useState(isUpdate ? item.price : '')
-    const [barcode, setBarcode] = useState(isUpdate ? item.barcode : '')
-    const [description, setDescription] = useState(isUpdate ? item.description : '')
-
+    const [name, setName] = useState(isUpdate ? supplier.name : '')
+    const [phone, setPhone] = useState(isUpdate ? supplier.phone : '')
+    const [note, setNote] = useState(isUpdate ? supplier.note : '')
     
     const [nameError, setNameError] = useState()
-    const [categoryIdError, setCategoryIdError] = useState()
-    const [priceError, setPriceError] = useState()
-    const [barcodeError, setBarcodeError] = useState()
-    const [descriptionError, setDescriptionError] = useState()
-    
-    useEffect(() => {
-        serverRequest.get(`/v1/specialities`)
-        .then(response => {
-            setCategories(response.data.specialities)
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }, [])
-
-
+    const [phoneError, setPhoneError] = useState()
+    const [noteError, setNoteError] = useState()
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
         if(!name) return setNameError('الاسم مطلوب')
 
-        if(!categoryId) return setCategoryIdError('الفئة مطلوبة')
+        if(!phone) return setPhoneError('الهاتف مطلوب')
 
-        if(!price) return setPriceError('السعر مطلوب')
-
-
-        const itemData = {
+        const supplierData = {
             name,
-            categoryId,
-            price: Number.parseFloat(price),
-            barcode,
-            description
+            phone,
+            note
         }
 
         setIsSubmit(true)
-        serverRequest.post(`/v1/items`, itemData)
+        serverRequest.post(`/v1/suppliers`, supplierData)
         .then(response => {
             setIsSubmit(false)
             setReload ? setReload(reload + 1) : null
@@ -68,6 +44,13 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
             console.error(error)
             
             try {
+
+                const errorData = error?.response?.data
+
+                if(errorData.field === 'name') return setNameError(errorData.message)
+
+                if(errorData.field === 'phone') return setPhoneError(errorData.message)
+                
                 toast.error(error.response.data.message, { position: 'top-left', duration: 3000 })
 
             } catch(error) {}
@@ -80,20 +63,12 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
 
         if(!name) return setNameError('الاسم مطلوب')
 
-        if(!categoryId) return setCategoryIdError('الفئة مطلوبة')
+        if(!phone) return setPhoneError('الهاتف مطلوب')
 
-        if(!price) return setPriceError('السعر مطلوب')
-
-        const itemData = {
-            name,
-            categoryId,
-            price: Number.parseFloat(price),
-            barcode,
-            description
-        }
+        const supplierData = { name, phone, note }
 
         setIsSubmit(true)
-        serverRequest.put(`/v1/items/${item._id}`, itemData)
+        serverRequest.put(`/v1/suppliers/${supplier._id}`, supplierData)
         .then(response => {
             setIsSubmit(false)
             setReload(reload + 1)
@@ -106,6 +81,13 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
             console.error(error)
             
             try {
+
+                const errorData = error?.response?.data
+
+                if(errorData.field === 'name') return setNameError(errorData.message)
+
+                if(errorData.field === 'phone') return setPhoneError(errorData.message)
+                
                 toast.error(error.response.data.message, { position: 'top-left', duration: 3000 })
 
             } catch(error) {}
@@ -118,36 +100,15 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
         <div className="modal-container body-text">
             <div className="modal-header">
                 <h2 className="flex-space-between">
-                    { isUpdate ? `تحديث المنتج رقم ${item.itemId}` : 'اضافة منتج'}
+                    { isUpdate ? `تحديث المورد` : 'اضافة مورد'}
                 </h2>
             </div>
             <div className="modal-body-container">
                 <form 
                 id="patient-form" 
-                className="modal-form-container responsive-form body-text" 
+                className="modal-form-container responsive-form body-text right-direction" 
                 onSubmit={isUpdate ? handleUpdate : handleSubmit}
                 >
-                    <div className="form-input-container">
-                        <label>*الفئة</label>
-                        <select
-                        className="form-input"
-                        onChange={e => setCategoryId(e.target.value)}
-                        onClick={() => setCategoryIdError()}
-                        >
-                            <option selected disabled>اختر الفئة</option>
-                            {categories.map(category => {
-                                if(category._id === categoryId) {
-                                    return <option selected value={category._id}>
-                                    {category.name}
-                                </option>
-                                }
-                                return <option value={category._id}>
-                                    {category.name}
-                                </option>
-                            })}
-                        </select>
-                        <span className="red">{categoryIdError}</span>
-                    </div>
                     <div className="form-input-container">
                         <label>*الاسم</label>
                         <input
@@ -158,43 +119,31 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         value={name}
                         />
                         <span className="red">{nameError}</span>
-                    </div>
-                    
-                               
+                    </div>                                     
                     <div className="form-input-container">
-                        <label>*السعر</label>
-                        <input
-                        type="number"
-                        className="form-input"
-                        onChange={e => setPrice(e.target.value)}
-                        onClick={() => setPriceError()}
-                        value={price}
-                        />
-                        <span className="red">{priceError}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label>باركود</label>
+                        <label>*الهاتف</label>
                         <input
                         type="text"
                         className="form-input"
-                        onChange={e => setBarcode(e.target.value)}
-                        onClick={() => setBarcodeError()}
-                        value={barcode}
+                        onChange={e => setPhone(e.target.value)}
+                        onClick={() => setPhoneError()}
+                        value={phone}
                         />
-                        <span className="red">{barcodeError}</span>
+                        <span className="red">{phoneError}</span>
                     </div>
+                    
                 </form>
                 <div className="form-input-container">
                     <label>ملحوظة</label>
                     <textarea
                     className="form-input"
-                    rows="10"
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    onClick={() => setDescriptionError()}
+                    rows="5"
+                    value={note}
+                    onChange={e => setNote(e.target.value)}
+                    onClick={() => setNoteError()}
                     >
                     </textarea>
-                    <span>{descriptionError}</span>
+                    <span>{noteError}</span>
                 </div>
 
             </div>
@@ -226,4 +175,4 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
 }
 
 
-export default ItemFormModal
+export default SupplierFormModal

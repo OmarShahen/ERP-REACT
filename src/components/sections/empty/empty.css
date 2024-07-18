@@ -20,4 +20,5 @@
 .empty-section-icon-container svg {
     font-size: 3rem;
     color: var(--dark-grey);
+    margin-left: .2rem;
 }

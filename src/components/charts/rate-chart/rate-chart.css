@@ -1,6 +1,5 @@
 .rate-chart-body-container {
-    display: grid;
-    grid-template-columns: 30% 70%;
+    
 }
 
 .rate-chart-score-container {
@@ -22,7 +21,7 @@
 
 .rate-chart-progress-container {
     display: grid;
-    grid-template-columns: 3fr 8fr 1fr;
+    grid-template-columns: 1fr 8fr 3fr;
     column-gap: .5rem;
     align-items: center;
     padding-bottom: .7rem;

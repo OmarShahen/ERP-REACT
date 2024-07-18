@@ -3,29 +3,38 @@ import './prescriptions.css'
 import { serverRequest } from "../components/API/request"
 import { useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast'
-import { isRolesValid } from '../utils/roles'
 import FiltersSection from '../components/sections/filters/filters'
 import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'
 import Card from '../components/cards/card'
 import { formatNumber } from '../utils/numbers'
 import PageHeader from '../components/sections/page-header'
 import LineChart from '../components/charts/line-chart/line-chart'
+import { format  } from 'date-fns'
+import RateChart from '../components/charts/rate-chart/rate-chart'
+import { useNavigate } from 'react-router-dom'
 
 
 const DashboardV2Page = ({ roles }) => {
 
+    const user = useSelector(state => state.user.user)
+    const navigate = useNavigate()
+
     const [stats, setStats] = useState()
-    const [statsQuery, setStatsQuery] = useState()
     const [reload, setReload] = useState(1)
 
-    const [customersGrowth, setCustomersGrowth] = useState([])
-    const [customersGroupBy, setCustomersGroupBy] = useState('MONTH')
+    const [ordersGrowth, setOrdersGrowth] = useState([])
+    const [ordersGroupBy, setOrdersGroupBy] = useState('MONTH')
 
-    const [itemsGrowth, setItemsGrowth] = useState([])
-    const [itemsGroupBy, setItemsGroupBy] = useState('MONTH')
+    const [itemsStats, setItemsStats] = useState([])
+
+    const todayDate = new Date()
+
+    const [statsQuery, setStatsQuery] = useState({ specific: format(todayDate, 'yyyy-MM-dd') })
 
     useEffect(() => { 
-        //scroll(0, 0)
+        scroll(0, 0)
+        roles.includes(user.type) ? null : navigate('/login')
     }, [])
 
     useEffect(() => { 
@@ -40,83 +49,87 @@ const DashboardV2Page = ({ roles }) => {
     }, [reload, statsQuery])
 
     useEffect(() => { 
-        serverRequest.get(`/v1/analytics/customers/growth` , { params: { ...statsQuery, groupBy: customersGroupBy } })
+        serverRequest.get(`/v1/analytics/orders/growth` , { params: { ...statsQuery, groupBy: ordersGroupBy } })
         .then(response => {
-            setCustomersGrowth(response.data.customersGrowth)
+            setOrdersGrowth(response.data.ordersGrowth)
         })
         .catch(error => {
             console.error(error)
             toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
         })
-    }, [reload, customersGroupBy])
+    }, [reload, ordersGroupBy])
 
     useEffect(() => { 
-        serverRequest.get(`/v1/analytics/items/growth` , { params: { ...statsQuery, groupBy: itemsGroupBy } })
+        serverRequest.get(`/v1/analytics/orders/items/quantity/stats` , { params: { ...statsQuery } })
         .then(response => {
-            setItemsGrowth(response.data.itemsGrowth)
+            setItemsStats(response.data.totalQuantityList)
         })
         .catch(error => {
             console.error(error)
             toast.error(error.response.data.message, { duration: 3000, position: 'top-right' })
         })
-    }, [reload, itemsGroupBy])
+    }, [reload, statsQuery])
+
+    const calculateTotal = (ratings) => {
+
+        let total = 0
+        for(let i=0;i<ratings.length;i++) {
+            total += ratings[i].count
+        }
+
+        return total
+    }
 
 
     return <div className="page-container page-white-background">
 
             <div className="padded-container">
                 <PageHeader 
-                pageName={'Dashboard'}
+                pageName={'لوحة التحكم'}
                 reload={reload}
                 setReload={setReload}
                 />
                 <FiltersSection 
                 setStatsQuery={setStatsQuery} 
                 statsQuery={statsQuery}
-                defaultValue={'LIFETIME'}
+                defaultValue={'0'}
                 />
                 <div className="cards-3-list-wrapper margin-top-1">
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Customers'}
-                    number={formatNumber(stats?.totalCustomers ? stats?.totalCustomers : 0)}
+                    cardHeader={'عدد المنتجات المباعة'}
+                    number={formatNumber(stats?.totalQuantity ? stats?.totalQuantity : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'اجمالي المدفوع'}
+                    number={`${formatNumber(stats?.totalPaid ? stats?.totalPaid : 0)} EGP`}
+                    isMoney={true}
                     iconColor={'#5C60F5'}
                     />
                     <Card 
                     icon={<NumbersOutlinedIcon />}
-                    cardHeader={'Items'}
-                    number={formatNumber(stats?.totalItems ? stats?.totalItems : 0)}
+                    cardHeader={'الطلبات'}
+                    number={formatNumber(stats?.totalOrders ? stats?.totalOrders : 0)}
                     iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'For Selling Items'}
-                    number={formatNumber(stats?.totalSellingItems ? stats?.totalSellingItems : 0)}
-                    iconColor={'#5C60F5'}
-                    />
-                    <Card 
-                    icon={<NumbersOutlinedIcon />}
-                    cardHeader={'For Renting Items'}
-                    number={formatNumber(stats?.totalRentingItems ? stats?.totalRentingItems : 0)}
-                    iconColor={'#5C60F5'}
-                    />
-                    
-                </div>
-                <div className="margin-top-1">
-                    <LineChart 
-                    title="Customers Growth"
-                    setGroupBy={setCustomersGroupBy}
-                    labels={customersGrowth.map(customer => customer._id)}
-                    data={customersGrowth.map(customer => customer.count)}
                     />
                 </div>
-                <div className="margin-top-1">
+                <div className="cards-2-list-wrapper-gap margin-top-1">
                     <LineChart 
-                    title="Items Growth"
-                    setGroupBy={setItemsGroupBy}
-                    labels={itemsGrowth.map(item => item._id)}
-                    data={itemsGrowth.map(item => item.count)}
+                    title="نمو الطلبات"
+                    setGroupBy={setOrdersGroupBy}
+                    labels={ordersGrowth.map(order => order._id)}
+                    data={ordersGrowth.map(order => order.count)}
                     />
+                    <div>
+                    <RateChart 
+                    title={'الاكثر مبيعا'}
+                    ratings={itemsStats}
+                    totalReviews={calculateTotal(itemsStats)}
+                    rateNameFunction={(item) => item.item.name}
+                    />
+                    </div>
                 </div>
         </div>
     </div>

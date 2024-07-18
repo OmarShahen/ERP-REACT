@@ -16,18 +16,18 @@ const EmptySection = ({ setIsShowForm, url }) => {
             <div className="empty-section-icon-container">
                 <InboxOutlinedIcon />
             </div>
-            <span>{translations[lang]['Oops! No results found']}</span>
+            <span>للاسف! لا يوجد نتائج</span>
         </div>
         {
             !url && !setIsShowForm ?
             null
             :
             <button 
-            className="normal-button white-text action-color-bg"
+            className="normal-button white-text action-color-bg right-direction"
             onClick={e => url ? navigate(url) : setIsShowForm(true)}
             >
                 <AddIcon />
-                Add New
+                    اضافة جديد
             </button>
         }
     </div>

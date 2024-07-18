@@ -18,7 +18,7 @@ const RateChart = ({ title, ratings=[], totalReviews=0, rateNameFunction }) => {
         return total
     }
 
-    const getAverageScore = (scores) => {
+    const getTotalCount = (scores) => {
         let total = 0
         for(let i=0;i<scores.length;i++) {
             total += (scores[i].count * scores[i]._id)
@@ -29,26 +29,26 @@ const RateChart = ({ title, ratings=[], totalReviews=0, rateNameFunction }) => {
 
 
     return <div className="card-container cards-white-bg disable-hover">
-        <div className="chart-header-container">
+        <div className="chart-header-container right-direction">
             <span>{title}</span>
         </div>
         <div className="rate-chart-body-container">
-            <div className="rate-chart-score-container">
+            {/*<div className="rate-chart-score-container">
                 <strong>
                     {
                         ratings.length === 0 ? 
                         0 
                         : 
-                        formatNumber(getAverageScore(ratings).toFixed(2))
+                        formatNumber(getTotalCount(ratings))
                     }
                 </strong>
-                <span>- of {formatNumber(totalReviews)} reviews</span>
-            </div>
+                <span>من {formatNumber(totalReviews)} طلب-</span>
+            </div>*/}
             <div>
                 {ratings.map(rate => <div className="rate-chart-progress-container">
-                    <span>{rateNameFunction ? rateNameFunction(rate._id) : rate._id}</span>
-                    <progress max={'100'} value={(rate.count / totalReviews) * 100}></progress>
                     <span>{rate.count}</span>
+                    <progress max={'100'} value={(rate.count / totalReviews) * 100}></progress>
+                    <span>{rateNameFunction ? rateNameFunction(rate) : rate._id}</span>
                 </div>)}
             </div>
         </div>

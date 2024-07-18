@@ -50,14 +50,13 @@ const MainLayout = () => {
              { 
              sidebar.isShowSidebar ? 
              <SideBar 
-             width={'18vw'}
              isHideText={false} 
              setHideSideBar={setHideSideBar}
              />
              : 
              null 
              }
-            <div className="page-main-container" style={sidebar.isShowSidebar ? { marginLeft: '19vw', paddingRight: '1rem' } : noSidebarStyle}>
+            <div className="page-main-container" style={sidebar.isShowSidebar ? { marginRight: '11vw', paddingLeft: '1rem' } : noSidebarStyle}>
                 <NavigationBar />
                 <Outlet />
                 <FooterSection />

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './modals.css'
 import translations from '../../i18n'
 import { useSelector } from 'react-redux'
+import CardTransition from '../transitions/card-transitions'
 
 
 const PickDateFormModal = ({ reload, setReload, setShowModalForm, setStatsQuery, setDatePeriod }) => {
@@ -54,6 +55,7 @@ const PickDateFormModal = ({ reload, setReload, setShowModalForm, setStatsQuery,
     }
 
     return <div className="modal">
+        <CardTransition>
         <div className="modal-container body-text">
             <div className="modal-header">
                 <h2>{translations[lang]['Pick Date']}</h2>
@@ -159,6 +161,7 @@ const PickDateFormModal = ({ reload, setReload, setShowModalForm, setStatsQuery,
                     </div>
             </div>
         </div>
+        </CardTransition>
     </div>
 }
 

@@ -3,13 +3,10 @@ import './modals.css'
 import { serverRequest } from '../API/request'
 import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
-import { useSelector } from 'react-redux'
-import translations from '../../i18n'
+import CardTransition from '../transitions/card-transitions'
 
 
 const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, isUpdate, setIsUpdate, specialty, setSpecialty, type }) => {
-
-    const lang = useSelector(state => state.lang.lang)
 
     const [isSubmit, setIsSubmit] = useState(false)
 
@@ -23,7 +20,7 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
     const handleSubmit = (e) => {
         e.preventDefault()
         
-        if(!name) return setNameError('Name is required')
+        if(!name) return setNameError('اسم الفئة مطلوب')
 
         //if(!imageURL) return setImageURLError('Image URL is required')
 
@@ -68,7 +65,7 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
     const handleUpdate = (e) => {
         e.preventDefault()
         
-        if(!name) return setNameError('Name is required')
+        if(!name) return setNameError('اسم الفئة مطلوب')
 
         //if(!imageURL) return setImageURLError('Image URL is required')
 
@@ -108,18 +105,20 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
     }
 
     return <div className="modal">
+        <CardTransition>
         <div className="modal-container body-text">
             <div className="modal-header">
-                <h2>{isUpdate ? 'Update Specialty' : 'Create Specialty'}</h2>
+                <h2>{isUpdate ? 'تحديث الفئة' : 'اضافة فئة'}</h2>
             </div>
             <div>
                 <div className="modal-body-container">
                     <form 
                     id="value-form" 
-                    className="modal-form-container responsive-form body-text" 
+                    className="modal-form-container responsive-form body-text right-direction" 
                     onSubmit={isUpdate ? handleUpdate : handleSubmit}>
+                        
                         <div className="form-input-container">
-                            <label>Name</label>
+                            <label>الاسم</label>
                             <input 
                             type="text"
                             className="form-input"
@@ -128,17 +127,6 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
                             value={name}
                             />
                             <span className="red">{nameError}</span>
-                        </div>
-                        <div className="form-input-container">
-                            <label>Image URL</label>
-                            <input 
-                            type="url"
-                            className="form-input"
-                            onClick={e => setImageURLError()}
-                            onChange={e => setImageURL(e.target.value)}
-                            value={imageURL}
-                            />
-                            <span className="red">{imageURLError}</span>
                         </div>
                     </form>
                 </div>
@@ -155,7 +143,7 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
                             <button
                             form="value-form"
                             className="normal-button white-text action-color-bg"
-                            >{isUpdate ? 'Update' : 'Create'}</button>
+                            >{isUpdate ? 'تحديث' : 'اضافة'}</button>
                         } 
                     </div>
                     <div>
@@ -167,11 +155,12 @@ const SpecialtyFormModal = ({ setShowFormModal, specialtyId, reload, setReload, 
                             setSpecialty ? setSpecialty() : null
                             setShowFormModal(false)
                         }}
-                        >{translations[lang]['Close']}</button>
+                        >الغاء</button>
                     </div>
                 </div>
             </div>            
         </div>
+        </CardTransition>
     </div>
 }
 

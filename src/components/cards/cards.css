@@ -277,6 +277,10 @@
     border-radius: 50%;
 }
 
+.card-details-container {
+    border-top: 1px solid var(--border-color);
+}
+
 .prescription-card-container {
     background-color: #FFF;
     border-radius: .25rem;

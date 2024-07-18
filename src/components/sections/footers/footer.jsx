@@ -26,7 +26,7 @@ const FooterSection = () => {
         <div className="copy-right-container">
             <CopyrightOutlinedIcon />
             <span>
-                2023 - Agile
+                2024 - Agile
             </span>
         </div>
     </div>

@@ -38,7 +38,7 @@ const LoginPage = () => {
         }
 
         setIsSubmit(true)
-        serverRequest.post('/v1/auth/employee/login', loginData)
+        serverRequest.post('/v1/auth/login', loginData)
         .then(response => {
             setIsSubmit(false)
             const data = response.data
@@ -47,7 +47,7 @@ const LoginPage = () => {
             const isLogged = true
             sessionStorage.setItem('user', JSON.stringify({ ...data.user, isLogged }))
             dispatch(setUser({ ...data.user, isLogged }))
-            return navigate('/dashboard')
+            return navigate(user.type === 'ADMIN' ? '/dashboard' : '/pos')
         })
         .catch(error => {
             setIsSubmit(false)
@@ -87,7 +87,7 @@ const LoginPage = () => {
                             <span className="red">{emailError}</span>
                         </div>
                         <div className="form-input-container">
-                            <div className="password-and-forgot-password-container">
+                            <div className="password-and-forgot-password-container right-direction">
                                 <label>{translations[lang]['Password']}</label>
                                 <NavLink to="/forgot-password" className="action-color-text bold-text">{translations[lang]['Forgot your password?']}</NavLink>
                             </div>
@@ -106,7 +106,7 @@ const LoginPage = () => {
                                     <TailSpin width="40" height="40" color="#4c83ee" />
                                 </div>
                                 :
-                                <input type="submit" className="action-color-bg white-text bold-text" value={translations[lang]["Continue"]} />
+                                <input type="submit" className="action-color-bg white-text bold-text" value={'تسجيل الدخول'} />
                             }
                         </div>
                     </div>

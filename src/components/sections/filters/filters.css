@@ -3,6 +3,7 @@
     grid-template-columns: auto auto auto auto;
     gap: 1rem;
     padding: 0 0 0rem 0;
+    direction: rtl;
 }
 
 .filters-section-container div label {

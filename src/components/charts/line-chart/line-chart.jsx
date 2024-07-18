@@ -8,16 +8,16 @@ import '../chart.css'
 const LineChart = ({ title, labels, data, setGroupBy  }) => {
 
     return <div style={{ maxWidth: '100%' }} className="card-container cards-white-bg disable-hover">
-        <div className="chart-header-container">
+        <div className="chart-header-container right-direction">
             <span>{title}</span>
             <div className="form-input-container">
                 <select 
                 className="form-input"
                 onChange={e => setGroupBy(e.target.value)}
                 >
-                    <option value="DAY">Day</option>
-                    <option selected value="MONTH">Month</option>
-                    <option value="YEAR">Year</option>
+                    <option value="DAY">يومي</option>
+                    <option selected value="MONTH">شهري</option>
+                    <option value="YEAR">سنوي</option>
                 </select>
             </div>
         </div>

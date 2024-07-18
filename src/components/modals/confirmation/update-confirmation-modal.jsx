@@ -2,24 +2,26 @@ import '../modals.css'
 import { TailSpin } from 'react-loader-spinner'
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined'
 import './confirmation-modal.css'
+import CardTransition from '../../transitions/card-transitions'
 
 
 const UpdateConfirmationModal = ({ target, isLoading, setIsShowModal, updateAction }) => {
 
     return <div className="modal">
+        <CardTransition>  
         <div className="confirmation-modal-container body-text">
             <div className="confirmation-modal-header">
                 <h3>
                     <CurrencyExchangeOutlinedIcon style={{ color: '#5c60f5'}} />
-                    Refund
+                    المرتجع
                 </h3>
             </div>  
             <div className="body-text confirmation-modal-body">
                 <p>
-                    You're about to refund payment #{target.paymentId}
+                أنت على وشك {target.isRefunded ? 'استرداد' : 'ارتجاع'} الطلب رقم <strong>{target.orderId}#</strong>
                 </p>
                 <p>
-                    If you're not sure, you can resolve or close it instead
+                    إذا لم تكن متأكدًا، يمكنك إغلاقها                   
                 </p>
             </div>    
             <div className="confirmation-modal-buttons-container">
@@ -29,17 +31,16 @@ const UpdateConfirmationModal = ({ target, isLoading, setIsShowModal, updateActi
                     :
                     <button 
                     className="button" 
-                    onClick={() => {
-                        updateAction(target.appointmentId)
-                    }}
-                    >Refund</button>
+                    onClick={updateAction}
+                    >تحديث</button>
                 }
                 <button 
                 className="button abort-button"
                 onClick={() => setIsShowModal(false)}
-                >Cancel</button>
+                >اغلاق</button>
             </div>          
         </div>
+        </CardTransition>
     </div>
 }
 

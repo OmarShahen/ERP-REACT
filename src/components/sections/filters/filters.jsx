@@ -111,12 +111,12 @@ const FiltersSection = ({ statsQuery, setStatsQuery, isShowUpcomingDates, defaul
     return <div className="filters-section-container">
         { isShowForm ? <PickDateFormModal setDatePeriod={setDatePeriod} setStatsQuery={setStatsQuery} setShowModalForm={setIsShowForm} /> : null }
         <div>
-            <label>{translations[lang]['Period']}</label>
+            <label>الفترة</label>
             <select
             className="form-input"
             onChange={e => getstatsDate(e.target.value)}
             >
-                <option selected disabled>{translations[lang]['Select Period']}</option>
+                <option selected disabled>اختر الفترة</option>
                 {selectOptions.map((option, index) => {
                     if(!isShowUpcomingDates && index <= 3) {
                         return
@@ -128,13 +128,13 @@ const FiltersSection = ({ statsQuery, setStatsQuery, isShowUpcomingDates, defaul
 
                     return <option value={option.value}>{translations[lang][option.name]}</option>
                 })}
-                <option value="CUSTOM">{translations[lang]['Custom']}</option>
+                <option value="CUSTOM">مخصص</option>
             </select>
         </div>
         {
             datePeriod === 'CUSTOM' && statsQuery?.from ?
             <div>
-                <label>{translations[lang]['From']}</label>
+                <label>من</label>
                 <input 
                 type="date" 
                 className="form-input"
@@ -151,7 +151,7 @@ const FiltersSection = ({ statsQuery, setStatsQuery, isShowUpcomingDates, defaul
         {
             datePeriod === 'CUSTOM' && statsQuery?.to ?
             <div>
-                <label>{translations[lang]['To']}</label>
+                <label>الي</label>
                 <input 
                 type="date" 
                 className="form-input"
@@ -168,7 +168,7 @@ const FiltersSection = ({ statsQuery, setStatsQuery, isShowUpcomingDates, defaul
         {
             datePeriod === 'CUSTOM' && statsQuery?.specific ?
             <div>
-                <label>{translations[lang]['Specific']}</label>
+                <label>محدد</label>
                 <input 
                 type="date" 
                 className="form-input"
@@ -184,7 +184,7 @@ const FiltersSection = ({ statsQuery, setStatsQuery, isShowUpcomingDates, defaul
         {
             datePeriod === 'CUSTOM' && statsQuery?.until ?
             <div>
-                <label>{translations[lang]['Until']}</label>
+                <label>حتي</label>
                 <input 
                 type="date" 
                 className="form-input"

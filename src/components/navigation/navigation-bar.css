@@ -1,6 +1,7 @@
 .navigation-bar-container {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     justify-content: space-between;
     padding: .5rem 0rem .5rem 0rem;
     border-bottom: 1px solid #eee;
@@ -54,7 +55,7 @@
 }
 
 .navigation-map-container span svg {
-    margin-right: .3rem;
+    margin-left: .3rem;
 }
 
 .navigation-map-container span svg:hover {
@@ -76,11 +77,12 @@
 .navigation-bar-options-container {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     justify-content: space-between;
 }
 
 .navigation-bar-options-container div {
-    margin-left: 1rem;
+    margin-right: 1rem;
     font-size: .9rem;
 }
 
@@ -128,7 +130,7 @@
 }
 
 .upgrade-btn svg {
-    margin-right: .2rem;
+    margin-left: 0rem;
     color: #4c83ee !important;
 }
 

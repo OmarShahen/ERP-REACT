@@ -37,7 +37,7 @@ const SpecialtyCard = ({
 
     const cardActionsList = [
         {
-            name: 'Delete Specialty',
+            name: 'مسح الفئة',
             icon: <DeleteOutlineOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
@@ -46,7 +46,7 @@ const SpecialtyCard = ({
             }
         },
         {
-            name: 'Update Specialty',
+            name: 'تحديث الفئة',
             icon: <CreateOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
@@ -56,7 +56,7 @@ const SpecialtyCard = ({
             }
         },
         {
-            name: specialty.isShow ? 'Hide Specialty' : 'Show Specialty',
+            name: specialty.isShow ? 'اخفاء الفئة' : 'اظهار الفئة',
             icon: <RemoveRedEyeOutlinedIcon />,
             onAction: (e) => {
                 e.stopPropagation()
@@ -67,29 +67,20 @@ const SpecialtyCard = ({
 
     return <CardTransition>
         <div 
-        onClick={() => navigate(`/specialties/${specialty._id}`)}
+        //onClick={() => navigate(`/specialties/${specialty._id}`)}
         className="patient-card-container body-text">
-            <div className="patient-card-header">
-                <div className="patient-image-info-container">
-                    <div>
-                        <strong>{specialty.name}</strong>
-                    </div>
-                </div>
+            <div className="patient-card-header left-direction">
+                <strong>{specialty.name}</strong>
                 <CardActions actions={cardActionsList} />
             </div>
             <div className="patient-card-body">
-                <ul>
-                    <li>
-                        <strong>Image</strong>
-                        <span>{specialty.imageURL ? textShortener(specialty.imageURL, 20) : 'Not registered'}</span>
-                    </li>
-                </ul>
-                <div className="flex margin-top-1">
+
+                <div className="flex left-direction">
                     {
                        specialty.isShow ?
-                       <span className="status-btn done bold-text">Visible</span> 
+                       <span className="status-btn done bold-text">ظاهر</span> 
                        :
-                       <span className="status-btn declined bold-text">Hidden</span>
+                       <span className="status-btn declined bold-text">مختفي</span>
                     }
                     <span></span>
                 </div>

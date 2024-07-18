@@ -4,19 +4,19 @@ import { serverRequest } from "../components/API/request"
 import PageHeader from '../components/sections/page-header'
 import CircularLoading from '../components/loadings/circular';
 import EmptySection from '../components/sections/empty/empty'
-import { isRolesValid } from '../utils/roles'
 import { useNavigate } from 'react-router-dom'
 import SpecialtyCard from '../components/cards/specialty'
-import { setIsShowModal } from '../redux/slices/modalSlice'
 import { toast } from 'react-hot-toast'
 import DeleteConfirmationModal from '../components/modals/confirmation/delete-confirmation-modal';
 import SpecialtyFormModal from '../components/modals/specialty-form';
 import FloatingButton from '../components/buttons/floating-button';
+import { useSelector } from 'react-redux'
 
 
 const SpecialtiesPage = ({ roles }) => {
 
     const navigate = useNavigate()
+    const user = useSelector(state => state.user.user)
 
     const [targetSpecialty, setTargetSpecialty] = useState({})
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
@@ -31,7 +31,7 @@ const SpecialtiesPage = ({ roles }) => {
 
     useEffect(() => { 
         scroll(0,0) 
-        //isRolesValid(user.roles, roles) ? null : navigate('/login')
+        roles.includes(user.type) ? null : navigate('/login')
     }, [])
 
     useEffect(() => {
@@ -100,11 +100,11 @@ const SpecialtiesPage = ({ roles }) => {
         
         <div className="padded-container">
             <PageHeader 
-            pageName={'Specialties'} 
+            pageName={'الفئات'} 
             setReload={setReload}
             reload={reload}
             totalNumber={specialties.length}
-            addBtnText={'Add Specialty'}
+            addBtnText={'اضافة فئة'}
             setShowModalForm={setShowModalForm}
             /> 
         
@@ -114,7 +114,7 @@ const SpecialtiesPage = ({ roles }) => {
                 <CircularLoading />
                 :
                 specialties.length !== 0 ?
-                <div className="cards-grey-container cards-3-list-wrapper">
+                <div className="cards-grey-container cards-3-list-wrapper right-direction">
                         {specialties.map(specialty => <SpecialtyCard 
                         specialty={specialty} 
                         reload={reload} 

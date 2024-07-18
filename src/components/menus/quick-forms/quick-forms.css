@@ -1,7 +1,7 @@
 .quick-form-menu-container {
     position: absolute;
     top: 2rem;
-    right: 0;
+    left: 0;
     background-color: #FFF;
     z-index: 1;
     border-radius: .25rem;
@@ -41,7 +41,7 @@
 .quick-form-list-container ul li svg {
     color: #4c83ee;
     font-size: 1.2rem;
-    margin-right: .4rem;
+    margin-left: .4rem;
 } 
 
 .quick-form-list-container ul li:hover {

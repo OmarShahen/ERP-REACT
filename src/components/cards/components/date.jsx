@@ -6,9 +6,9 @@ const CardDate = ({ creationDate, updateDate, isHideUpdate=false }) => {
 
     const lang = useSelector(state => state.lang.lang)
 
-    return <div className="card-date-container grey-text">
+    return <div className="card-date-container grey-text left-direction">
         <div>
-            <span>{lang === 'en' ? format(new Date(creationDate), 'dd MMM yyyy') : format(new Date(creationDate), 'MM/dd/yyyy') }</span>
+            <span>{format(new Date(creationDate), 'dd/MM/yyyy')}</span>
         </div>
         { lang === 'en' ?
             <div>

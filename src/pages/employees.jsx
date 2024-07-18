@@ -8,132 +8,104 @@ import EmptySection from '../components/sections/empty/empty'
 import SearchInput from '../components/inputs/search'
 import { useNavigate } from 'react-router-dom'
 import DeleteConfirmationModal from '../components/modals/confirmation/delete-confirmation-modal'
+import UserCard from '../components/cards/user'
 import { toast } from 'react-hot-toast'
-import ItemCard from '../components/cards/item'
-import ItemFormModal from '../components/modals/item-form'
+import EmployeeFormModal from '../components/modals/employee-form'
 import FloatingButton from '../components/buttons/floating-button'
-import StockRecordFormModal from '../components/modals/stock-record-form'
 
 
-const ItemsPage = ({ roles }) => {
+const EmployeesPage = ({ roles }) => {
 
     const navigate = useNavigate()
 
     const user = useSelector(state => state.user.user)
     
     const [isShowModal, setIsShowModal] = useState(false)
-    const [target, setTarget] = useState({})
+    const [targetUser, setTargetUser] = useState({})
 
     const [isUpdate, setIsUpdate] = useState(false)
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
-    const [isShowUpdateModal, setIsShowUpdateModal] = useState(false)
-
-    const [isShowStockOrderModal, setIsShowStockOrderModal] = useState(false)
 
     const [isDeleting, setIsDeleting] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [reload, setReload] = useState(1)
-    const [items, setItems] = useState([])
-    const [specialties, setSpecialties] = useState([])
-    const [totalItems, setTotalItems] = useState(0)
+    const [employees, setEmployees] = useState([])
 
-    const [searchName, setSearchName] = useState()
-    const [searchCategory, setSearchCategory] = useState()
 
     useEffect(() => {
         roles.includes(user.type) ? null : navigate('/login')
         scroll(0, 0)
     }, [])
 
-
     useEffect(() => {
-        serverRequest.get('/v1/specialities')
+
+        setIsLoading(true)
+        serverRequest.get(`/v1/employees`)
         .then(response => {
-            setSpecialties(response.data.specialities)
+            setIsLoading(false)
+            setEmployees(response.data.employees)
         })
         .catch(error => {
+            setIsLoading(false)
             console.error(error)
         })
     }, [reload])
 
-    useEffect(() => {
-
+    const searchEmployeesByName = (name) => {
         setIsLoading(true)
-        serverRequest.get(`/v1/items/search/name/category`, { params: { name: searchName, categoryId: searchCategory } })
+        serverRequest.get(`/v1/employees/name/search`, { params: { name } })
         .then(response => {
             setIsLoading(false)
-            setItems(response.data.items)
+            setEmployees(response.data.employees)
         })
         .catch(error => {
             setIsLoading(false)
             console.error(error)
         })
+    }
 
-    }, [searchCategory, searchName, reload])
-
-    const deleteItem = (itemId) => {
+    const deleteEmployee = (employeeId) => {
         setIsDeleting(true)
-        serverRequest.delete(`/v1/items/${itemId}`)
+        serverRequest.delete(`/v1/employees/${employeeId}`)
         .then(response => {
             setIsDeleting(false)
             setReload(reload + 1)
             setIsShowDeleteModal(false)
-            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            toast.success(response.data.message, { duration: 3000, position: 'top-left' })
         })
         .catch(error => {
             setIsDeleting(false)
             console.error(error)
-            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-left' })
         })
     }
 
-    const searchItems = (value) => {
-        if(!value) {
-            setSearchName()
-            setSearchCategory()
-            return
-        }
-       setSearchName(value)
-    }
 
     return <div className="page-container">
         {
             isShowDeleteModal ?
             <DeleteConfirmationModal 
-            id={target._id}
+            id={targetUser._id}
             isLoading={isDeleting}
             setIsShowModal={setIsShowDeleteModal}
-            deleteAction={deleteItem}
+            deleteAction={deleteEmployee}
             />
             :
             null
         }
-
         {
             isShowModal ?
-            <ItemFormModal
+            <EmployeeFormModal 
             reload={reload}
             setReload={setReload}
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
             setShowModalForm={setIsShowModal}
-            item={target}
+            employee={targetUser}
             />
             :
             null
         }
-        {
-            isShowStockOrderModal ?
-            <StockRecordFormModal
-            reload={reload}
-            setReload={setReload}
-            setShowModalForm={setIsShowStockOrderModal}
-            item={target}
-            />
-            :
-            null
-        }
-            
 
         <div className="show-mobile">
             <FloatingButton setIsShowForm={setIsShowModal} />
@@ -141,49 +113,33 @@ const ItemsPage = ({ roles }) => {
         
         <div className="padded-container">
             <PageHeader 
-            pageName={'المنتجات'} 
+            pageName={'الموظفين'} 
             reload={reload}
             setReload={setReload}
-            totalNumber={totalItems}
-            addBtnText={'اضافة منتج'}
+            addBtnText={'اضافة موظف'}
             setShowModalForm={setIsShowModal}
             />
             <div className="search-input-container">
-                    <SearchInput searchRows={searchItems} />
-                    <select
-                    className="form-input"
-                    onChange={e => {
-                        if(e.target.value === 'ALL') {
-                            setSearchCategory()
-                            setReload(reload + 1)
-                            return
-                        }
-
-                        setSearchCategory(e.target.value)
-                    }}
-                    >
-                        <option selected disabled>اختر الفئة</option>
-                        <option value={'ALL'}>الكل</option>
-                        {specialties.map(category => <option value={category._id}>{category.name}</option>)}
-                    </select>
+                <SearchInput searchRows={searchEmployeesByName} />
             </div>
+            
             {
                 isLoading ?
                 <CircularLoading />
                 :
-                items.length !== 0 ?
+                employees.length !== 0 ?
                 <div className="cards-grey-container cards-3-list-wrapper right-direction">
-                    {items.map(item =><ItemCard 
-                    item={item} 
+                    {employees.map(user =><UserCard 
+                    user={user} 
                     setReload={setReload} 
                     reload={reload} 
-                    setTarget={setTarget}
+                    setTargetUser={setTargetUser}
+                    setIsShowUpdateModal={setIsShowModal}
                     setIsUpdate={setIsUpdate}
                     setIsShowDeleteModal={setIsShowDeleteModal}
-                    setIsShowUpdateModal={setIsShowModal}
-                    setIsShowStockOrderModal={setIsShowStockOrderModal}
                     />)}
                 </div>
+                    
                 :
                 <EmptySection setIsShowForm={setIsShowModal} />
             }
@@ -192,4 +148,4 @@ const ItemsPage = ({ roles }) => {
     </div>
 }
 
-export default ItemsPage
+export default EmployeesPage

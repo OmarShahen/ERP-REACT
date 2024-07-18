@@ -1,163 +1,128 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import './sidebar.css'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
 import { motion, AnimatePresence } from "framer-motion";
 import logoImage from '../../assets/memories.png'
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
-import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined'
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
-import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined'
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined'
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined'
-import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined'
-import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined'
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
-import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined'
-import CarRepairOutlinedIcon from '@mui/icons-material/CarRepairOutlined'
+import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined'
+import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined'
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
+import { setIsLogged } from '../../redux/slices/userSlice'
+import TurnedInNotOutlinedIcon from '@mui/icons-material/TurnedInNotOutlined'
+import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined'
 
 
-const SideBar = ({ width, isHideText, setHideSideBar }) => {
+const SideBar = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const user = useSelector(state => state.user.user)
     
 
-    return <div className="side-bar-container body-text" style={{ width }}>
+    return <div className="side-bar-container body-text">
         <AnimatePresence>
       <motion.div
         className="sidebar"
-        initial={{ x: "-100%" }}
+        initial={{ x: "100%" }}
         animate={{ x: 0 }}
-        exit={{ x: "-100%" }}
+        exit={{ x: "100%" }}
         transition={{ duration: 0.3 }}
       >
         <div className="side-bar-arrow-container show-mobile">
             <span onClick={e => dispatch(setIsShowSidebar(false))}>
-                <ArrowBackIcon />
+                <ArrowForwardIcon />
             </span>
         </div>
         <div className="center side-bar-logo-container">
             <img src={logoImage} />
         </div>
-        <ul>
-            <ul className="nav-nested-list-container">
+        <ul className="nav-nested-list-container">
+            {
+                user.type === 'ADMIN' ?
                 <li>
                     <div>
                         <NavLink to="/dashboard">
                             <InsertChartOutlinedIcon />
-                            Dashboard
+                            لوحة التحكم
                         </NavLink>
                     </div>
                 </li>
-                {/*<li>
-                    <div>
-                        <NavLink to="/payments">
-                            <PaymentOutlinedIcon />
-                            Payments
-                        </NavLink>
-                    </div>
-                </li>
+                :
+                null
+            }
+            <li>
+                <div>
+                    <NavLink to="/pos">
+                        <PointOfSaleOutlinedIcon />
+                        نقطة البيع
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <NavLink to="/orders">
+                        <ReceiptOutlinedIcon />
+                        الطلبات
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <NavLink to="/items">
+                        <CakeOutlinedIcon />
+                        المنتجات
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <NavLink to="/stock-records">
+                        <InventoryOutlinedIcon />
+                        حركة المخزن
+                    </NavLink>
+                </div>
+            </li>
+            {
+                user.type === 'ADMIN' ?
                 <li>
                     <div>
-                        <NavLink to="/appointments">
-                        <CalendarMonthOutlinedIcon />
-                        Appointments
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/users/seekers">
-                        <PersonOutlineOutlinedIcon />
-                        Seekers
-                        </NavLink>
-                    </div>
-                </li>*/}
-                <li>
-                    <div>
-                        <NavLink to="/brands">
-                            <AddBusinessOutlinedIcon />
-                            Brands
-                        </NavLink>
-                    </div>
-                </li>
-                {/*<li>
-                    <div>
-                        <NavLink to="/users/experts">
+                        <NavLink to="/employees">
                             <BadgeOutlinedIcon />
-                            Experts
-                        </NavLink>
-                    </div>
-                </li>*/}
-                <li>
-                    <div>
-                        <NavLink to="/customers">
-                            <BadgeOutlinedIcon />
-                            Customers
+                            الموظفين
                         </NavLink>
                     </div>
                 </li>
-                <li>
-                    <div>
-                        <NavLink to="/items">
-                            <CarRepairOutlinedIcon />
-                            Items
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/specialties">
-                            <CategoryOutlinedIcon />
-                            Specialties
-                        </NavLink>
-                    </div>
-                </li>
-                {/*<li>
-                    <div>
-                        <NavLink to="/reviews">
-                            <MapsUgcOutlinedIcon />
-                            Reviews
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/experts-verifications">
-                            <VerifiedOutlinedIcon />
-                            Verifications
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/promo-codes">
-                            <LoyaltyOutlinedIcon />
-                            Coupons
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/questions">
-                            <ContactSupportOutlinedIcon />
-                            Questions
-                        </NavLink>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <NavLink to="/settings">
-                            <SettingsOutlinedIcon />
-                            Settings
-                        </NavLink>
-                    </div>
-</li>*/}
-            </ul>
+                :
+                null
+            }
+            <li>
+                <div>
+                    <NavLink to="/specialties">
+                        <TurnedInNotOutlinedIcon />
+                        الفئات
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <NavLink to="/" 
+                    onClick={e => {
+                        e.preventDefault()
+                        sessionStorage.setItem('user', null)
+                        dispatch(setIsLogged(false))
+                        navigate('/login')
+                    }}>
+                        <LogoutOutlinedIcon />
+                        الخروج
+                    </NavLink>
+                </div>
+            </li>
+            
         </ul>
     </motion.div>
     </AnimatePresence>

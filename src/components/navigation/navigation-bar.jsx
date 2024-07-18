@@ -4,27 +4,14 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuOpenIcon from '@mui/icons-material/MenuOpen'
-import UserProfileMenu from '../menus/profile/profile'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import QuickFormMenu from '../menus/quick-forms/quick-forms'
-import AppointmentFormModal from '../modals/appointment-form'
-import InvoiceFormModal from '../modals/invoice-form'
-import InsurancePolicyFormModal from '../modals/insurance-policy-form'
-import InsuranceFormModal from '../modals/insurance-form'
-import CommentFormModal from '../modals/comment-form'
-import LeadFormModal from '../modals/lead-form'
-import MeetingFormModal from '../modals/meeting-form'
-import StageFormModal from '../modals/stage-form'
-import MessageTemplateFormModal from '../modals/message-template-form'
-import ValueFormModal from '../modals/value-form'
+import ItemFormModal from '../modals/item-form'
 import { serverRequest } from '../API/request'
-import { setValues } from '../../redux/slices/valueSlice'
-import { setMessagesTemplates } from '../../redux/slices/messageTemplateSlice'
-import { toast } from 'react-hot-toast'
-import OpeningTimeFormModal from '../modals/opening-time-form'
+import { setItems } from '../../redux/slices/itemSlice'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -38,18 +25,8 @@ const NavigationBar = ({ pageName }) => {
     const [showUserProfileMenu, setShowUserProfileMenu] = useState(false)
     const [showQuickActionsForm, setShowQuickActionsForm] = useState(false)
 
-    const [isShowAppointmentsForm, setIsShowAppointmentsForm] = useState(false)
-    const [showInvoiceForm, setShowInvoiceForm] = useState(false)
-    const [isShowEmergencyContactsForm, setIsShowEmergencyContactsForm] = useState(false)
-    const [isShowInsurancePolicy, setIsShowInsurancePolicy] = useState(false)
-    const [isShowInsuranceCompanyForm, setIsShowInsuranceCompanyForm] = useState(false)
-    const [isShowCommentForm, setIsShowCommentForm] = useState(false)
-    const [isShowLeadForm, setIsShowLeadForm] = useState(false)
-    const [isShowMeetingForm, setIsShowMeetingForm] = useState(false)
-    const [isShowStageForm, setIsShowStageForm] = useState(false)
-    const [isShowMessageTemplateForm, setIsShowMessageTemplateForm] = useState(false)
-    const [isShowValuesForm, setIsShowValuesForm] = useState(false)
-    const [isShowOpeningTime, setIsShowOpeningTime] = useState(false)
+
+    const [isShowItemsForm, setIsShowItemsForm] = useState(false)
 
 
     useEffect(() => {
@@ -65,14 +42,24 @@ const NavigationBar = ({ pageName }) => {
 
     }, [user.isLogged])
 
+    useEffect(() => {
+        serverRequest.get('/v1/all/items')
+        .then(response => {
+            dispatch(setItems({ items: response.data.items }))
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }, [])
+
 
     return <div>
         <div className="navigation-bar-container body-text">
             <div className="navigation-map-container">
+            <span>{`${user.firstName}`}</span>
                     <span onClick={e => dispatch(setIsShowSidebar(!sidebar.isShowSidebar))}>
                         <MenuOpenIcon />
                     </span>
-                <span>{`${user.firstName}`}</span>
             </div>
             
             <div className="navigation-bar-options-container">
@@ -82,13 +69,13 @@ const NavigationBar = ({ pageName }) => {
                     className="upgrade-btn"
                     onClick={e => setShowQuickActionsForm(!showQuickActionsForm)}
                     >
+                        اضافة
                         <AddOutlinedIcon />
-                        Create
                     </button>
                     { 
                         showQuickActionsForm ? 
                         <QuickFormMenu 
-                        setShowAppointmentForm={setIsShowAppointmentsForm}
+                        setIsShowItemsForm={setIsShowItemsForm}
                         setShowEmergencyContactForm={setIsShowEmergencyContactsForm}
                         setShowInsurancePoliciesForm={setIsShowInsurancePolicy}
                         setShowInvoiceForm={setShowInvoiceForm}
@@ -108,88 +95,26 @@ const NavigationBar = ({ pageName }) => {
                 </div>
                    
                 <div className="show-large">
-                    <NavLink to="/settings/profile">
+                    <NavLink>
                         <SettingsOutlinedIcon />
                     </NavLink>
                 </div>
                 <div className="show-large">
                     <NotificationsNoneOutlinedIcon />
                 </div>
-                <div className="user-profile-container">
+                <div className="user-profile-container show-large">
                     <span onClick={e => setShowUserProfileMenu(!showUserProfileMenu)}>
                         <AccountCircleIcon />
                     </span>
-                    { showUserProfileMenu ? <UserProfileMenu user={user} /> : null }
                 </div>
             </div>
         </div>
         { 
-            isShowAppointmentsForm ? 
-            <AppointmentFormModal setShowFormModal={setIsShowAppointmentsForm} />
+            isShowItemsForm ? 
+            <ItemFormModal setShowModalForm={setIsShowItemsForm} />
              : 
              null 
         }
-        { 
-            showInvoiceForm ? 
-            <InvoiceFormModal setShowModalForm={setShowInvoiceForm} /> 
-            : 
-            null 
-        }
-        {
-            isShowInsurancePolicy ?
-            <InsurancePolicyFormModal setShowFormModal={setIsShowInsurancePolicy} />
-            :
-            null
-        }
-        {
-            isShowInsuranceCompanyForm ?
-            <InsuranceFormModal setShowFormModal={setIsShowInsuranceCompanyForm} />
-            :
-            null
-        }
-        {
-            isShowCommentForm ?
-            <CommentFormModal setShowModalForm={setIsShowCommentForm} />
-            :
-            null
-        }
-        {
-            isShowLeadForm ?
-            <LeadFormModal setShowModalForm={setIsShowLeadForm} />
-            :
-            null
-        }
-        {
-            isShowMeetingForm ?
-            <MeetingFormModal setShowFormModal={setIsShowMeetingForm} />
-            :
-            null
-        }
-        {
-            isShowStageForm ?
-            <StageFormModal setShowFormModal={setIsShowStageForm} />
-            :
-            null
-        }
-        {
-            isShowMessageTemplateForm ?
-            <MessageTemplateFormModal setShowFormModal={setIsShowMessageTemplateForm} />
-            :
-            null
-        }
-        {
-            isShowValuesForm ?
-            <ValueFormModal setShowFormModal={setIsShowValuesForm} />
-            :
-            null
-        }
-        {
-            isShowOpeningTime ?
-            <OpeningTimeFormModal setShowFormModal={setIsShowOpeningTime} />
-            :
-            null
-        }
-
     </div>
 }
 

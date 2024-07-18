@@ -5,6 +5,7 @@
 .page-header-container {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     justify-content: space-between;
     padding: 0 0 0 0;
 }
@@ -47,7 +48,7 @@
 }
 
 .page-header-container .btns-container button svg, .action-button svg {
-    margin-right: .5rem;
+    margin-left: .5rem;
     font-size: 1.2rem;
 }
 
@@ -95,6 +96,7 @@
 .back-button-container {
     display: flex;
     align-items: center;
+    flex-direction: row-reverse;
     color: #4c83ee;
 }
 
@@ -125,7 +127,7 @@
     font-size: 1rem;
     padding: .3rem .6rem;
     border-radius: .3215rem;
-    margin-left: .5rem;
+    margin-right: .5rem;
     font-weight: 700;
 }
 
@@ -149,7 +151,7 @@
     }
 
     .page-header-container div h1 {
-        font-size: 1.2rem;
+        font-size: 1.7rem;
     }
     
   }

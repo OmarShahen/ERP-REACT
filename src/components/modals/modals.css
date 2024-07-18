@@ -24,6 +24,7 @@
 
 .modal-header {
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
     border-bottom: 2px solid var(--border-color);
