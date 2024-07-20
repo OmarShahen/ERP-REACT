@@ -63,6 +63,7 @@ const ItemsPage = ({ roles }) => {
         .then(response => {
             setIsLoading(false)
             setItems(response.data.items)
+            setTotalItems(response.data.totalItems)
         })
         .catch(error => {
             setIsLoading(false)

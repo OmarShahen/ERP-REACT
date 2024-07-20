@@ -12,8 +12,6 @@ import Receipt from '../components/receipt/receipt';
 import POSItemCard from '../components/cards/pos-item';
 import { useSelector } from 'react-redux';
 import BarcodeScanner from '../components/scanners/Barcode';
-import { render, Printer, Text } from 'react-thermal-printer'
-import { printReceipt } from '../components/printer/printer'
 
 
 const POSPage = ({ roles }) => {
@@ -118,9 +116,6 @@ const POSPage = ({ roles }) => {
 
     }
 
-    const testPrint = async () => {
-        printReceipt('Omar is here')
-    }
 
     return <div className="page-container">
         <div className="padded-container pos-layout">
@@ -139,7 +134,6 @@ const POSPage = ({ roles }) => {
             setReload={setReload}
             reload={reload}
             /> 
-            <button className="normal-button" onClick={testPrint}>Print</button>
         
             <div className="search-input-container">
                     <SearchInput searchRows={searchItems} />

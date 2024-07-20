@@ -30,6 +30,7 @@ const EmployeesPage = ({ roles }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [reload, setReload] = useState(1)
     const [employees, setEmployees] = useState([])
+    const [totalEmployees, setTotalEmployees] = useState(0)
 
 
     useEffect(() => {
@@ -43,6 +44,7 @@ const EmployeesPage = ({ roles }) => {
         serverRequest.get(`/v1/employees`)
         .then(response => {
             setIsLoading(false)
+            setTotalEmployees(response.data.totalEmployees)
             setEmployees(response.data.employees)
         })
         .catch(error => {
@@ -118,6 +120,7 @@ const EmployeesPage = ({ roles }) => {
             setReload={setReload}
             addBtnText={'اضافة موظف'}
             setShowModalForm={setIsShowModal}
+            totalNumber={totalEmployees}
             />
             <div className="search-input-container">
                 <SearchInput searchRows={searchEmployeesByName} />
