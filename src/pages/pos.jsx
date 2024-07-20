@@ -13,7 +13,8 @@ import POSItemCard from '../components/cards/pos-item';
 import { useSelector } from 'react-redux';
 import BarcodeScanner from '../components/scanners/Barcode';
 import { render, Printer, Text } from 'react-thermal-printer'
-import { printReceipt } from '../components/printer/printer'
+import PrintReceipt from '../components/printer/printer';
+//import { printReceipt } from '../components/printer/printer'
 
 
 const POSPage = ({ roles }) => {
@@ -118,8 +119,20 @@ const POSPage = ({ roles }) => {
 
     }
 
-    const testPrint = async () => {
+    /*const testPrint = async () => {
         printReceipt('Omar is here')
+    }*/
+
+    const printReceipt = (items, total) => {
+        const printWindow = window.open('', 'Print', 'height=400,width=600');
+        const printContent = (
+            <PrintReceipt />
+        );
+        ReactDOM.render(printContent, printWindow.document.body);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
 
     return <div className="page-container">
@@ -139,7 +152,7 @@ const POSPage = ({ roles }) => {
             setReload={setReload}
             reload={reload}
             /> 
-            <button className="normal-button" onClick={testPrint}>Print</button>
+            <button className="normal-button" onClick={printReceipt}>Print</button>
         
             <div className="search-input-container">
                     <SearchInput searchRows={searchItems} />
