@@ -107,8 +107,14 @@ const OrdersPage = ({ roles }) => {
     }
 
     const updateOrderRefunding = (orderId, isRefunded) => {
+
+        const refundData = { isRefunded }
+        if(isRefunded) {
+            refundData.refunderId = user._id
+        }
+
         setIsUpdating(true)
-        serverRequest.patch(`/v1/orders/${orderId}/refunding`, { isRefunded })
+        serverRequest.patch(`/v1/orders/${orderId}/refunding`, refundData)
         .then(response => {
             setIsUpdating(false)
             setReload(reload + 1)

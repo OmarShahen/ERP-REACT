@@ -7,6 +7,7 @@ import { formatNumber } from '../../utils/numbers'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../transitions/card-transitions'
 import { useSelector } from 'react-redux'
+import { format } from 'date-fns'
 
 
 const OrderCard = ({ 
@@ -87,8 +88,31 @@ const OrderCard = ({
                     <span className="bold-text">{formatNumber(order.totalPrice)} EGP</span>
                </li>
                {
+                isShowItems && order.isRefunded ?
+                <div className="card-details-container margin-top-1">
+                    <div className="margin-top-1">
+                        <strong>الارتجاع</strong>
+                    </div>
+                        <ul className="margin-top-1">
+                            <li>
+                                <span>المرجع</span>
+                                <span>{order.refunder ? order?.refunder?.firstName : 'غير مسجل'}</span>
+                            </li>
+                            <li>
+                                <span>التاريخ</span>
+                                <span>{order.refundDate ? format(new Date(order.refundDate), 'hh:mm a yyyy/MM/dd') : 'غير مسجل'}</span>
+                            </li>
+                        </ul>
+               </div>
+                :
+                null
+               }
+               {
                 isShowItems && order.items && order.items.lenght !== 0 ?
                 <div className="card-details-container margin-top-1">
+                    <div className="margin-top-1">
+                        <strong>المنتجات</strong>
+                    </div>
                         <ul className="margin-top-1">
                             {order?.items.map(item => <li>
                                 <span>{item.name} ({item.quantity} {item.quantity === 1 ? 'قطعة' : 'قطع'})</span>
