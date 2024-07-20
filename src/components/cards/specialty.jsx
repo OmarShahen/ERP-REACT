@@ -73,18 +73,6 @@ const SpecialtyCard = ({
                 <strong>{specialty.name}</strong>
                 <CardActions actions={cardActionsList} />
             </div>
-            <div className="patient-card-body">
-
-                <div className="flex left-direction">
-                    {
-                       specialty.isShow ?
-                       <span className="status-btn done bold-text">ظاهر</span> 
-                       :
-                       <span className="status-btn declined bold-text">مختفي</span>
-                    }
-                    <span></span>
-                </div>
-            </div>
             <CardDate 
             creationDate={specialty.createdAt}  
             updateDate={specialty.updatedAt} 

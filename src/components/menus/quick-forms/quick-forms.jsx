@@ -4,15 +4,13 @@ import translations from '../../../i18n'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
 import ReceiptOutlinedIcon from '@mui/icons-material/ReceiptOutlined'
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined'
-import TurnedInNotOutlinedIcon from '@mui/icons-material/TurnedInNotOutlined'
 import { useNavigate } from 'react-router-dom'
+import TurnedInNotOutlinedIcon from '@mui/icons-material/TurnedInNotOutlined'
 
 
 const QuickFormMenu = ({ 
     setIsShowItemsForm,
-    setIsShowMeetingForm,
-    setIsShowStageForm,
-    setIsShowOpeningTime
+    setIsShowSpecialityForm
 }) => {
 
     const user = useSelector(state => state.user.user)
@@ -36,6 +34,10 @@ const QuickFormMenu = ({
                     <CakeOutlinedIcon />
                 </li>
                    
+                <li onClick={() => setIsShowSpecialityForm(true)}>
+                    <span>الفئات</span>
+                    <TurnedInNotOutlinedIcon />
+                </li>
             </ul>
         </div>
     </div>

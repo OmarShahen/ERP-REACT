@@ -12,6 +12,7 @@ import QuickFormMenu from '../menus/quick-forms/quick-forms'
 import ItemFormModal from '../modals/item-form'
 import { serverRequest } from '../API/request'
 import { setItems } from '../../redux/slices/itemSlice'
+import SpecialtyFormModal from '../modals/specialty-form'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -27,6 +28,7 @@ const NavigationBar = ({ pageName }) => {
 
 
     const [isShowItemsForm, setIsShowItemsForm] = useState(false)
+    const [isShowSpecialityForm, setIsShowSpecialityForm] = useState(false)
 
 
     useEffect(() => {
@@ -76,18 +78,8 @@ const NavigationBar = ({ pageName }) => {
                         showQuickActionsForm ? 
                         <QuickFormMenu 
                         setIsShowItemsForm={setIsShowItemsForm}
-                        setShowEmergencyContactForm={setIsShowEmergencyContactsForm}
-                        setShowInsurancePoliciesForm={setIsShowInsurancePolicy}
-                        setShowInvoiceForm={setShowInvoiceForm}
                         setShowMenu={setShowQuickActionsForm}
-                        setIsShowInsuranceCompanyForm={setIsShowInsuranceCompanyForm}
-                        setIsShowCommentForm={setIsShowCommentForm}
-                        setIsShowLeadForm={setIsShowLeadForm}
-                        setIsShowMeetingForm={setIsShowMeetingForm}
-                        setIsShowStageForm={setIsShowStageForm}
-                        setIsShowMessageTemplateForm={setIsShowMessageTemplateForm}
-                        setIsShowValuesForm={setIsShowValuesForm}
-                        setIsShowOpeningTime={setIsShowOpeningTime}
+                        setIsShowSpecialityForm={setIsShowSpecialityForm}
                         /> 
                         : 
                         null 
@@ -112,6 +104,12 @@ const NavigationBar = ({ pageName }) => {
         { 
             isShowItemsForm ? 
             <ItemFormModal setShowModalForm={setIsShowItemsForm} />
+             : 
+             null 
+        }
+        { 
+            isShowSpecialityForm ? 
+            <SpecialtyFormModal setShowFormModal={setIsShowSpecialityForm} type={'MAIN'} />
              : 
              null 
         }

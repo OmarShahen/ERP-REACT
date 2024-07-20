@@ -25,6 +25,8 @@ const POSPage = ({ roles }) => {
     const [isUpdate, setIsUpdate] = useState(false)
     const [target, setTarget] = useState()
 
+    const [barcode, setBarcode] = useState('')
+
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmit, setIsSubmit] = useState(false)
 
@@ -119,13 +121,15 @@ const POSPage = ({ roles }) => {
 
     return <div className="page-container">
         <div className="padded-container pos-layout">
-            <div className="cards-grey-container margin-top-1">
-                <Receipt 
-                orderItems={orderItems}
-                setOrderItems={setOrderItems} 
-                onSubmit={onOrderSubmit}
-                isSubmit={isSubmit}
-                />
+            <div className="margin-top-1">
+                <div className="cards-grey-container">
+                    <Receipt 
+                    orderItems={orderItems}
+                    setOrderItems={setOrderItems} 
+                    onSubmit={onOrderSubmit}
+                    isSubmit={isSubmit}
+                    />
+                </div>
             </div>
             <div>
 
@@ -136,7 +140,7 @@ const POSPage = ({ roles }) => {
             /> 
         
             <div className="search-input-container">
-                    <SearchInput searchRows={searchItems} />
+                    <SearchInput searchRows={searchItems} />        
                     <select
                     className="form-input"
                     onChange={e => {
@@ -157,6 +161,8 @@ const POSPage = ({ roles }) => {
                     setOrderItems={setOrderItems}
                     orderItems={orderItems}
                     inputRef={inputRef}
+                    barcode={barcode}
+                    setBarcode={setBarcode}
                     />
             </div>
 
