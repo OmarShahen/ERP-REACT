@@ -159,7 +159,7 @@ const StockRecordFormModal = ({ reload, setReload, setShowModalForm, isUpdate, s
                     <div className="form-input-container">
                         <label>اجمالي السعر</label>
                         <input 
-                        type="number" 
+                        type="text"
                         className="form-input" 
                         placeholder=""
                         value={totalPrice}

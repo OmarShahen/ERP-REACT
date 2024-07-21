@@ -10,6 +10,7 @@ import { formatNumber } from '../../utils/numbers'
 import BakeryDiningOutlinedIcon from '@mui/icons-material/BakeryDiningOutlined'
 import { toast } from 'react-hot-toast'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
 
 
 const POSItemCard = ({ 
@@ -44,8 +45,9 @@ const POSItemCard = ({
             <strong>{formatNumber(item.price)} EGP</strong>
         </div>
       </div>
-      <div className="flex left-direction">
-        <span className="status-btn done bold-text">{item?.category?.name}</span>
+      <div className="flex-space-between-center margin-top-1">
+      <strong className="status-btn grey-bg flex-space-between-center">{item.stock === 0 ? 'لا يوجد' : item.stock !== 1 ? `${item.stock} قطعة` : `${item.stock} قطع`}</strong>
+        <span className="status-btn pending bold-text">{item?.category?.name}</span>
       </div>
     </div>
     </CardTransition>

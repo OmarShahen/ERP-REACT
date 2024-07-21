@@ -15,7 +15,6 @@ import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
 
 
-
 const NavigationBar = ({ pageName }) => {
 
     const navigate = useNavigate()
@@ -104,6 +103,26 @@ const NavigationBar = ({ pageName }) => {
                             اغلاق الوردية
                             <ManageHistoryOutlinedIcon />
                         </button>
+=======
+                
+                <div className="quick-form-container">
+                    <button 
+                    className="upgrade-btn"
+                    onClick={e => setShowQuickActionsForm(!showQuickActionsForm)}
+                    >
+                        اضافة
+                        <AddOutlinedIcon />
+                    </button>
+                    { 
+                        showQuickActionsForm ? 
+                        <QuickFormMenu 
+                        setIsShowItemsForm={setIsShowItemsForm}
+                        setShowMenu={setShowQuickActionsForm}
+                        setIsShowSpecialityForm={setIsShowSpecialityForm}
+                        /> 
+                        : 
+                        null 
+>>>>>>> 1e608cef0694a48c73bfb7027a3fd25515cfd86e
                     }
                     
                 </div>
@@ -136,6 +155,12 @@ const NavigationBar = ({ pageName }) => {
             />
             :
             null
+        }
+        { 
+        isShowSpecialityForm ? 
+            <SpecialtyFormModal setShowFormModal={setIsShowSpecialityForm} type={'MAIN'} />
+            : 
+            null 
         }
     </div>
 }

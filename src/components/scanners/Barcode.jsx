@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux'
 import { toast } from 'react-hot-toast' 
 
 
-const BarcodeScanner = ({ orderItems, setOrderItems, inputRef }) => {
-
-  const [barcode, setBarcode] = useState('')
+const BarcodeScanner = ({ orderItems, setOrderItems, inputRef, barcode, setBarcode }) => {
 
   const items = useSelector(state => state.items.items)
 
@@ -22,7 +20,11 @@ const BarcodeScanner = ({ orderItems, setOrderItems, inputRef }) => {
     if (event.key === 'Enter') {
       const targetItemList = items.filter(item => item.barcode === barcode)
       if(targetItemList.length === 0) {
-        return toast.error('المنتج غير مسجل', { duration: 3000, position: 'top-left' })
+        toast.error('المنتج غير مسجل', { duration: 3000, position: 'top-left' })
+        setBarcode('')
+        inputRef.current.focus()
+        inputRef.current.reset
+        return
       }
 
       const item = targetItemList[0]
@@ -30,6 +32,7 @@ const BarcodeScanner = ({ orderItems, setOrderItems, inputRef }) => {
       setOrderItems([ ...orderItems, { ...item, quantity: 1 } ])
       setBarcode('')
       inputRef.current.focus()
+      inputRef.current.reset
     }
   }
 

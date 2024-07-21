@@ -114,6 +114,53 @@ const DashboardV2Page = ({ roles }) => {
                     number={formatNumber(stats?.totalOrders ? stats?.totalOrders : 0)}
                     iconColor={'#5C60F5'}
                     />
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'معاملات الايرادات'}
+                    number={formatNumber(stats?.totalRevenueRecords ? stats?.totalRevenueRecords : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'معاملات المصاريف'}
+                    number={formatNumber(stats?.totalExpensesRecords ? stats?.totalExpensesRecords : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'حركة المخزن'}
+                    number={formatNumber(stats?.totalStockRecords ? stats?.totalStockRecords : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'اجمالي المصاريف'}
+                    number={`${formatNumber(stats?.totalExpenses ? stats?.totalExpenses : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'اجمالي الايرادات'}
+                    number={`${formatNumber(stats?.totalRevenue ? stats?.totalRevenue : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'صافي الربح'}
+                    number={`${formatNumber(stats?.netProfit ? stats?.netProfit : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'قيمة المخزن الحالي'}
+                    number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
                 </div>
                 <div className="cards-2-list-wrapper-gap margin-top-1">
                     <LineChart 

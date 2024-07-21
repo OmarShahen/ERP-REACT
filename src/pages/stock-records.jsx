@@ -177,10 +177,11 @@ const StockRecordsPage = ({ roles }) => {
                 iconColor={'#5C60F5'}
                 />
                 <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'المعاملات'}
-                number={formatNumber(stats?.totalStockRecords ? stats?.totalStockRecords : 0)}
+                icon={<PaidOutlinedIcon />}
+                cardHeader={'قيمة المخزن الحالي'}
+                number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
                 iconColor={'#5C60F5'}
+                isMoney={true}
                 />
                 <Card 
                 icon={<PaidOutlinedIcon />}
