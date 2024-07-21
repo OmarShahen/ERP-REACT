@@ -15,6 +15,7 @@ import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined'
+import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined'
 
 
 const SideBar = () => {
@@ -84,6 +85,14 @@ const SideBar = () => {
                     <NavLink to="/stock-records">
                         <InventoryOutlinedIcon />
                         حركة المخزن
+                    </NavLink>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <NavLink to="/shifts">
+                        <ManageHistoryOutlinedIcon />
+                        الورديات
                     </NavLink>
                 </div>
             </li>

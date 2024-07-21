@@ -156,6 +156,7 @@
     border-bottom: 3px solid #2a7ade;
   }
 
+
   @media only screen and (max-width: 900px) {
     .mini-page-navigator-container ul li a {
         color: #000;

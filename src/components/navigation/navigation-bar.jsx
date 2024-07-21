@@ -7,26 +7,30 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { setIsShowSidebar } from '../../redux/slices/sidebarSlice'
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
-import QuickFormMenu from '../menus/quick-forms/quick-forms'
-import ItemFormModal from '../modals/item-form'
 import { serverRequest } from '../API/request'
 import { setItems } from '../../redux/slices/itemSlice'
+import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined'
+import ShiftFormModal from '../modals/shift-form'
+import { toast } from 'react-hot-toast'
+import { TailSpin } from 'react-loader-spinner'
+
 
 
 const NavigationBar = ({ pageName }) => {
 
     const navigate = useNavigate()
     const user = useSelector(state => state.user.user)
-    const lang = useSelector(state => state.lang.lang)
     const sidebar = useSelector(state => state.sidebar)
     const dispatch = useDispatch()
 
     const [showUserProfileMenu, setShowUserProfileMenu] = useState(false)
-    const [showQuickActionsForm, setShowQuickActionsForm] = useState(false)
 
+    const [isShowShiftModal, setIsShowShiftModal] = useState(false)
+    const [isShiftActive, setIsShiftActive] = useState(false)
 
-    const [isShowItemsForm, setIsShowItemsForm] = useState(false)
+    const [isShiftLoading, setIsShiftLoading] = useState(true)
+    const [activeShift, setActiveShift] = useState()
+    const [shiftReload, setShiftReload] = useState(1)
 
 
     useEffect(() => {
@@ -52,6 +56,23 @@ const NavigationBar = ({ pageName }) => {
         })
     }, [])
 
+    useEffect(() => {
+        if(user.type === 'ADMIN') {
+            return
+        }
+        setIsShiftLoading(true)
+        serverRequest.get(`/v1/shifts/cashiers/${user._id}/active`)
+        .then(response => {
+            setIsShiftLoading(false)
+            setIsShiftActive(response.data.isActive)
+            setActiveShift(response.data.shift)
+        })
+        .catch(error => {
+            setIsShiftLoading(false)
+            console.error(error)
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+        })
+    }, [shiftReload])
 
     return <div>
         <div className="navigation-bar-container body-text">
@@ -63,36 +84,31 @@ const NavigationBar = ({ pageName }) => {
             </div>
             
             <div className="navigation-bar-options-container">
-                
-                <div className="quick-form-container">
-                    <button 
-                    className="upgrade-btn"
-                    onClick={e => setShowQuickActionsForm(!showQuickActionsForm)}
-                    >
-                        اضافة
-                        <AddOutlinedIcon />
-                    </button>
-                    { 
-                        showQuickActionsForm ? 
-                        <QuickFormMenu 
-                        setIsShowItemsForm={setIsShowItemsForm}
-                        setShowEmergencyContactForm={setIsShowEmergencyContactsForm}
-                        setShowInsurancePoliciesForm={setIsShowInsurancePolicy}
-                        setShowInvoiceForm={setShowInvoiceForm}
-                        setShowMenu={setShowQuickActionsForm}
-                        setIsShowInsuranceCompanyForm={setIsShowInsuranceCompanyForm}
-                        setIsShowCommentForm={setIsShowCommentForm}
-                        setIsShowLeadForm={setIsShowLeadForm}
-                        setIsShowMeetingForm={setIsShowMeetingForm}
-                        setIsShowStageForm={setIsShowStageForm}
-                        setIsShowMessageTemplateForm={setIsShowMessageTemplateForm}
-                        setIsShowValuesForm={setIsShowValuesForm}
-                        setIsShowOpeningTime={setIsShowOpeningTime}
-                        /> 
-                        : 
-                        null 
+
+               {
+                user.type === 'ADMIN' ?
+                null
+                :
+                <div>
+                    {
+                        isShiftLoading ?
+                        <TailSpin width="17" height="17" color="#4c83ee" />
+                        :
+                        !isShiftActive ? 
+                        <button onClick={() => setIsShowShiftModal(true)} className="normal-button action-color-bg white-text shift-button">
+                            بدء الوردية
+                            <ManageHistoryOutlinedIcon />
+                        </button>
+                        :
+                        <button onClick={() => setIsShowShiftModal(true)} className="normal-button red-bg white-text shift-button">
+                            اغلاق الوردية
+                            <ManageHistoryOutlinedIcon />
+                        </button>
                     }
+                    
                 </div>
+               } 
+                
                    
                 <div className="show-large">
                     <NavLink>
@@ -109,11 +125,17 @@ const NavigationBar = ({ pageName }) => {
                 </div>
             </div>
         </div>
-        { 
-            isShowItemsForm ? 
-            <ItemFormModal setShowModalForm={setIsShowItemsForm} />
-             : 
-             null 
+        {
+            isShowShiftModal ?
+            <ShiftFormModal 
+            setShowModalForm={setIsShowShiftModal} 
+            isDone={!isShiftActive} 
+            activeShift={activeShift}
+            reload={shiftReload}
+            setReload={setShiftReload}
+            />
+            :
+            null
         }
     </div>
 }

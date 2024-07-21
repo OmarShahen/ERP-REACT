@@ -4,6 +4,7 @@ import '../../cards/cards.css'
 import '../chart.css'
 import './rate-chart.css'
 import { formatNumber } from '../../../utils/numbers'
+import EmptySection from '../../sections/empty/empty'
 
 
 const RateChart = ({ title, ratings=[], totalReviews=0, rateNameFunction }) => {
@@ -45,11 +46,16 @@ const RateChart = ({ title, ratings=[], totalReviews=0, rateNameFunction }) => {
                 <span>من {formatNumber(totalReviews)} طلب-</span>
             </div>*/}
             <div>
-                {ratings.map(rate => <div className="rate-chart-progress-container">
-                    <span>{rate.count}</span>
-                    <progress max={'100'} value={(rate.count / totalReviews) * 100}></progress>
-                    <span>{rateNameFunction ? rateNameFunction(rate) : rate._id}</span>
-                </div>)}
+                {
+                    ratings.length === 0 ?
+                    <EmptySection />
+                    :
+                    ratings.map(rate => <div className="rate-chart-progress-container">
+                        <span>{rate.count}</span>
+                        <progress max={'100'} value={(rate.count / totalReviews) * 100}></progress>
+                        <span>{rateNameFunction ? rateNameFunction(rate) : rate._id}</span>
+                    </div>)
+                }
             </div>
         </div>
     </div>

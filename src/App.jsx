@@ -15,6 +15,7 @@ import OrdersPage from './pages/orders'
 import EmployeesPage from './pages/employees'
 import SuppliersPage from './pages/suppliers'
 import StockRecordsPage from './pages/stock-records'
+import ShiftsPage from './pages/shifts'
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/pos" element={<POSPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/employees" element={<EmployeesPage roles={['ADMIN']} />} />
             <Route path="/suppliers" element={<SuppliersPage roles={['ADMIN']} />} />
+            <Route path="/shifts" element={<ShiftsPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/orders" element={<OrdersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/items" element={<ItemsPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/stock-records" element={<StockRecordsPage roles={['ADMIN', 'EMPLOYEE']} />} />
