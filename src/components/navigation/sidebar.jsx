@@ -122,7 +122,7 @@ const SideBar = () => {
                     <NavLink to="/" 
                     onClick={e => {
                         e.preventDefault()
-                        sessionStorage.setItem('user', null)
+                        localStorage.setItem('user', null)
                         dispatch(setIsLogged(false))
                         navigate('/login')
                     }}>

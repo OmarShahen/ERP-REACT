@@ -13,6 +13,8 @@ import ManageHistoryOutlinedIcon from '@mui/icons-material/ManageHistoryOutlined
 import ShiftFormModal from '../modals/shift-form'
 import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
+import CachedIcon from '@mui/icons-material/Cached'
+import WifiIcon from '@mui/icons-material/Wifi'
 
 
 const NavigationBar = ({ pageName }) => {
@@ -24,12 +26,16 @@ const NavigationBar = ({ pageName }) => {
 
     const [showUserProfileMenu, setShowUserProfileMenu] = useState(false)
 
+    const [isOnline, setIsOnline] = useState(navigator.onLine)
+
     const [isShowShiftModal, setIsShowShiftModal] = useState(false)
     const [isShiftActive, setIsShiftActive] = useState(false)
 
     const [isShiftLoading, setIsShiftLoading] = useState(true)
     const [activeShift, setActiveShift] = useState()
     const [shiftReload, setShiftReload] = useState(1)
+
+    const [syncItems, setSyncItems] = useState(1)
 
 
     useEffect(() => {
@@ -49,11 +55,15 @@ const NavigationBar = ({ pageName }) => {
         serverRequest.get('/v1/all/items')
         .then(response => {
             dispatch(setItems({ items: response.data.items }))
+            if(syncItems !== 1) {
+                toast.success('تم تحديث المنتجات بنجاح', { duration: 3000, position: 'top-left' })
+            }
+            
         })
         .catch(error => {
             console.error(error)
         })
-    }, [])
+    }, [syncItems])
 
     useEffect(() => {
         if(user.type === 'ADMIN') {
@@ -72,6 +82,23 @@ const NavigationBar = ({ pageName }) => {
             toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
         })
     }, [shiftReload])
+
+    const updateOnlineStatus = () => {
+        setIsOnline(navigator.onLine)
+        if(!navigator.onLine) {
+            toast.error('أنت غير متصل بالإنترنت', { duration: 3000, position:'top-left' })
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('online', updateOnlineStatus)
+        window.addEventListener('offline', updateOnlineStatus)
+    
+        return () => {
+          window.removeEventListener('online', updateOnlineStatus)
+          window.removeEventListener('offline', updateOnlineStatus)
+        }
+    }, [])
 
     return <div>
         <div className="navigation-bar-container body-text">
@@ -103,36 +130,22 @@ const NavigationBar = ({ pageName }) => {
                             اغلاق الوردية
                             <ManageHistoryOutlinedIcon />
                         </button>
-=======
                 
-                <div className="quick-form-container">
-                    <button 
-                    className="upgrade-btn"
-                    onClick={e => setShowQuickActionsForm(!showQuickActionsForm)}
-                    >
-                        اضافة
-                        <AddOutlinedIcon />
-                    </button>
-                    { 
-                        showQuickActionsForm ? 
-                        <QuickFormMenu 
-                        setIsShowItemsForm={setIsShowItemsForm}
-                        setShowMenu={setShowQuickActionsForm}
-                        setIsShowSpecialityForm={setIsShowSpecialityForm}
-                        /> 
-                        : 
-                        null 
->>>>>>> 1e608cef0694a48c73bfb7027a3fd25515cfd86e
                     }
-                    
-                </div>
-               } 
+                </div> 
+                }
                 
                    
                 <div className="show-large">
-                    <NavLink>
-                        <SettingsOutlinedIcon />
-                    </NavLink>
+                    <a onClick={e => {
+                        e.preventDefault()
+                        setSyncItems(syncItems + 1)
+                    }}>
+                        <CachedIcon />
+                    </a>
+                </div>
+                <div className="show-large">
+                    <WifiIcon  style={isOnline ? { color: '#2193B0' } : { color: '#DE350B' }} />
                 </div>
                 <div className="show-large">
                     <NotificationsNoneOutlinedIcon />
@@ -155,12 +168,6 @@ const NavigationBar = ({ pageName }) => {
             />
             :
             null
-        }
-        { 
-        isShowSpecialityForm ? 
-            <SpecialtyFormModal setShowFormModal={setIsShowSpecialityForm} type={'MAIN'} />
-            : 
-            null 
         }
     </div>
 }

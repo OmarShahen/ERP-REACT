@@ -41,7 +41,8 @@ const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit }) => {
                             onClick={() => {
                                 setOrderItems(orderItems.map(orderItem => {
                                     if(orderItem._id === item._id) {
-                                        const newOrderItem = { ...item, quantity: item.quantity + 1 }
+                                        const addValue = item.quantity < 1 ? 0.1 : 1
+                                        const newOrderItem = { ...item, quantity: Number.parseFloat((item.quantity + addValue).toFixed(2)) }
                                         return newOrderItem
                                     }
 
@@ -55,8 +56,9 @@ const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit }) => {
                             <span
                             onClick={() => {
                                 setOrderItems(orderItems.map(orderItem => {
-                                    if(orderItem._id === item._id && item.quantity !== 1) {
-                                        const newOrderItem = { ...item, quantity: item.quantity - 1 }
+                                    if(orderItem._id === item._id && item.quantity !== 0.1) {
+                                        const subtractValue = item.quantity <= 1 ? 0.1 : 1
+                                        const newOrderItem = { ...item, quantity: Number.parseFloat((item.quantity - subtractValue).toFixed(2)) }
                                         return newOrderItem
                                     }
 

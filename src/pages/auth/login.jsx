@@ -45,7 +45,7 @@ const LoginPage = () => {
             let user = data.user
             user.accessToken = data.token
             const isLogged = true
-            sessionStorage.setItem('user', JSON.stringify({ ...data.user, isLogged }))
+            localStorage.setItem('user', JSON.stringify({ ...data.user, isLogged }))
             dispatch(setUser({ ...data.user, isLogged }))
             return navigate(user.type === 'ADMIN' ? '/dashboard' : '/pos')
         })

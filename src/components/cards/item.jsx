@@ -65,25 +65,35 @@ const ItemCard = ({
             <strong>{item.name}</strong>
             <CardActions actions={cardActionsList} />
         </div>
-        <div className="patient-card-body">
+        <div className="patient-card-body item-card-body-container">
             <ul>
                 <li>
-                    <span>#{item?.itemId}</span>
                     <strong>الرقم</strong>
 
+                    <span>#{item?.itemId}</span>
                 </li>
                 <li>
-                    <span>{item.barcode ? item.barcode : 'غير مسجل'}</span>
-                    <strong>الباركود</strong>
+                    <strong>وحدة الحفظ</strong>
+                    <span>{item.sku ? item.sku : 'غير مسجل'}</span>
 
                 </li>
                 <li>
-                    <span>{formatNumber(item.stock ? item.stock : 0)}</span>
-                    <strong>الكمية</strong>
+                    <strong>الباركود</strong>
+                    <span>{item.barcode ? item.barcode : 'غير مسجل'}</span>
+
                 </li>
                 <li>
-                    <span>{formatNumber(item?.price)} EGP</span>
+                    <strong>الكمية الحالية</strong>
+                    <span>{formatNumber(item.stock ? item.stock : 0)}</span>
+                </li>
+                <li>
+                    <strong>مستوي اعادة الطلب</strong>
+                    <span>{formatNumber(item.reorderLevel ? item.reorderLevel : 0)}</span>
+                </li>
+                <li>
                     <strong>السعر</strong>
+                    <span>{formatNumber(item?.price)} EGP</span>
+
                 </li>
             </ul>
             <div className="flex left-direction margin-top-1">

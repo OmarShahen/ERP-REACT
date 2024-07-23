@@ -12,7 +12,6 @@ import { isRolesValid } from '../utils/roles'
 import DeleteConfirmationModal from '../components/modals/confirmation/delete-confirmation-modal'
 import UpdateConfirmationModal from '../components/modals/confirmation/update-confirmation-modal'
 import { toast } from 'react-hot-toast'
-import OrderCard from '../components/cards/order'
 import { format  } from 'date-fns'
 import { formatNumber } from '../utils/numbers'
 import StockRecordCard from '../components/cards/stock-record'
@@ -47,7 +46,7 @@ const StockRecordsPage = ({ roles }) => {
     const [targetItem, setTargetItem] = useState()
     const [targetItemError, setTargetItemError] = useState()
 
-    const [targetUser, setTargetUser] = useState()
+    const [targetUser, setTargetUser] = useState(user.type !== 'ADMIN' ? user._id : null)
 
     const [employees, setEmployees] = useState([])
     const [cashierId, setCashierId] = useState()
@@ -90,6 +89,9 @@ const StockRecordsPage = ({ roles }) => {
     }, [reload, statsQuery, targetItem, targetUser, targetType])
 
     useEffect(() => {
+        if(user.type !== 'ADMIN') {
+            return
+        }
         serverRequest.get(`/v1/analytics/stock-records/stats`, { params: { ...statsQuery } })
         .then(response => {
             setStats(response.data)
@@ -100,6 +102,9 @@ const StockRecordsPage = ({ roles }) => {
     }, [reload, statsQuery])
 
     useEffect(() => {
+        if(user.type !== 'ADMIN') {
+            return
+        }
         serverRequest.get(`/v1/employees`)
         .then(response => {
             setEmployees(response.data.employees)
@@ -110,9 +115,9 @@ const StockRecordsPage = ({ roles }) => {
     }, [])
 
 
-    const deleteOrder = (orderId) => {
+    const deleteStockRecord = (stockRecordId) => {
         setIsDeleting(true)
-        serverRequest.delete(`/v1/orders/${orderId}`)
+        serverRequest.delete(`/v1/stock-records/${stockRecordId}`)
         .then(response => {
             setIsDeleting(false)
             setReload(reload + 1)
@@ -133,7 +138,7 @@ const StockRecordsPage = ({ roles }) => {
             id={target._id}
             isLoading={isDeleting}
             setIsShowModal={setIsShowDeleteModal}
-            deleteAction={deleteOrder}
+            deleteAction={deleteStockRecord}
             />
             :
             null
@@ -153,7 +158,7 @@ const StockRecordsPage = ({ roles }) => {
 
         <div className="padded-container">
             <PageHeader 
-            pageName={'المخزن'} 
+            pageName={'حركة المخزن'} 
             reload={reload}
             setReload={setReload}
             totalNumber={totalStockRecords}
@@ -163,48 +168,54 @@ const StockRecordsPage = ({ roles }) => {
             statsQuery={statsQuery}
             defaultValue={'0'}
             />
-           <div className="cards-3-list-wrapper margin-top-1">
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'معاملات المصاريف'}
-                number={formatNumber(stats?.totalExpensesRecords ? stats?.totalExpensesRecords : 0)}
-                iconColor={'#5C60F5'}
-                />
-                <Card 
-                icon={<NumbersOutlinedIcon />}
-                cardHeader={'معاملات الايرادات'}
-                number={formatNumber(stats?.totalRevenueRecords ? stats?.totalRevenueRecords : 0)}
-                iconColor={'#5C60F5'}
-                />
-                <Card 
-                icon={<PaidOutlinedIcon />}
-                cardHeader={'قيمة المخزن الحالي'}
-                number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
-                iconColor={'#5C60F5'}
-                isMoney={true}
-                />
-                <Card 
-                icon={<PaidOutlinedIcon />}
-                cardHeader={'اجمالي المصاريف'}
-                number={`${formatNumber(stats?.totalExpenses ? stats?.totalExpenses : 0)} EGP`}
-                iconColor={'#5C60F5'}
-                isMoney={true}
-                />
-                <Card 
-                icon={<PaidOutlinedIcon />}
-                cardHeader={'اجمالي الايرادات'}
-                number={`${formatNumber(stats?.totalRevenue ? stats?.totalRevenue : 0)} EGP`}
-                iconColor={'#5C60F5'}
-                isMoney={true}
-                />
-                <Card 
-                icon={<PaidOutlinedIcon />}
-                cardHeader={'صافي الربح'}
-                number={`${formatNumber(stats?.netProfit ? stats?.netProfit : 0)} EGP`}
-                iconColor={'#5C60F5'}
-                isMoney={true}
-                />
+            {
+                user.type === 'ADMIN' ?
+                <div className="cards-3-list-wrapper margin-top-1">
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'معاملات المصاريف'}
+                    number={formatNumber(stats?.totalExpensesRecords ? stats?.totalExpensesRecords : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<NumbersOutlinedIcon />}
+                    cardHeader={'معاملات الايرادات'}
+                    number={formatNumber(stats?.totalRevenueRecords ? stats?.totalRevenueRecords : 0)}
+                    iconColor={'#5C60F5'}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'قيمة المخزن الحالي'}
+                    number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'اجمالي المصاريف'}
+                    number={`${formatNumber(stats?.totalExpenses ? stats?.totalExpenses : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'اجمالي الايرادات'}
+                    number={`${formatNumber(stats?.totalRevenue ? stats?.totalRevenue : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
+                    <Card 
+                    icon={<PaidOutlinedIcon />}
+                    cardHeader={'صافي الربح'}
+                    number={`${formatNumber(stats?.netProfit ? stats?.netProfit : 0)} EGP`}
+                    iconColor={'#5C60F5'}
+                    isMoney={true}
+                    />
                 </div>
+                :
+                null
+            }
+           
             <div className="search-input-container">
                 <SearchItemsInputField
                 placeholder={'ابحث في المنتجات'}
@@ -212,23 +223,29 @@ const StockRecordsPage = ({ roles }) => {
                 setTargetItemError={setTargetItemError}
                 targetItemError={targetItemError}
                 />
-                <select
-                className="form-input"
-                onChange={e => {
-                    const value = e.target.value
+                {
+                    user.type === 'ADMIN' ?
+                    <select
+                    className="form-input"
+                    onChange={e => {
+                        const value = e.target.value
 
-                    if(value === 'ALL') {
-                        setTargetUser()
-                        return
-                    }
+                        if(value === 'ALL') {
+                            setTargetUser()
+                            return
+                        }
 
-                    setTargetUser(value)
-                }}
-                >
-                    <option disabled selected>اختر المسجل</option>
-                    <option value={'ALL'}>الكل</option>
-                    {employees.map(employee => <option value={employee._id}>{employee.firstName}</option>)}
-                </select>
+                        setTargetUser(value)
+                    }}
+                    >
+                        <option disabled selected>اختر المسجل</option>
+                        <option value={'ALL'}>الكل</option>
+                        {employees.map(employee => <option value={employee._id}>{employee.firstName}</option>)}
+                    </select>
+                    :
+                    null
+                }
+                
                 <select
                 className="form-input"
                 onChange={e => {

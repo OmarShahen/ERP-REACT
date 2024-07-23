@@ -54,14 +54,6 @@ const SpecialtyCard = ({
                 setIsUpdate(true)
                 setIsShowForm(true)
             }
-        },
-        {
-            name: specialty.isShow ? 'اخفاء الفئة' : 'اظهار الفئة',
-            icon: <RemoveRedEyeOutlinedIcon />,
-            onAction: (e) => {
-                e.stopPropagation()
-                updateShow(specialty.isShow ? false : true)
-            }
         }
      ]
 

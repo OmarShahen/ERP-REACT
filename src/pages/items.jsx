@@ -40,6 +40,13 @@ const ItemsPage = ({ roles }) => {
     const [searchName, setSearchName] = useState()
     const [searchCategory, setSearchCategory] = useState()
 
+    const [status, setStatus] = useState()
+
+    const statusList = [
+        { name: 'نقص في الكمية', value: 'SHORTAGE' },
+        { name: 'الكمية كافية', value: 'SUFFICIENT' }
+    ]
+
     useEffect(() => {
         roles.includes(user.type) ? null : navigate('/login')
         scroll(0, 0)
@@ -59,7 +66,7 @@ const ItemsPage = ({ roles }) => {
     useEffect(() => {
 
         setIsLoading(true)
-        serverRequest.get(`/v1/items/search/name/category`, { params: { name: searchName, categoryId: searchCategory } })
+        serverRequest.get(`/v1/items/search/name/category`, { params: { name: searchName, categoryId: searchCategory, status } })
         .then(response => {
             setIsLoading(false)
             setItems(response.data.items)
@@ -70,7 +77,7 @@ const ItemsPage = ({ roles }) => {
             console.error(error)
         })
 
-    }, [searchCategory, searchName, reload])
+    }, [searchCategory, searchName, reload, status])
 
     const deleteItem = (itemId) => {
         setIsDeleting(true)
@@ -79,12 +86,12 @@ const ItemsPage = ({ roles }) => {
             setIsDeleting(false)
             setReload(reload + 1)
             setIsShowDeleteModal(false)
-            toast.success(response.data.message, { duration: 3000, position: 'top-right' })
+            toast.success(response.data.message, { duration: 3000, position: 'top-left' })
         })
         .catch(error => {
             setIsDeleting(false)
             console.error(error)
-            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
+            toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-left' })
         })
     }
 
@@ -166,6 +173,24 @@ const ItemsPage = ({ roles }) => {
                         <option selected disabled>اختر الفئة</option>
                         <option value={'ALL'}>الكل</option>
                         {specialties.map(category => <option value={category._id}>{category.name}</option>)}
+                    </select>
+
+                    <select
+                    className="form-input"
+                    onChange={e => {
+                        const value = e.target.value
+
+                        if(value === 'ALL') {
+                            setStatus()
+                            return
+                        }
+
+                        setStatus(value)
+                    }}
+                    >
+                        <option disabled selected>اختر الحالة</option>
+                        <option value={'ALL'}>الكل</option>
+                        {statusList.map(status => <option value={status.value}>{status.name}</option>)}
                     </select>
             </div>
             {

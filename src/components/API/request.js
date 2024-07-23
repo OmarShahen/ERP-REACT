@@ -2,10 +2,10 @@ import axios from 'axios'
 import { store } from '../../redux/store'
 
 const DEV_URL = 'http://localhost:5007/api'
-const PROD_URL = 'https://us-central1-ra-aya.cloudfunctions.net/app/api'
+const PROD_URL = 'https://us-central1-agile-erp-d452c.cloudfunctions.net/app/api'
 
 export const serverRequest = axios.create({
-    baseURL: DEV_URL
+    baseURL: PROD_URL
 })
 
 serverRequest.interceptors.request.use(config => {

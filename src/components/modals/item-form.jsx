@@ -5,7 +5,6 @@ import { toast } from 'react-hot-toast'
 import { TailSpin } from 'react-loader-spinner'
 import CardTransition from '../transitions/card-transitions'
 
-
 const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpdate, item }) => {
 
     const [isSubmit, setIsSubmit] = useState(false)
@@ -17,6 +16,8 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
     const [price, setPrice] = useState(isUpdate ? item.price : '')
     const [barcode, setBarcode] = useState(isUpdate ? item.barcode : '')
     const [description, setDescription] = useState(isUpdate ? item.description : '')
+    const [sku, setSku] = useState(isUpdate ? item.sku : '')
+    const [reorderLevel, setReorderLevel] = useState(isUpdate ? item.reorderLevel : 0)
 
     
     const [nameError, setNameError] = useState()
@@ -24,6 +25,8 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
     const [priceError, setPriceError] = useState()
     const [barcodeError, setBarcodeError] = useState()
     const [descriptionError, setDescriptionError] = useState()
+    const [skuError, setSkuError] = useState()
+    const [reorderLevelError, setReorderLevelError] = useState()
     
     useEffect(() => {
         serverRequest.get(`/v1/specialities`)
@@ -36,7 +39,6 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
     }, [])
 
 
-
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -46,12 +48,15 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
 
         if(!price) return setPriceError('السعر مطلوب')
 
+        if(reorderLevel !== 0 && !reorderLevel) return setReorderLevelError('مستوى إعادة الطلب مطلوب') 
 
         const itemData = {
             name,
+            sku,
             categoryId,
             price: Number.parseFloat(price),
             barcode,
+            reorderLevel: Number.parseFloat(reorderLevel),
             description
         }
 
@@ -84,11 +89,15 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
 
         if(!price) return setPriceError('السعر مطلوب')
 
+        if(reorderLevel !== 0 && !reorderLevel) return setReorderLevelError('مستوى إعادة الطلب مطلوب') 
+
         const itemData = {
             name,
+            sku,
             categoryId,
             price: Number.parseFloat(price),
             barcode,
+            reorderLevel: Number.parseFloat(reorderLevel),
             description
         }
 
@@ -159,7 +168,6 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         />
                         <span className="red">{nameError}</span>
                     </div>
-                    
                                
                     <div className="form-input-container">
                         <label>*السعر</label>
@@ -173,6 +181,18 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         <span className="red">{priceError}</span>
                     </div>
                     <div className="form-input-container">
+                        <label>وحدة حفظ المخزون</label>
+                        <input
+                        type="text"
+                        className="form-input"
+                        onChange={e => setSku(e.target.value)}
+                        onClick={() => setSkuError()}
+                        value={sku}
+                        />
+                        <span className="red">{skuError}</span>
+                    </div>
+                    
+                    <div className="form-input-container">
                         <label>باركود</label>
                         <input
                         type="text"
@@ -182,6 +202,17 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
                         value={barcode}
                         />
                         <span className="red">{barcodeError}</span>
+                    </div>
+                    <div className="form-input-container">
+                        <label>مستوى إعادة الطلب</label>
+                        <input
+                        type="number"
+                        className="form-input"
+                        onChange={e => setReorderLevel(e.target.value)}
+                        onClick={() => setReorderLevelError()}
+                        value={reorderLevel}
+                        />
+                        <span className="red">{reorderLevelError}</span>
                     </div>
                 </form>
                 <div className="form-input-container">

@@ -27,6 +27,15 @@ const BarcodeScanner = ({ orderItems, setOrderItems, inputRef, barcode, setBarco
         return
       }
 
+      const registeredItems = orderItems.filter(orderItem => orderItem.barcode === barcode)
+      if(registeredItems.length !== 0) {
+        toast.error('المنتج مسجل مسبقا', { duration: 3000, position: 'top-left' })
+        setBarcode('')
+        inputRef.current.focus()
+        inputRef.current.reset
+        return
+      }
+
       const item = targetItemList[0]
 
       setOrderItems([ ...orderItems, { ...item, quantity: 1 } ])

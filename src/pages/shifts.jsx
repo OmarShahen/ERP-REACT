@@ -83,7 +83,7 @@ const ShiftsPage = ({ roles }) => {
         if(user.type !== 'ADMIN') {
             return
         }
-        serverRequest.get(`/v1/shifts/stats`, { params: { ...statsQuery } })
+        serverRequest.get(`/v1/analytics/shifts/stats`, { params: { ...statsQuery } })
         .then(response => {
             setStats(response.data)
         })

@@ -6,6 +6,7 @@ import CardTransition from '../transitions/card-transitions'
 import { format } from 'date-fns'
 import { formatNumber } from '../../utils/numbers'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 
 const ShiftCard = ({ 
@@ -15,6 +16,8 @@ const ShiftCard = ({
 }) => {
 
     const user = useSelector(state => state.user.user)
+
+    const navigate = useNavigate()
 
     const cardActionsList = [
         {
@@ -30,7 +33,10 @@ const ShiftCard = ({
 
 
     return <CardTransition>
-    <div className="patient-card-container body-text">
+    <div 
+    className="patient-card-container body-text"
+    onClick={() => navigate(`/shifts/${shift._id}`)}
+    >
         <div className="patient-card-header left-direction">
             <div className="patient-image-info-container">
                 <div>

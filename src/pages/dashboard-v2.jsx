@@ -101,20 +101,20 @@ const DashboardV2Page = ({ roles }) => {
                     number={formatNumber(stats?.totalQuantity ? stats?.totalQuantity : 0)}
                     iconColor={'#5C60F5'}
                     />
-                    <Card 
+                    {/*<Card 
                     icon={<PaidOutlinedIcon />}
                     cardHeader={'اجمالي المدفوع'}
                     number={`${formatNumber(stats?.totalPaid ? stats?.totalPaid : 0)} EGP`}
                     isMoney={true}
                     iconColor={'#5C60F5'}
-                    />
+                    />*/}
                     <Card 
                     icon={<NumbersOutlinedIcon />}
                     cardHeader={'الطلبات'}
                     number={formatNumber(stats?.totalOrders ? stats?.totalOrders : 0)}
                     iconColor={'#5C60F5'}
                     />
-                    <Card 
+                    {/*<Card 
                     icon={<NumbersOutlinedIcon />}
                     cardHeader={'معاملات الايرادات'}
                     number={formatNumber(stats?.totalRevenueRecords ? stats?.totalRevenueRecords : 0)}
@@ -131,19 +131,19 @@ const DashboardV2Page = ({ roles }) => {
                     cardHeader={'حركة المخزن'}
                     number={formatNumber(stats?.totalStockRecords ? stats?.totalStockRecords : 0)}
                     iconColor={'#5C60F5'}
-                    />
+                    />*/}
 
                     <Card 
                     icon={<PaidOutlinedIcon />}
-                    cardHeader={'اجمالي المصاريف'}
-                    number={`${formatNumber(stats?.totalExpenses ? stats?.totalExpenses : 0)} EGP`}
+                    cardHeader={'اجمالي الايرادات'}
+                    number={`${formatNumber(stats?.totalRevenue ? stats?.totalRevenue : 0)} EGP`}
                     iconColor={'#5C60F5'}
                     isMoney={true}
                     />
                     <Card 
                     icon={<PaidOutlinedIcon />}
-                    cardHeader={'اجمالي الايرادات'}
-                    number={`${formatNumber(stats?.totalRevenue ? stats?.totalRevenue : 0)} EGP`}
+                    cardHeader={'قيمة المخزن الحالي'}
+                    number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
                     iconColor={'#5C60F5'}
                     isMoney={true}
                     />
@@ -156,8 +156,8 @@ const DashboardV2Page = ({ roles }) => {
                     />
                     <Card 
                     icon={<PaidOutlinedIcon />}
-                    cardHeader={'قيمة المخزن الحالي'}
-                    number={`${formatNumber(stats?.totalInventoryValue ? stats?.totalInventoryValue : 0)} EGP`}
+                    cardHeader={'اجمالي المصاريف'}
+                    number={`${formatNumber(stats?.totalExpenses ? stats?.totalExpenses : 0)} EGP`}
                     iconColor={'#5C60F5'}
                     isMoney={true}
                     />

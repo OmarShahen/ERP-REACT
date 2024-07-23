@@ -16,6 +16,7 @@ import EmployeesPage from './pages/employees'
 import SuppliersPage from './pages/suppliers'
 import StockRecordsPage from './pages/stock-records'
 import ShiftsPage from './pages/shifts'
+import ShiftPage from './pages/shift'
 
 
 function App() {
@@ -29,7 +30,10 @@ function App() {
 
         <Routes>
 
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route 
+          path="/" 
+          element={<Navigate to={user ? user.type === 'ADMIN' ? '/dashboard' : '/pos' : '/login'} />} 
+          />
 
           <Route element={user.isLogged ? <MainLayout /> : <LoginPage />}>
             
@@ -39,6 +43,7 @@ function App() {
             <Route path="/employees" element={<EmployeesPage roles={['ADMIN']} />} />
             <Route path="/suppliers" element={<SuppliersPage roles={['ADMIN']} />} />
             <Route path="/shifts" element={<ShiftsPage roles={['ADMIN', 'EMPLOYEE']} />} />
+            <Route path="/shifts/:id" element={<ShiftPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/orders" element={<OrdersPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/items" element={<ItemsPage roles={['ADMIN', 'EMPLOYEE']} />} />
             <Route path="/stock-records" element={<StockRecordsPage roles={['ADMIN', 'EMPLOYEE']} />} />

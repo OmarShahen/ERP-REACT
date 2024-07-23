@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const userSession = sessionStorage.getItem('user')
+const userSession = localStorage.getItem('user')
 
 const initialState = {
     user: JSON.parse(userSession) ? JSON.parse(userSession) : { isLogged: false }

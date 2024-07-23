@@ -130,6 +130,10 @@
     align-self: stretch;
 }
 
+.side-bar-container:hover .nav-nested-list-container {
+    overflow: auto;
+}
+
 .nav-nested-list-container li {
     display: flex;
     align-items: center;

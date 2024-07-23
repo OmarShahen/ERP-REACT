@@ -13,7 +13,6 @@ import POSItemCard from '../components/cards/pos-item';
 import { useSelector } from 'react-redux';
 import BarcodeScanner from '../components/scanners/Barcode';
 
-
 const POSPage = ({ roles }) => {
 
     const navigate = useNavigate()
@@ -132,13 +131,11 @@ const POSPage = ({ roles }) => {
                 </div>
             </div>
             <div>
-
             <PageHeader 
             pageName={'نقطة البيع'} 
             setReload={setReload}
             reload={reload}
             /> 
-        
             <div className="search-input-container">
                     <SearchInput searchRows={searchItems} />        
                     <select
