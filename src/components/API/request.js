@@ -5,7 +5,7 @@ const DEV_URL = 'http://localhost:5007/api'
 const PROD_URL = 'https://us-central1-agile-erp-d452c.cloudfunctions.net/app/api'
 
 export const serverRequest = axios.create({
-    baseURL: PROD_URL
+    baseURL: DEV_URL
 })
 
 serverRequest.interceptors.request.use(config => {

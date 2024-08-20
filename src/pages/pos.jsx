@@ -12,6 +12,7 @@ import Receipt from '../components/receipt/receipt';
 import POSItemCard from '../components/cards/pos-item';
 import { useSelector } from 'react-redux';
 import BarcodeScanner from '../components/scanners/Barcode';
+import axios from 'axios';
 
 const POSPage = ({ roles }) => {
 
@@ -23,6 +24,8 @@ const POSPage = ({ roles }) => {
     const [isShowDeleteModal, setIsShowDeleteModal] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
     const [target, setTarget] = useState()
+
+    const [currentOrder, setCurrentOrder] = useState()
 
     const [barcode, setBarcode] = useState('')
 
@@ -106,6 +109,7 @@ const POSPage = ({ roles }) => {
         .then(response => {
             setIsSubmit(false)
             setOrderItems([])
+            setCurrentOrder(response.data.order)
             toast.success(response.data.message, { duration: 3000, position: 'top-left' })
             inputRef.current.focus()
         })
@@ -115,6 +119,26 @@ const POSPage = ({ roles }) => {
             toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-left' })
         })
 
+    }
+
+    const printOrder = () => {
+
+        if(!currentOrder) {
+            return toast.error('لا يوجد فاتورة للطباعة', { duration: 3000, position: 'top-left' })
+        }
+
+        if(isSubmit) {
+            return toast.error('لم يسجل الطلب بعد', { duration: 3000, position: 'top-left' })
+        }
+
+        axios.post(`http://localhost:5010/orders/${currentOrder._id}/print`)
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-left' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error('هناك مشكلة في الطباعة', { duration: 3000, position: 'top-left' })
+        })
     }
 
 
@@ -127,6 +151,7 @@ const POSPage = ({ roles }) => {
                     setOrderItems={setOrderItems} 
                     onSubmit={onOrderSubmit}
                     isSubmit={isSubmit}
+                    printOrder={printOrder}
                     />
                 </div>
             </div>

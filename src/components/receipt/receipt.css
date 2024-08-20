@@ -50,12 +50,25 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: .5rem;
+    row-gap: .5rem;
+    margin-bottom: .5rem;
+}
+
+.receipt-button {
+    display: flex;
+    align-items: center;
+    font-weight: bold !important;
+}
+
+.receipt-button svg {
+    margin-left: .2rem;
+    font-size: 1.4rem;
 }
 
 .receipt-total-contaier button {
     display: flex;
     align-items: center;
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 .receipt-total-contaier button svg {

@@ -5,9 +5,10 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { TailSpin } from 'react-loader-spinner'
+import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined'
 
 
-const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit }) => {
+const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit, printOrder }) => {
 
     const getTotalPrice = (items) => {
 
@@ -95,13 +96,30 @@ const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit }) => {
                 </div>
                 :
                 <button 
-                onClick={onSubmit}
+                onClick={printOrder}
                 className="normal-button white-text action-color-bg span-text bold-text center">
-                    تاكيد
-                <CheckCircleOutlinedIcon />
+                    طباعة اخر فاتورة
+                <LocalPrintshopOutlinedIcon />
                 </button>
             }
         </div>
+
+        <div>
+        {
+            isSubmit ?
+            <div className="center">
+                <TailSpin width="25" height="25" color="#4c83ee" />
+            </div>
+            :
+            <button 
+            onClick={onSubmit}
+            className="normal-button white-text action-color-bg bold-text center full-width-button receipt-button">
+                تاكيد
+            <CheckCircleOutlinedIcon />
+            </button>
+        }
+        </div>
+        
     </div>
 }
 

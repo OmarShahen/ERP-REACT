@@ -8,6 +8,9 @@ import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../transitions/card-transitions'
 import { useSelector } from 'react-redux'
 import { format } from 'date-fns'
+import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined'
+import axios from 'axios'
+import toast from 'react-hot-toast'
 
 
 const OrderCard = ({ 
@@ -20,6 +23,17 @@ const OrderCard = ({
     const user = useSelector(state => state.user.user)
 
     const [isShowItems, setIsShowItems] = useState(false)
+
+    const printOrder = () => {
+        axios.post(`http://localhost:5010/orders/${order._id}/print`)
+        .then(response => {
+            toast.success(response.data.message, { duration: 3000, position: 'top-left' })
+        })
+        .catch(error => {
+            console.error(error)
+            toast.error('هناك مشكلة في الطباعة', { duration: 3000, position: 'top-left' })
+        })
+    }
 
     const cardAdminActionsList = [
         {
@@ -38,6 +52,15 @@ const OrderCard = ({
                 e.stopPropagation()
                 setTarget(order)
                 setIsShowUpdateModal(true)
+            }
+        },
+
+        {
+            name: 'طبع الفاتورة',
+            icon: <LocalPrintshopOutlinedIcon />,
+            onAction: (e) => {
+                e.stopPropagation()
+                printOrder()
             }
         }
     ]
