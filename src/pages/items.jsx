@@ -54,7 +54,7 @@ const ItemsPage = ({ roles }) => {
 
 
     useEffect(() => {
-        serverRequest.get('/v1/specialities')
+        serverRequest.get('/v1/specialities?show=TRUE')
         .then(response => {
             setSpecialties(response.data.specialities)
         })

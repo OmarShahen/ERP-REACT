@@ -37,7 +37,7 @@ const SpecialtiesPage = ({ roles }) => {
     useEffect(() => {
         setIsLoading(true)
 
-        serverRequest.get('/v1/specialities')
+        serverRequest.get('/v1/specialities?show=TRUE')
         .then(response => {
             setIsLoading(false)
             setSpecialties(response.data.specialities)

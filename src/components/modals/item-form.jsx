@@ -29,7 +29,7 @@ const ItemFormModal = ({ reload, setReload, setShowModalForm, isUpdate, setIsUpd
     //const [reorderLevelError, setReorderLevelError] = useState()
     
     useEffect(() => {
-        serverRequest.get(`/v1/specialities`)
+        serverRequest.get(`/v1/specialities?show=TRUE`)
         .then(response => {
             setCategories(response.data.specialities)
         })
