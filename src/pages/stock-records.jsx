@@ -19,6 +19,7 @@ import SearchItemsInputField from '../components/inputs/search-items'
 import NumbersOutlinedIcon from '@mui/icons-material/NumbersOutlined'
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'
 import Card from '../components/cards/card'
+import UpdateStockRecordPriceFormModal from '../components/modals/update-stock-record-price'
 
 
 const StockRecordsPage = ({ roles }) => {
@@ -146,11 +147,11 @@ const StockRecordsPage = ({ roles }) => {
 
         {
             isShowUpdateModal ?
-            <UpdateConfirmationModal 
-            target={target}
-            isLoading={isUpdating}
-            setIsShowModal={setIsShowUpdateModal}
-            updateAction={() => updateOrderRefunding(target._id, !target.isRefunded)}
+            <UpdateStockRecordPriceFormModal 
+            stockRecord={target}
+            setReload={setReload}
+            reload={reload}
+            setShowModalForm={setIsShowUpdateModal}
             />
             :
             null

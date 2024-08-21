@@ -8,7 +8,7 @@ const CardDate = ({ creationDate, updateDate, isHideUpdate=false }) => {
 
     return <div className="card-date-container grey-text left-direction">
         <div>
-            <span>{format(new Date(creationDate), 'dd/MM/yyyy')}</span>
+            <span>{format(new Date(creationDate), 'MM/dd/yyyy hh:mm a')}</span>
         </div>
         { lang === 'en' ?
             <div>

@@ -65,7 +65,7 @@ const NavigationBar = ({ pageName }) => {
         })
     }, [syncItems])
 
-    useEffect(() => {
+    {/*useEffect(() => {
         if(user.type === 'ADMIN') {
             return
         }
@@ -81,7 +81,7 @@ const NavigationBar = ({ pageName }) => {
             console.error(error)
             toast.error(error?.response?.data?.message, { duration: 3000, position: 'top-right' })
         })
-    }, [shiftReload])
+    }, [shiftReload])*/}
 
     const updateOnlineStatus = () => {
         setIsOnline(navigator.onLine)
@@ -111,7 +111,7 @@ const NavigationBar = ({ pageName }) => {
             
             <div className="navigation-bar-options-container">
 
-               {
+               {/*
                 user.type === 'ADMIN' ?
                 null
                 :
@@ -133,7 +133,7 @@ const NavigationBar = ({ pageName }) => {
                 
                     }
                 </div> 
-                }
+                */}
                 
                    
                 <div className="show-large">

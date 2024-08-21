@@ -88,14 +88,14 @@ const SideBar = () => {
                     </NavLink>
                 </div>
             </li>
-            <li>
+            {/*<li>
                 <div>
                     <NavLink to="/shifts">
                         <ManageHistoryOutlinedIcon />
                         الورديات
                     </NavLink>
                 </div>
-            </li>
+            </li>*/}
             {
                 user.type === 'ADMIN' ?
                 <li>

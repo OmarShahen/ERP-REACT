@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './patient.css'
 import CardDate from './components/date'
 import CardActions from './components/actions'
@@ -6,13 +5,17 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { formatNumber } from '../../utils/numbers'
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined'
 import CardTransition from '../transitions/card-transitions'
-
+import { useSelector } from 'react-redux'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 
 const StockRecordCard = ({ 
     stockRecord, 
     setTarget, 
     setIsShowDeleteModal,
+    setIsShowUpdateModal
 }) => {
+
+    const user = useSelector(state => state.user.user)
 
     const cardActionsList = [
         {
@@ -25,6 +28,19 @@ const StockRecordCard = ({
             }
         }
     ]
+
+    user.type === 'ADMIN' ? 
+    cardActionsList.push({
+        name: 'تعديل سعر المعاملة',
+        icon: <AttachMoneyIcon />,
+        onAction: (e) => {
+            e.stopPropagation()
+            setTarget(stockRecord)
+            setIsShowUpdateModal(true)
+        }
+    }) 
+    : 
+    null
 
     const types = [
         { name: 'استلام', value: 'PURCHASE' },
@@ -72,15 +88,29 @@ const StockRecordCard = ({
                     <span>الكمية</span>
                     <span>{formatNumber(Math.abs(stockRecord.quantity))}</span>
                </li>
-               <li>
+               {
+                user.type !== 'ADMIN' ?
+                null
+                :
+                <li>
                     <span>السعر</span>
                     <span>{formatNumber((Math.abs(stockRecord.totalPrice / stockRecord.quantity)).toFixed(2))} EGP</span>
                </li>
-               <li>
+               }
+               {
+                user.type !== 'ADMIN' ?
+                null
+                :
+                <li>
                     <span>الاجمالي</span>
                     <span className="bold-text">{formatNumber(stockRecord.totalPrice)} EGP</span>
                </li>
-               <li>
+               }
+               {
+                user.type !== 'ADMIN' ?
+                null
+                :
+                <li>
                     <span>النوع</span>
                     {
                         !stockRecord.effect ?
@@ -92,6 +122,7 @@ const StockRecordCard = ({
                         <span className="status-btn declined bold-text">مصروفات</span>
                     }
                </li>
+               }
             </ul>
         </div>
         <CardDate 

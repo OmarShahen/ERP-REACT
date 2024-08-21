@@ -53,7 +53,22 @@ const Receipt = ({ orderItems, setOrderItems, onSubmit, isSubmit, printOrder }) 
                             >
                                 <AddOutlinedIcon />
                             </span>
-                            <span>{item.quantity}</span>
+                            {/*<span>{item.quantity}</span>*/}
+                            <input 
+                            type="number" 
+                            value={item.quantity} 
+                            className="quantity-input-field"
+                            onChange={e => {
+                                setOrderItems(orderItems.map(orderItem => {
+                                    if(orderItem._id === item._id) {
+                                        const newOrderItem = { ...item, quantity: Number.parseFloat(e.target.value) }
+                                        return newOrderItem
+                                    }
+
+                                    return orderItem
+                                }))
+                            }}
+                            />
                             <span
                             onClick={() => {
                                 setOrderItems(orderItems.map(orderItem => {

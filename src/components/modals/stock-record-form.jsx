@@ -16,7 +16,7 @@ const StockRecordFormModal = ({ reload, setReload, setShowModalForm, isUpdate, s
     const [type, setType] = useState()
     const [effect, setEffect] = useState()
     const [quantity, setQuantity] = useState()
-    const [totalPrice, setTotalPrice] = useState()
+    const [totalPrice, setTotalPrice] = useState(0)
 
     const [typeError, setTypeError] = useState()
     const [effectError, setEffectError] = useState()
@@ -44,7 +44,7 @@ const StockRecordFormModal = ({ reload, setReload, setShowModalForm, isUpdate, s
 
         if(!quantity) return setQuantityError('الكمية مطلوبة')
 
-        if(!totalPrice) return setTotalPriceError('اجمالي السعر مطلوب')
+        if(totalPrice !== 0 && !totalPrice) return setTotalPriceError('اجمالي السعر مطلوب')
 
         const stockRecordData = {
             userId: user._id,
@@ -156,18 +156,24 @@ const StockRecordFormModal = ({ reload, setReload, setShowModalForm, isUpdate, s
                         />
                         <span className="red">{quantityError}</span>
                     </div>
-                    <div className="form-input-container">
-                        <label>اجمالي السعر</label>
-                        <input 
-                        type="text"
-                        className="form-input" 
-                        placeholder=""
-                        value={totalPrice}
-                        onChange={e => setTotalPrice(e.target.value)}
-                        onClick={() => setTotalPriceError()}
-                        />
-                        <span className="red">{totalPriceError}</span>
-                    </div>
+                    {
+                        user.type !== 'ADMIN' ?
+                        null
+                        :
+                        <div className="form-input-container">
+                            <label>اجمالي السعر</label>
+                            <input 
+                            type="text"
+                            className="form-input" 
+                            placeholder=""
+                            value={totalPrice}
+                            onChange={e => setTotalPrice(e.target.value)}
+                            onClick={() => setTotalPriceError()}
+                            />
+                            <span className="red">{totalPriceError}</span>
+                        </div>
+                    }
+                    
                 </form>
             </div>
             <div className="modal-form-btn-container">

@@ -72,11 +72,10 @@ const ItemCard = ({
 
                     <span>#{item?.itemId}</span>
                 </li>
-                <li>
+                {/*<li>
                     <strong>وحدة الحفظ</strong>
                     <span>{item.sku ? item.sku : 'غير مسجل'}</span>
-
-                </li>
+                </li>*/}
                 <li>
                     <strong>الباركود</strong>
                     <span>{item.barcode ? item.barcode : 'غير مسجل'}</span>
@@ -86,14 +85,13 @@ const ItemCard = ({
                     <strong>الكمية الحالية</strong>
                     <span>{formatNumber(item.stock ? item.stock : 0)}</span>
                 </li>
-                <li>
+                {/*<li>
                     <strong>مستوي اعادة الطلب</strong>
                     <span>{formatNumber(item.reorderLevel ? item.reorderLevel : 0)}</span>
-                </li>
+                </li>*/}
                 <li>
                     <strong>السعر</strong>
                     <span>{formatNumber(item?.price)} EGP</span>
-
                 </li>
             </ul>
             <div className="flex left-direction margin-top-1">
